@@ -1,24 +1,35 @@
-// Save as js/vis2.js (REPLACE the old content with this)
+//
+// === UPDATED VERSION: js/vis2.js (Kaggle CSVs) ===
+//
+// This version adds the Team Name to the tooltip
+// on the "Tire" scatter plot (Position vs. Avg Pit Stop).
+//
 document.addEventListener("DOMContentLoaded", function () {
     // Check if we are on the main page and viz2 exists
     if (!document.getElementById("viz2")) {
         return;
     }
 
-    viz2();
+    viz2(); // Initialize the visualization
 
     function viz2() {
-        const API_URL = "https://api.openf1.org/v1";
+        // --- CSV File Paths ---
+        const DATA_PATH = "data/kaggle/";
+        const RACES_FILE = DATA_PATH + "races.csv";
+        const DRIVERS_FILE = DATA_PATH + "drivers.csv";
+        const CONSTRUCTORS_FILE = DATA_PATH + "constructors.csv";
+        const RESULTS_FILE = DATA_PATH + "results.csv";
+        const PITSTOPS_FILE = DATA_PATH + "pit_stops.csv";
+        const LAPTIMES_FILE = DATA_PATH + "lap_times.csv";
 
         // --- DOM Selections ---
-        const vizContainer = d3.select("#viz2");
         const carContainer = d3.select("#carContainer");
         const modal = d3.select("#viz2-modal");
         const modalTitle = d3.select("#modal-title");
         const modalChart = d3.select("#modal-chart");
-        const modalOvertakes = d3.select("#modal-overtakes");
+        const modalOvertakes = d3.select("#modal-overtakes"); // Will be hidden
         const modalCloseBtn = d3.select(".close-btn");
-        const modalDescription = d3.select("#modal-description"); // <-- NEW
+        const modalDescription = d3.select("#modal-description");
 
         const yearSelect = d3.select("#viz2-yearSelect");
         const teamSelect = d3.select("#viz2-teamSelect");
@@ -28,15 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const infoDriverName = d3.select("#info-driverName");
 
         // --- State ---
-        let sessionData = {}; // To store drivers, session_key, etc.
-
-        // --- D3 Scales & Colors ---
-        const compoundColors = d3.scaleOrdinal()
-            .domain(["SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET"])
-            .range(["#D90000", "#FFD400", "#EFEFEF", "#00A651", "#00A9E0"]);
+        let kaggleData = {}; // To store all loaded CSVs
+        let selected = {};   // To store user's dropdown choices (raceId, driverId, etc.)
 
         // --- Initialization ---
-        populateYears();
+        loadData();
         loadSVG();
 
         // --- Event Listeners ---
@@ -46,10 +53,44 @@ document.addEventListener("DOMContentLoaded", function () {
         modalCloseBtn.on("click", closeModal);
 
         // --- Data Loading Chain ---
+        async function loadData() {
+            try {
+                // Load all necessary CSVs at once
+                const [races, drivers, constructors, results, pitStops, lapTimes] = await Promise.all([
+                    d3.csv(RACES_FILE, d3.autoType),
+                    d3.csv(DRIVERS_FILE, d3.autoType),
+                    d3.csv(CONSTRUCTORS_FILE, d3.autoType),
+                    d3.csv(RESULTS_FILE, d3.autoType),
+                    d3.csv(PITSTOPS_FILE, d3.autoType),
+                    d3.csv(LAPTIMES_FILE, d3.autoType)
+                ]);
+
+                // Store data in our state object
+                kaggleData = { races, drivers, constructors, results, pitStops, lapTimes };
+
+                // Manually create full name for drivers for easier matching
+                kaggleData.drivers.forEach(d => {
+                    d.fullName = `${d.forename} ${d.surname}`;
+                });
+
+                console.log("Kaggle data loaded:", kaggleData);
+                populateYears();
+
+            } catch (error) {
+                console.error("Error loading CSV data:", error);
+                carContainer.html("<p>Error: Could not load CSV files. Check /data/kaggle/ folder.</p>");
+                yearSelect.html("<option>Error loading data</option>");
+            }
+        }
+
         function populateYears() {
-            const years = [2024, 2023]; // Add more as needed
+            const years = [...new Set(kaggleData.races.map(d => d.year))].sort(d3.descending);
+
+            // Limit to more recent years for performance, e.g., 2000+
+            const recentYears = years.filter(y => y >= 2010);
+
             yearSelect.selectAll("option")
-                .data(years)
+                .data(recentYears)
                 .enter()
                 .append("option")
                 .attr("value", d => d)
@@ -59,103 +100,87 @@ document.addEventListener("DOMContentLoaded", function () {
             handleYearChange();
         }
 
-        async function handleYearChange() {
-            const year = yearSelect.property("value");
-            console.log(`Year selected: ${year}`); // Debug
+        function handleYearChange() {
+            const year = +yearSelect.property("value");
             clearDropdowns([teamSelect, driverSelect]);
             clearInfo();
-            teamSelect.append("option").text("Loading teams..."); // Add loading text
+            teamSelect.append("option").text("Loading teams...");
 
-            try {
-                // 1. Find the first 'Race' session of the selected year.
-                const raceSessions = await fetchData(`/sessions?year=${year}&session_name=Race`);
-                if (!raceSessions.length) throw new Error(`No 'Race' sessions found for ${year}.`);
+            // Find the *first* race of that season
+            const firstRace = kaggleData.races
+                .filter(d => d.year === year)
+                .sort((a, b) => a.round - b.round)[0];
 
-                // 2. Get the session_key and meeting_key from the *first* race.
-                const firstRace = raceSessions[0]; // This is the first official race (e.g., Bahrain GP, not testing)
-                const race_session_key = firstRace.session_key;
-                const meeting_key = firstRace.meeting_key;
-                console.log(`Found first race: meeting_key ${meeting_key}, race_session_key ${race_session_key}`); // Debug
-
-                // 3. Get ALL sessions for that meeting to find a practice session.
-                const allSessions = await fetchData(`/sessions?meeting_key=${meeting_key}`);
-                if (!allSessions.length) throw new Error(`No sessions found for meeting ${meeting_key}.`);
-
-                // 4. Find 'Practice 1' (most reliable) or any 'Practice' session to get the driver list
-                const practiceSession = allSessions.find(s => s.session_name === 'Practice 1') || allSessions.find(s => s.session_type === 'Practice');
-                if (!practiceSession) throw new Error("No practice session found for driver list.");
-                const practice_session_key = practiceSession.session_key;
-                console.log(`Found practice_session_key: ${practice_session_key}`); // Debug
-
-                // 5. Get drivers using the practice key.
-                const drivers = await fetchData(`/drivers?session_key=${practice_session_key}`);
-                if (!drivers.length) throw new Error("Could not fetch driver list.");
-                console.log(`Found ${drivers.length} drivers`); // Debug
-
-                // 6. Store data (using the RACE key for charts).
-                sessionData = {
-                    session_key: race_session_key, // <-- IMPORTANT: Store the RACE key for charts
-                    drivers: drivers,
-                    allDrivers: drivers // Store a copy for overtake lookups
-                };
-
-                // 7. Populate Teams
-                const teams = [...new Set(drivers.map(d => d.team_name))].filter(Boolean).sort(); // filter(Boolean) removes null/undefined
-
-                clearDropdowns([teamSelect]); // Clear "Loading teams..."
-
-                if (!teams.length) {
-                    teamSelect.append("option").text("No teams found");
-                    throw new Error("Driver list fetched but no teams found.");
-                }
-
-                teamSelect.selectAll("option")
-                    .data(teams)
-                    .enter()
-                    .append("option")
-                    .attr("value", d => d)
-                    .text(d => d);
-
-                // Trigger next step
-                handleTeamChange();
-
-            } catch (error) {
-                console.error("Error loading year data:", error);
-                clearDropdowns([teamSelect, driverSelect]);
-                teamSelect.append("option").text("Error loading teams");
-                infoTeamName.text("Error");
-                infoDriverName.text(error.message.substring(0, 30) + "...");
+            if (!firstRace) {
+                teamSelect.html("<option>No race data for year</option>");
+                return;
             }
+
+            // Store the selected raceId
+            selected.raceId = firstRace.raceId;
+            console.log(`Selected Race: ${firstRace.name} (raceId: ${selected.raceId})`);
+
+            // Find which teams (constructors) participated in this race
+            const resultsForRace = kaggleData.results.filter(d => d.raceId === selected.raceId);
+            const constructorIds = [...new Set(resultsForRace.map(d => d.constructorId))];
+
+            const teams = kaggleData.constructors
+                .filter(c => constructorIds.includes(c.constructorId))
+                .sort((a, b) => a.name.localeCompare(b.name));
+
+            clearDropdowns([teamSelect]);
+            teamSelect.selectAll("option")
+                .data(teams)
+                .enter()
+                .append("option")
+                .attr("value", d => d.constructorId)
+                .text(d => d.name);
+
+            // Trigger next step
+            handleTeamChange();
         }
 
         function handleTeamChange() {
-            const teamName = teamSelect.property("value");
+            const constructorId = +teamSelect.property("value");
             clearDropdowns([driverSelect]);
 
-            const driversForTeam = sessionData.drivers.filter(d => d.team_name === teamName);
+            // Store the selected constructorId
+            selected.constructorId = constructorId;
+
+            // Find which drivers drove for this team *in this race*
+            const driverIds = kaggleData.results
+                .filter(d => d.raceId === selected.raceId && d.constructorId === selected.constructorId)
+                .map(d => d.driverId);
+
+            const drivers = kaggleData.drivers
+                .filter(d => driverIds.includes(d.driverId));
 
             driverSelect.selectAll("option")
-                .data(driversForTeam)
+                .data(drivers)
                 .enter()
                 .append("option")
-                .attr("value", d => d.driver_number)
-                .text(d => d.full_name);
+                .attr("value", d => d.driverId)
+                .text(d => d.fullName);
 
             handleDriverChange();
         }
 
         function handleDriverChange() {
-            const driverNumber = driverSelect.property("value");
-            if (!driverNumber || !sessionData.drivers) {
+            const driverId = +driverSelect.property("value");
+            if (!driverId || !kaggleData.drivers) {
                 clearInfo();
                 return;
             }
 
-            const driver = sessionData.drivers.find(d => d.driver_number == driverNumber);
+            // Store selected driverId
+            selected.driverId = driverId;
 
-            if (driver) {
-                infoTeamName.text(driver.team_name);
-                infoDriverName.text(driver.full_name);
+            const driver = kaggleData.drivers.find(d => d.driverId === driverId);
+            const team = kaggleData.constructors.find(c => c.constructorId === selected.constructorId);
+
+            if (driver && team) {
+                infoTeamName.text(team.name);
+                infoDriverName.text(driver.fullName);
             }
         }
 
@@ -172,15 +197,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 svg.select("#clickable-tires")
                     .classed("interactive-part", true)
-                    .on("click", showTireData);
+                    .on("click", showPitstopData);
 
                 svg.select("#clickable-engine")
                     .classed("interactive-part", true)
-                    .on("click", showEngineData);
+                    .on("click", showLapTimeData);
 
                 svg.select("#clickable-rear-wing")
                     .classed("interactive-part", true)
-                    .on("click", showDrsData);
+                    .on("click", showPositionData);
+
             }).catch(err => {
                 console.error("Error loading SVG:", err);
                 carContainer.html("<p>Error loading car SVG.</p>");
@@ -189,125 +215,134 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // --- Click Handlers & Modal Functions ---
 
-        function showTireData() {
-            const driver_number = driverSelect.property("value");
-            if (!driver_number) return alert("Please select a driver.");
+        /**
+         * REWRITE 1: Show Pitstop Data
+         */
+        function showPitstopData() {
+            const { driverId, raceId } = selected;
+            if (!driverId) return alert("Please select a driver.");
 
-            const driver = sessionData.drivers.find(d => d.driver_number == driver_number);
-            openModal(`Tyre Strategy & Pit Stops: ${driver.full_name}`); // Sets "Loading..."
+            const driver = kaggleData.drivers.find(d => d.driverId === driverId);
+            const driverName = driver.fullName;
+            openModal(`Pit Stop vs. Position: ${driverName}`);
 
-            Promise.all([
-                fetchData(`/stints?session_key=${sessionData.session_key}&driver_number=${driver_number}`),
-                fetchData(`/pit?session_key=${sessionData.session_key}&driver_number=${driver_number}`)
-            ]).then(([stints, pits]) => {
+            // 1. Get all results for the race
+            const raceResults = kaggleData.results.filter(d =>
+                d.raceId === raceId
+            );
 
-                clearModal(); // <-- FIX: Clear "Loading..." text
+            // 2. Get all pit stops for the race
+            const racePitStops = kaggleData.pitStops.filter(d =>
+                d.raceId === raceId
+            );
 
-                // === ADD DESCRIPTION ===
-                modalDescription.html(`This chart shows the driver's tyre strategy. Each bar is a "stint," or period of driving. 
-                                        The bar's color shows the tyre compound (Soft, Medium, etc.), and its length shows how many laps they drove on it. 
-                                        The <strong>magenta dots</strong> mark when a pit stop occurred.`);
+            // 3. Combine the data
+            const plotData = raceResults.map(result => {
+                const dId = result.driverId;
+                const finalPosition = result.positionOrder;
+                const cId = result.constructorId; // <-- Get constructorId
 
-                if (!stints.length) {
-                    modalChart.html("<p>No stint data available for this driver.</p>");
-                    return;
+                // Find this driver's name
+                const driverInfo = kaggleData.drivers.find(d => d.driverId === dId);
+                const name = driverInfo ? driverInfo.fullName : 'Unknown';
+
+                // === FIND TEAM NAME ===
+                const teamInfo = kaggleData.constructors.find(c => c.constructorId === cId);
+                const teamName = teamInfo ? teamInfo.name : 'Unknown';
+                // === END CHANGE ===
+
+                // Find this driver's pit stops
+                const driverPitStops = racePitStops.filter(p => p.driverId === dId);
+
+                // Calculate average pit stop time
+                let avgPitstopTime = 0;
+                if (driverPitStops.length > 0) {
+                    avgPitstopTime = d3.mean(driverPitStops, p => p.duration);
                 }
 
-                drawStintChart(stints, pits);
-            }).catch(error => {
-                clearModal();
-                console.error("Error fetching tire data:", error);
-                modalChart.html("<p>Could not load tire data.</p>");
-            });
+                return {
+                    driverId: dId,
+                    driverName: name,
+                    teamName: teamName, // <-- Add team name to plot object
+                    finalPosition: finalPosition,
+                    avgPitstopTime: avgPitstopTime
+                };
+            }).filter(d => d.avgPitstopTime > 0); // Only plot drivers with at least one pit stop
+
+
+            clearModal();
+            modalDescription.html(`This scatter plot shows the <strong>Final Race Position</strong> vs. <strong>Average Pit Stop Time (seconds)</strong> 
+                                    for all drivers in the race. Does a faster average pit stop lead to a better finish?`);
+
+            if (!plotData.length) {
+                modalChart.html("<p>No pit stop data available for this race to plot.</p>");
+                return;
+            }
+
+            // 4. Call the drawing function
+            drawPitstopScatterPlot(plotData, driverId, driverName);
         }
 
-        function showEngineData() {
-            const driver_number = driverSelect.property("value");
-            if (!driver_number) return alert("Please select a driver.");
+        /**
+         * REWRITE 2: Show Lap Time Data
+         */
+        function showLapTimeData() {
+            const { driverId, raceId } = selected;
+            if (!driverId) return alert("Please select a driver.");
 
-            const driver = sessionData.drivers.find(d => d.driver_number == driver_number);
-            openModal(`Engine Performance (Speed Trap): ${driver.full_name}`); // Sets "Loading..."
+            const driver = kaggleData.drivers.find(d => d.driverId === driverId);
+            openModal(`Lap Time Performance: ${driver.fullName}`);
 
-            fetchData(`/laps?session_key=${sessionData.session_key}&driver_number=${driver_number}`)
-                .then(laps => {
+            const lapTimes = kaggleData.lapTimes.filter(d =>
+                d.raceId === raceId && d.driverId === driverId
+            ).sort((a,b) => a.lap - b.lap);
 
-                    clearModal(); // <-- FIX: Clear "Loading..." text
+            clearModal();
+            modalDescription.html(`This chart plots the driver's raw lap time <strong>(in milliseconds)</strong> for each lap of the race. 
+                                    Lower values are better. This shows consistency and pace degradation.`);
 
-                    // === ADD DESCRIPTION ===
-                    modalDescription.html(`This chart plots the driver's raw speed performance over the race. 
-                                        It shows the <strong>Speed Trap (st_speed)</strong> in km/h for each lap. 
-                                        The Speed Trap is the point on the track where cars reach their highest speed, 
-                                        making this a good measure of engine power and setup.`);
+            if (!lapTimes.length) {
+                modalChart.html("<p>No lap time data available for this driver in this race.</p>");
+                return;
+            }
 
-                    if (!laps.length) {
-                        modalChart.html("<p>No lap data available for this driver.</p>");
-                        return;
-                    }
-                    const speedData = laps.filter(d => d.st_speed > 0)
-                        .sort((a,b) => a.lap_number - b.lap_number);
-
-                    if (!speedData.length) {
-                        modalChart.html("<p>No speed trap data found for this driver in this session.</p>");
-                        return;
-                    }
-                    drawEngineChart(speedData);
-                }).catch(error => {
-                clearModal();
-                console.error("Error fetching engine data:", error);
-                modalChart.html("<p>Could not load engine data.</p>");
-            });
+            drawLapTimeChart(lapTimes);
         }
 
-        function showDrsData() {
-            const driver_number = driverSelect.property("value");
-            if (!driver_number) return alert("Please select a driver.");
+        /**
+         * REWRITE 3: Show Position Data
+         */
+        function showPositionData() {
+            const { driverId, raceId } = selected;
+            if (!driverId) return alert("Please select a driver.");
 
-            const driver = sessionData.drivers.find(d => d.driver_number == driver_number);
-            openModal(`DRS Usage & Overtakes: ${driver.full_name}`); // Sets "Loading..."
+            const driver = kaggleData.drivers.find(d => d.driverId === driverId);
+            openModal(`Race Position: ${driver.fullName}`);
 
-            Promise.all([
-                fetchData(`/car_data?session_key=${sessionData.session_key}&driver_number=${driver_number}&drs>=10`),
-                fetchData(`/overtakes?session_key=${sessionData.session_key}&overtaking_driver_number=${driver_number}`),
-                fetchData(`/laps?session_key=${sessionData.session_key}&driver_number=${driver_number}`)
-            ]).then(([drsData, overtakes, laps]) => {
+            const lapData = kaggleData.lapTimes.filter(d =>
+                d.raceId === raceId && d.driverId === driverId
+            ).sort((a,b) => a.lap - b.lap);
 
-                clearModal(); // <-- FIX: Clear "Loading..." text
+            clearModal();
+            modalDescription.html(`This chart shows the driver's <strong>position in the race</strong> at the end of each lap.`);
 
-                // === ADD DESCRIPTION ===
-                modalDescription.html(`This shows two key stats: <strong>DRS (Drag Reduction System)</strong> usage and overtakes. 
-                                        The pie chart shows the percentage of race laps where the driver activated DRS. 
-                                        The list shows all overtakes recorded for this driver.`);
+            if (!lapData.length) {
+                modalChart.html("<p>No position data available for this driver in this race.</p>");
+                return;
+            }
 
-                const totalLaps = laps.length;
-                if (totalLaps === 0) {
-                    modalChart.html("<p>No lap data available to calculate DRS usage.</p>");
-                    drawOvertakeList(overtakes);
-                    return;
-                }
-
-                const drsLaps = new Set(drsData.map(d => d.lap_number)).size;
-                const noDrsLaps = totalLaps - drsLaps;
-                const pieData = [
-                    { label: "Laps with DRS", value: drsLaps },
-                    { label: "Laps without DRS", value: noDrsLaps }
-                ];
-
-                drawDrsPieChart(pieData);
-                drawOvertakeList(overtakes);
-
-            }).catch(error => {
-                clearModal();
-                console.error("Error fetching DRS data:", error);
-                modalChart.html("<p>Could not load DRS data.</p>");
-            });
+            drawPositionChart(lapData);
         }
 
         // --- Chart Drawing Functions ---
 
-        function drawStintChart(stints, pits) {
-            const margin = { top: 20, right: 30, bottom: 40, left: 100 };
+        /**
+         * NEW Scatter Plot Function
+         */
+        function drawPitstopScatterPlot(plotData, selectedDriverId, selectedDriverName) {
+            const margin = { top: 40, right: 30, bottom: 50, left: 60 };
             const width = 600 - margin.left - margin.right;
-            const height = 300 - margin.top - margin.bottom;
+            const height = 350 - margin.top - margin.bottom;
 
             const svg = modalChart.append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -315,57 +350,74 @@ document.addEventListener("DOMContentLoaded", function () {
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            const maxLaps = d3.max(stints, d => d.lap_end);
-
+            // X-Scale: Average Pit Stop Time
             const x = d3.scaleLinear()
-                .domain([0, maxLaps])
+                .domain([
+                    d3.min(plotData, d => d.avgPitstopTime) * 0.9, // 10% padding
+                    d3.max(plotData, d => d.avgPitstopTime) * 1.1  // 10% padding
+                ])
                 .range([0, width]);
 
-            const y = d3.scaleBand()
-                .domain(stints.map(d => `Stint ${d.stint_number}`))
-                .range([0, height])
-                .padding(0.2);
+            // Y-Scale: Final Position (Inverted: 1 at top, 20 at bottom)
+            const y = d3.scaleLinear()
+                .domain([d3.max(plotData, d => d.finalPosition) + 1, 0])
+                .range([height, 0]);
 
+            // X-Axis
             svg.append("g")
                 .attr("transform", `translate(0,${height})`)
-                .call(d3.axisBottom(x).ticks(10))
+                .call(d3.axisBottom(x))
                 .append("text")
                 .attr("fill", "#111")
                 .attr("x", width / 2)
-                .attr("y", 35)
-                .text("Lap Number");
+                .attr("y", 40)
+                .style("text-anchor", "middle")
+                .text("Average Pit Stop Time (seconds)");
 
+            // Y-Axis
             svg.append("g")
-                .call(d3.axisLeft(y));
+                .call(d3.axisLeft(y).ticks(10).tickFormat(d3.format("d"))) // Integer format
+                .append("text")
+                .attr("fill", "#111")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -40)
+                .attr("x", -height / 2)
+                .style("text-anchor", "middle")
+                .text("Final Race Position");
 
-            svg.selectAll("stintBars")
-                .data(stints)
-                .enter()
-                .append("rect")
-                .attr("x", d => x(d.lap_start))
-                .attr("y", d => y(`Stint ${d.stint_number}`))
-                .attr("width", d => x(d.lap_end) - x(d.lap_start))
-                .attr("height", y.bandwidth())
-                .style("fill", d => compoundColors(d.compound))
-                .style("stroke", "#111")
-                .style("stroke-width", 1);
-
-            svg.selectAll("pitMarkers")
-                .data(pits)
+            // Scatter Plot Circles
+            svg.selectAll("circle")
+                .data(plotData)
                 .enter()
                 .append("circle")
-                .attr("cx", d => x(d.lap_number))
-                .attr("cy", d => {
-                    const stint = stints.find(s => d.lap_number >= s.lap_start && d.lap_number <= s.lap_end);
-                    const stintName = stint ? `Stint ${stint.stint_number}` : y.domain()[0];
-                    return y(stintName) + y.bandwidth() / 2;
-                })
+                .attr("cx", d => x(d.avgPitstopTime))
+                .attr("cy", d => y(d.finalPosition))
                 .attr("r", 5)
-                .style("fill", "magenta")
-                .style("stroke", "#111");
+                .style("fill", d => (d.driverId === selectedDriverId) ? "var(--red, #D40000)" : "#888")
+                .style("opacity", 0.7)
+                .style("stroke", "#111")
+                .style("stroke-width", 0.5)
+                .append("title") // Add a simple tooltip
+                // === UPDATE TOOLTIP TEXT ===
+                .text(d => `${d.driverName} (${d.teamName})\nPosition: ${d.finalPosition}\nAvg Pit Stop: ${d.avgPitstopTime.toFixed(2)}s`);
+            // === END CHANGE ===
+
+            // Legend
+            const legend = d3.select(svg.node().parentNode)
+                .append("g")
+                .attr("transform", `translate(${margin.left}, 15)`);
+
+            // Selected Driver
+            legend.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "var(--red, #D40000)");
+            legend.append("text").attr("x", 10).attr("y", 0).text(selectedDriverName).style("font-size", "12px").attr("alignment-baseline", "middle");
+
+            // Other Drivers
+            legend.append("circle").attr("cx", 180).attr("cy", 0).attr("r", 5).style("fill", "#888");
+            legend.append("text").attr("x", 190).attr("y", 0).text("Other Drivers").style("font-size", "12px").attr("alignment-baseline", "middle");
         }
 
-        function drawEngineChart(speedData) {
+
+        function drawLapTimeChart(lapData) {
             const margin = { top: 20, right: 30, bottom: 40, left: 60 };
             const width = 600 - margin.left - margin.right;
             const height = 300 - margin.top - margin.bottom;
@@ -377,16 +429,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
             const x = d3.scaleLinear()
-                .domain(d3.extent(speedData, d => d.lap_number))
+                .domain(d3.extent(lapData, d => d.lap))
                 .range([0, width]);
 
             const y = d3.scaleLinear()
-                .domain([d3.min(speedData, d => d.st_speed) - 5, d3.max(speedData, d => d.st_speed) + 5])
+                .domain(d3.extent(lapData, d => d.milliseconds))
                 .range([height, 0]);
 
             svg.append("g")
                 .attr("transform", `translate(0,${height})`)
-                .call(d3.axisBottom(x))
+                .call(d3.axisBottom(x).ticks(10))
                 .append("text")
                 .attr("fill", "#111")
                 .attr("x", width / 2)
@@ -394,147 +446,85 @@ document.addEventListener("DOMContentLoaded", function () {
                 .text("Lap Number");
 
             svg.append("g")
-                .call(d3.axisLeft(y))
+                .call(d3.axisLeft(y).tickFormat(d => `${d/1000}s`))
                 .append("text")
                 .attr("fill", "#111")
                 .attr("transform", "rotate(-90)")
                 .attr("y", -40)
                 .attr("x", -height/2)
                 .style("text-anchor", "middle")
-                .text("Speed Trap (km/h)");
+                .text("Lap Time (ms)");
 
             svg.append("path")
-                .datum(speedData)
+                .datum(lapData)
                 .attr("fill", "none")
                 .attr("stroke", "var(--red, #D40000)")
                 .attr("stroke-width", 2)
                 .attr("d", d3.line()
-                    .x(d => x(d.lap_number))
-                    .y(d => y(d.st_speed))
+                    .x(d => x(d.lap))
+                    .y(d => y(d.milliseconds))
                 );
         }
 
-        // ======================================================
-        // === UPDATED PIE CHART FUNCTION ===
-        // ======================================================
-        function drawDrsPieChart(pieData) {
-            const width = 450; // Increased width
-            const height = 300;
-            const margin = 40; // Margin for labels
-            const radius = Math.min(width, height) / 2 - margin;
+        function drawPositionChart(lapData) {
+            const margin = { top: 20, right: 30, bottom: 40, left: 60 };
+            const width = 600 - margin.left - margin.right;
+            const height = 300 - margin.top - margin.bottom;
 
             const svg = modalChart.append("svg")
-                .attr("width", width)
-                .attr("height", height)
-                .attr("class", "pie-chart-svg") // Add class for styling
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", `translate(${width / 2},${height / 2})`);
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            const color = d3.scaleOrdinal()
-                .domain(pieData.map(d => d.label))
-                .range(["#00A651", "#EFEFEF"]); // Green for DRS, light gray for no
+            const x = d3.scaleLinear()
+                .domain(d3.extent(lapData, d => d.lap))
+                .range([0, width]);
 
-            const pie = d3.pie()
-                .value(d => d.value)
-                .sort(null); // Do not sort slices
+            const y = d3.scaleLinear()
+                .domain([d3.max(lapData, d => d.position) + 1, 0])
+                .range([height, 0]);
 
-            const arc = d3.arc()
-                .innerRadius(0)
-                .outerRadius(radius);
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x).ticks(10))
+                .append("text")
+                .attr("fill", "#111")
+                .attr("x", width / 2)
+                .attr("y", 35)
+                .text("Lap Number");
 
-            const outerArc = d3.arc()
-                .innerRadius(radius + 10) // 10px outside
-                .outerRadius(radius + 10);
+            svg.append("g")
+                .call(d3.axisLeft(y).ticks(10).tickFormat(d3.format("d")))
+                .append("text")
+                .attr("fill", "#111")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -40)
+                .attr("x", -height/2)
+                .style("text-anchor", "middle")
+                .text("Position");
 
-            const arcs = svg.selectAll("arc")
-                .data(pie(pieData))
-                .enter()
-                .append("g")
-                .attr("class", "arc");
-
-            // Draw slices
-            arcs.append("path")
-                .attr("fill", (d, i) => color(d.data.label))
-                .attr("d", arc)
-                .style("stroke", "#111")
-                .style("stroke-width", "1px");
-
-            // --- New Label Code ---
-
-            // Add polylines
-            svg.selectAll('allPolylines')
-                .data(pie(pieData))
-                .enter()
-                .append('polyline')
-                .attr('stroke', '#111')
-                .style('fill', 'none')
-                .attr('stroke-width', 1)
-                .attr('points', d => {
-                    const posA = arc.centroid(d);
-                    const posB = outerArc.centroid(d);
-                    const posC = outerArc.centroid(d);
-                    posC[0] = (radius + 20) * (midAngle(d) < Math.PI ? 1 : -1); // extend line
-                    return [posA, posB, posC];
-                });
-
-            // Add text labels
-            svg.selectAll('allLabels')
-                .data(pie(pieData))
-                .enter()
-                .append('text')
-                .text(d => `${d.data.label} (${d.data.value})`)
-                .attr('transform', d => {
-                    const pos = outerArc.centroid(d);
-                    pos[0] = (radius + 25) * (midAngle(d) < Math.PI ? 1 : -1); // Position text
-                    return `translate(${pos})`;
-                })
-                .style('text-anchor', d => {
-                    return (midAngle(d) < Math.PI ? 'start' : 'end');
-                });
-
-            function midAngle(d) {
-                return d.startAngle + (d.endAngle - d.startAngle) / 2;
-            }
-        }
-        // ======================================================
-        // === END OF UPDATED FUNCTION ===
-        // ======================================================
-
-        function drawOvertakeList(overtakes) {
-            const driverMap = new Map(sessionData.allDrivers.map(d => [d.driver_number, d.name_acronym]));
-
-            modalOvertakes.html("<h4>Overtakes Made:</h4>");
-
-            if (!overtakes.length) {
-                modalOvertakes.append("p").text("No overtakes recorded.");
-                return;
-            }
-
-            const list = modalOvertakes.append("ul");
-            overtakes.forEach(o => {
-                const overtakenDriverName = driverMap.get(o.overtaken_driver_number) || `Driver ${o.overtaken_driver_number}`;
-                list.append("li")
-                    .text(`Passed ${overtakenDriverName} for P${o.position}`);
-            });
+            svg.append("path")
+                .datum(lapData)
+                .attr("fill", "none")
+                .attr("stroke", "var(--red, #D40000)")
+                .attr("stroke-width", 2)
+                .attr("d", d3.line()
+                    .x(d => x(d.lap))
+                    .y(d => y(d.position))
+                );
         }
 
-        // --- Utility Functions ---
-        async function fetchData(endpoint) {
-            const response = await fetch(API_URL + endpoint);
-            if (!response.ok) {
-                throw new Error(`API call failed: ${response.status} for ${endpoint}`);
-            }
-            return await response.json();
-        }
+
+        // --- Utility Functions (Mostly Unchanged) ---
 
         function openModal(title) {
             modalTitle.text(title);
             modal.style("display", "block");
             clearModal();
-            // Set loading text in *all* containers that will be cleared
             modalChart.html("<p>Loading data...</p>");
             modalDescription.html("");
-            modalOvertakes.html("");
+            modalOvertakes.html(""); // Clear this as it's no longer used
         }
 
         function closeModal() {
@@ -542,7 +532,6 @@ document.addEventListener("DOMContentLoaded", function () {
             clearModal();
         }
 
-        // UPDATE clearModal to clear description
         function clearModal() {
             modalChart.html("");
             modalOvertakes.html("");

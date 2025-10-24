@@ -476,8 +476,8 @@ body {
 
 /* --- SVG STYLES --- */
 #interactive-car-svg {
-    width: 800px; /* Increased width */
-    height: 500px; /* Increased height */
+    width: 100%;  /* Fill the container's width */
+    height: auto; /* Let the aspect ratio define the height */
     max-width: 100%;
 }
 
@@ -494,25 +494,24 @@ body {
     stroke: var(--gray);
 }
 
-/* --- HOVER EFFECT FIX --- */
 .interactive-part {
     cursor: pointer;
     opacity: 0.8;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, fill 0.2s ease;
 }
 
-/* Target the PATHS *inside* the hovered group */
-.interactive-part:hover path {
+#interactive-car-svg path.interactive-part:hover {
     opacity: 1;
-    fill: #ff6666; /* Lighter red on hover */
-    stroke: var(--red);
+    fill: #FFD400; /* Yellow */
+    stroke: var(--black);
 }
 
-/* Keep tires black/gray on hover */
-.interactive-part#clickable-tires:hover path {
-    fill: var(--gray);
-    stroke: var(--red);
+#interactive-car-svg #clickable-tires:hover path {
+    opacity: 1;
+    fill: #FFD400; /* Yellow */
+    stroke: var(--black);
 }
+
 /* --- End SVG STYLES --- */
 
 
