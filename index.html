@@ -50,7 +50,56 @@
 <section class="viz-section">
     <h2>Visualizations</h2>
     <div class="viz-grid">
-        <div id="viz1" class="viz-card">Viz 1 · Awaiting Data</div>
+        <div id="viz1" class="viz-card">
+            <div class="viz1-container">
+                <!-- === LEFT PANEL === -->
+                <div id="controls">
+                    <!-- YEAR SELECT -->
+                    <div id="selectionRow">
+                        <div class="selectGroup">
+                            <label for="yearSelect">Select a Year</label>
+                            <select id="yearSelect">
+                                <option>Select a year</option>
+                            </select>
+                        </div>
+
+                        <div class="selectGroup">
+                            <label for="circuitSelect">Select a Circuit</label>
+                            <select id="circuitSelect">
+                                <option>Select a circuit</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!-- PLAY / PAUSE -->
+                    <div id="playControls">
+                        <button id="playBtn">▶ Play</button>
+                        <button id="pauseBtn">⏸ Pause</button>
+                    </div>
+
+                    <!-- DRIVER STATS BOX -->
+                    <div id="driverStatsBox">
+                        <h3>Driver Stats</h3>
+                        <div class="stat-line">
+                            <span class="label">Driver:</span>
+                            <span id="driverName">–</span>
+                        </div>
+                        <div class="stat-line">
+                            <span class="label">Speed:</span>
+                            <span id="speed">–</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- === RIGHT SIDE: CIRCUIT VISUALIZATION === -->
+                <div id="circuitContainer">
+                    <p class="awaitingText">Awaiting Circuit…</p>
+                    <svg id="circuitSVG" width="600" height="400"></svg>
+                </div>
+            </div>
+        </div>
+
         <div id="viz2" class="viz-card">Viz 2 · Awaiting Data</div>
         <div id="viz3" class="viz-card">Viz 3 · Awaiting Data</div>
     </div>
@@ -91,5 +140,7 @@
         </div>
     </div>
 </section>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="js/vis1.js"></script>
 </body>
 </html>
