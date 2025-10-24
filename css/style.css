@@ -211,3 +211,75 @@ body {
     font-size: 1rem;
     color: var(--black);
 }
+
+.data-section {
+    text-align: center;
+    margin: 3rem 0;
+    font-family: 'Orbitron', sans-serif; /* Apply Orbitron everywhere */
+}
+
+.data-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #b80000;
+    letter-spacing: 2px;
+}
+
+.data-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.data-card {
+    background: white;
+    border: 2px solid #b80000;
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: 280px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.data-card:hover {
+    transform: translateY(-5px);
+}
+
+.circle-img {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #b80000;
+}
+
+.circle-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.data-card h3 {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    color: #b80000;
+}
+
+.data-card p {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.data-card a {
+    font-weight: bold;
+    color: #b80000;
+    text-decoration: none;
+}
+
+.data-card a:hover {
+    text-decoration: underline;
+}
+
