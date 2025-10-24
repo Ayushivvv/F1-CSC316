@@ -399,3 +399,197 @@ body {
     align-items: center;
     min-height: 400px;
 }
+
+/* --- Visualization 2 Layout --- */
+.viz2-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+/* Reusable control panel style (based on #controls) */
+.controls-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    background: var(--card);
+    border: 2px solid var(--black);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+/* Reusable stats box style (based on #driverStatsBox) */
+.stats-box {
+    border: 2px solid var(--black);
+    border-radius: 8px;
+    padding: 1rem;
+    width: 100%;
+    background: #fafafa;
+    box-sizing: border-box;
+    margin-top: auto;
+}
+
+.stats-box h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--red);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Reusable select group */
+.selectGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.selectGroup label {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--red);
+    font-weight: 700;
+}
+.selectGroup select {
+    font-family: 'Antonio', sans-serif;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+    width: 100%;
+}
+
+
+/* Car container */
+#carContainer {
+    flex-grow: 1; /* Allows it to take up available space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px; /* Ensure it has some base height */
+    overflow: hidden; /* Important to prevent scrollbars */
+}
+
+/* --- SVG STYLES --- */
+#interactive-car-svg {
+    width: 800px; /* Increased width */
+    height: 500px; /* Increased height */
+    max-width: 100%;
+}
+
+/* Style all paths inside the SVG */
+#interactive-car-svg path {
+    fill: var(--red);
+    stroke: var(--black);
+    stroke-width: 0.5px;
+}
+
+/* Style the tires specifically */
+#interactive-car-svg #clickable-tires path {
+    fill: var(--black);
+    stroke: var(--gray);
+}
+
+/* --- HOVER EFFECT FIX --- */
+.interactive-part {
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+/* Target the PATHS *inside* the hovered group */
+.interactive-part:hover path {
+    opacity: 1;
+    fill: #ff6666; /* Lighter red on hover */
+    stroke: var(--red);
+}
+
+/* Keep tires black/gray on hover */
+.interactive-part#clickable-tires:hover path {
+    fill: var(--gray);
+    stroke: var(--red);
+}
+/* --- End SVG STYLES --- */
+
+
+/* --- Viz 2 Modal (Pop-up) --- */
+.viz-modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: var(--card, #fff);
+    margin: 10% auto;
+    padding: 25px;
+    border: 3px solid var(--red, #D40000);
+    border-radius: 12px;
+    width: 80%;
+    max-width: 800px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.close-btn {
+    color: var(--gray, #333);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--red, #D40000);
+}
+
+#modal-title {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--red);
+    margin-top: 0;
+}
+
+#modal-chart {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows chart and list to wrap */
+    gap: 1rem;
+}
+
+#modal-overtakes {
+    font-family: 'Antonio', sans-serif;
+}
+#modal-overtakes h4 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--black);
+}
+#modal-overtakes ul {
+    list-style-type: square;
+}
+
+/* D3 Chart Styles */
+#modal-chart text {
+    font-family: 'Antonio', sans-serif;
+    fill: #111;
+}
+#modal-chart .domain {
+    stroke: #111;
+}
+#modal-chart .tick line {
+    stroke: #ccc;
+}

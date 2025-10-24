@@ -139,10 +139,63 @@
             </div>
         </div>
 
-        <div id="viz2" class="viz-card">Viz 2 · Awaiting Data</div>
+        <div id="viz2" class="viz-card">
+            <div class="viz2-container">
+
+                <div id="viz2-controls" class="controls-panel">
+
+                    <div class="selectGroup">
+                        <label for="viz2-yearSelect">Select Year</label>
+                        <select id="viz2-yearSelect"></select>
+                    </div>
+
+                    <div class="selectGroup">
+                        <label for="viz2-teamSelect">Select Team</label>
+                        <select id="viz2-teamSelect">
+                            <option>Select a year first</option>
+                        </select>
+                    </div>
+
+                    <div class="selectGroup">
+                        <label for="viz2-driverSelect">Select Driver</label>
+                        <select id="viz2-driverSelect">
+                            <option>Select a team first</option>
+                        </select>
+                    </div>
+
+                    <div id="viz2-infoBox" class="stats-box">
+                        <h3>Car & Driver</h3>
+                        <div class="stat-line">
+                            <span class="label">Team:</span>
+                            <span id="info-teamName">–</span>
+                        </div>
+                        <div class="stat-line">
+                            <span class="label">Driver:</span>
+                            <span id="info-driverName">–</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="carContainer">
+                    <p class="awaitingText">Loading Car...</p>
+                </div>
+            </div>
+        </div>
+
         <div id="viz3" class="viz-card">Viz 3 · Awaiting Data</div>
     </div>
 </section>
+<div id="viz2-modal" class="viz-modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 id="modal-title">Modal Title</h3>
+        <p id="modal-description"></p>
+        <div id="modal-chart">
+        </div>
+        <div id="modal-overtakes">
+        </div>
+    </div>
+</div>
 <!-- RACERS SECTION -->
 <section class="racers-section">
     <h2>The Racers</h2>
@@ -181,5 +234,6 @@
 </section>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="js/vis1.js"></script>
+<script src="js/vis2.js"></script>
 </body>
 </html>
