@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const yearSelect = document.getElementById("yearSelect");
+    // const yearSelect = document.getElementById("yearSelect");
     const circuitSelect = document.getElementById("circuitSelect");
 
     // API hasn't been called yet, placeholder data
     const sampleYears = [2022, 2023, 2024];
     const sampleCircuits = ["Bahrain", "Monaco", "Silverstone", "Suzuka"];
 
-    sampleYears.forEach(y => {
-        const opt = document.createElement("option");
-        opt.value = y;
-        opt.textContent = y;
-        yearSelect.appendChild(opt);
-    });
+    // sampleYears.forEach(y => {
+    //     const opt = document.createElement("option");
+    //     opt.value = y;
+    //     opt.textContent = y;
+    //     yearSelect.appendChild(opt);
+    // });
 
     sampleCircuits.forEach(c => {
         const opt = document.createElement("option");
@@ -22,10 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let raceVis = null;
 
-    yearSelect.addEventListener("change", () => {
-        console.log("Year selected:", yearSelect.value);
-        loadTrack();
-    });
+    // yearSelect.addEventListener("change", () => {
+    //     console.log("Year selected:", yearSelect.value);
+    //     loadTrack();
+    // });
 
     circuitSelect.addEventListener("change", () => {
         console.log("Circuit selected:", circuitSelect.value);
@@ -33,10 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function loadTrack() {
-        const year = yearSelect.value;
+        // const year = yearSelect.value;
         const circuit = circuitSelect.value.toLowerCase(); 
         
-        if (!year || !circuit) return; // return early if nothing selected
+        if (!circuit || !circuit) return; // return early if nothing selected
         
         d3.select(".awaitingText").style("display", "none"); 
         
