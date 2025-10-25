@@ -1,7 +1,7 @@
 viz1();
 
 function viz1() {
-    // --- CSV File Paths ---
+    // load the data 
     const DATA_PATH = "data/kaggle/";
     const CIRCUITS_FILE = DATA_PATH + "circuits.csv"
     const LAPTIMES_FILE = DATA_PATH + "lap_times.csv";
@@ -181,7 +181,7 @@ class novelTrackVis {
                         "#6CD3BF",
                         "#E80020"
                       ];                      
-                    return colors[Math.floor(i / 2)]; // there are 2 cars (circles) of each colour
+                    return colors[Math.floor(i / 2)]; // there are 2 circles of each colour
                 })
 
         // references to the driver stats fields
@@ -217,7 +217,7 @@ class novelTrackVis {
                 speedEl.textContent = d.speed.toFixed(2) + "x";
             });
 
-        // Hover over driver circles - placeholder names
+        // hover over driver circles - placeholder names
         const driverNames = [
             "Verstappen", "Leclerc", "Norris", "Hamilton", "Sainz",
             "Piastri", "Russell", "Perez", "Alonso", "Gasly"
