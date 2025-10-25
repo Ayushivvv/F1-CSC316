@@ -1,3 +1,12 @@
+viz1();
+
+function viz1() {
+    // --- CSV File Paths ---
+    const DATA_PATH = "data/kaggle/";
+    const CIRCUITS_FILE = DATA_PATH + "circuits.csv"
+    const LAPTIMES_FILE = DATA_PATH + "lap_times.csv";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     // const yearSelect = document.getElementById("yearSelect");
     const circuitSelect = document.getElementById("circuitSelect");
@@ -5,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // API hasn't been called yet, placeholder data
     const sampleYears = [2022, 2023, 2024];
     const sampleCircuits = ["Bahrain", "Monaco", "Silverstone", "Suzuka"];
-
 
     // sampleYears.forEach(y => {
     //     const opt = document.createElement("option");
@@ -130,7 +138,7 @@ class novelTrackVis {
             }
 
             vis.pathLength = vis.trackPath.node().getTotalLength(); // path length for animation
-
+            
             const dots = [
                 { distance: 0, speed: 0.5 },
                 { distance: 0, speed: 0.6 },
