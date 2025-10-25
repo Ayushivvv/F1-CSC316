@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sampleYears = [2022, 2023, 2024];
     const sampleCircuits = ["Bahrain", "Monaco", "Silverstone", "Suzuka"];
 
+
     // sampleYears.forEach(y => {
     //     const opt = document.createElement("option");
     //     opt.value = y;
@@ -30,6 +31,18 @@ document.addEventListener("DOMContentLoaded", function () {
     circuitSelect.addEventListener("change", () => {
         console.log("Circuit selected:", circuitSelect.value);
         loadTrack();
+    });
+
+    // Event listeners for pause and play
+    const playBtn = document.getElementById("playBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+
+    playBtn.addEventListener("click", () => {
+        if (raceVis) raceVis.startAnimation();
+    });
+
+    pauseBtn.addEventListener("click", () => {
+        if (raceVis) raceVis.stopAnimation();
     });
 
     function loadTrack() {
@@ -68,7 +81,16 @@ class novelTrackVis {
         this.currentLap = 1;
         this.initVis();
     }
-        
+
+    startAnimation() {
+        this.isPaused = false;
+    }
+
+    stopAnimation() {
+        this.isPaused = true;
+    }
+
+
     async initVis(){
         let vis = this;
 
@@ -153,8 +175,83 @@ class novelTrackVis {
                       ];                      
                     return colors[Math.floor(i / 2)]; // there are 2 cars (circles) of each colour
                 })
-            
-            d3.timer(() => {
+
+        // references to the driver stats fields
+        const driverNameEl = document.getElementById("driverName");
+        const speedEl = document.getElementById("speed");
+
+        // handle hover + click
+        circles
+            .on("mouseover", (event, d) => {
+                // show driver + speed when hovered
+                driverNameEl.textContent = d.driver || "Unknown";
+                speedEl.textContent = d.speed.toFixed(2) + "x";
+            })
+            .on("mouseout", () => {
+                // if not selected, clear temporary hover info
+                if (!vis.selectedDriver) {
+                    driverNameEl.textContent = "–";
+                    speedEl.textContent = "–";
+                }
+            })
+            .on("click", (event, d) => {
+                // mark this driver as "selected"
+                vis.selectedDriver = d.driver;
+
+                // highlight this circle
+                d3.selectAll(".race-dot").attr("stroke", "none");
+                d3.select(event.currentTarget)
+                    .attr("stroke", "#d40000")
+                    .attr("stroke-width", 3);
+
+                // update driver stats panel permanently
+                driverNameEl.textContent = d.driver || "Unknown";
+                speedEl.textContent = d.speed.toFixed(2) + "x";
+            });
+
+        // Hover over driver circles - placeholder names
+        const driverNames = [
+            "Verstappen", "Leclerc", "Norris", "Hamilton", "Sainz",
+            "Piastri", "Russell", "Perez", "Alonso", "Gasly"
+        ];
+
+        // attach driver name to each dot
+        dots.forEach((d, i) => {
+            d.driver = driverNames[i % driverNames.length];
+        });
+
+        // tooltip div
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("position", "absolute")
+            .style("padding", "6px 10px")
+            .style("background", "#fff")
+            .style("border", "1px solid #ccc")
+            .style("border-radius", "5px")
+            .style("font-family", "Antonio, sans-serif")
+            .style("font-size", "0.9rem")
+            .style("pointer-events", "none")
+            .style("display", "none");
+
+        // add hover behavior
+        circles
+            .on("mouseover", (event, d) => {
+                tooltip.style("display", "block")
+                    .text(d.driver);
+            })
+            .on("mousemove", (event) => {
+                tooltip
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 20) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.style("display", "none");
+            });
+
+
+        d3.timer(() => {
+                if (vis.isPaused) return; // skip updates while paused
+
                 dots.forEach(dot => {
                     // move forward along the path
                     dot.distance += dot.speed;
