@@ -2,13 +2,13 @@
     --cream: #f9f5f0;
     --red: #d40000;
     --black: #111;
-    --gray: #333;
+    --gray: #000000;
     --card: #ffffff;
 }
 
 body {
     margin: 0;
-    font-family: 'Antonio', sans-serif; /* Default body font */
+    font-family: 'Titillium Web', sans-serif; /* Default body font */
     background: var(--cream);
     color: var(--black);
     line-height: 1.7;
@@ -32,9 +32,9 @@ body {
 }
 
 .site-header h3 {
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     font-weight: 600;
-    font-size: 1.2rem;
+    font-size: 2rem;
     letter-spacing: 0.5px;
     color: var(--gray);
     margin: 0.5rem 0 1rem 0;
@@ -49,7 +49,7 @@ body {
     gap: 0.75rem;
     margin: 0;
     padding: 0;
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     font-weight: 600;
 }
 
@@ -69,7 +69,7 @@ body {
 
 /* ===== Intro Card ===== */
 .card {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 2rem auto;
     background: var(--card);
     padding: 1rem 1.5rem; /* smaller padding top/bottom, normal left/right */
@@ -77,7 +77,26 @@ body {
     box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
-.card h2 {
+.card p {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    color: var(--black);
+}
+
+.viz-section .intro p {
+    text-align: left;
+}
+
+.about-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* --- Introduction/ About wrapper --- */
+.about-wrapper h2 {
+    text-align: center;
     font-family: 'Orbitron', sans-serif;
     font-size: 2rem;
     color: var(--red);
@@ -85,12 +104,8 @@ body {
     margin-bottom: 1rem;
 }
 
-.card p {
-    font-family: 'Antonio', sans-serif;
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: 1rem;
-    color: var(--black);
+.intro.card {
+    text-align: left; /* ensures text inside box is left-aligned */
 }
 
 /* ===== Marquee Strip ===== */
@@ -147,7 +162,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     font-weight: 700;
     font-size: 1.2rem;
     color: var(--red);
@@ -185,8 +200,8 @@ body {
 
 .racer {
     text-align: center;
-    font-family: 'Antonio', sans-serif;
-    font-weight: 600;
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: 700;
 }
 
 .racer-img {
@@ -212,7 +227,7 @@ body {
 
 .racer p {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.25rem;
     color: var(--black);
 }
 
@@ -332,7 +347,7 @@ body {
 }
 
 #controls select {
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     padding: 0.3rem 0.5rem;
     border: 1px solid var(--gray);
     border-radius: 4px;
@@ -376,7 +391,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin: 0.4rem 0;
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
 }
 
 .stat-line .label {
@@ -456,7 +471,7 @@ body {
     font-weight: 700;
 }
 .selectGroup select {
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     padding: 0.3rem 0.5rem;
     border: 1px solid var(--gray);
     border-radius: 4px;
@@ -571,7 +586,7 @@ body {
 }
 
 #modal-overtakes {
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
 }
 #modal-overtakes h4 {
     font-family: 'Orbitron', sans-serif;
@@ -583,7 +598,7 @@ body {
 
 /* D3 Chart Styles */
 #modal-chart text {
-    font-family: 'Antonio', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     fill: #111;
 }
 #modal-chart .domain {

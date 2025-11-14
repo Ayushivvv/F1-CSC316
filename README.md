@@ -12,7 +12,7 @@
 
 ## 📖 Project Overview
 
-Our project explores the world of **Formula One (F1)** through the lens of data. Since its inception in 1950, F1 has hosted over **1,142 World Championship events** across 76 seasons, 34 countries, and 77 racing circuits. Each event has generated a rich collection of data — from categorical variables like **drivers, teams, and locations** to quantitative measures such as **lap times, points earned, and pit stop counts**.
+Our project explores the world of **Formula One (F1)** through the lens of data. Since its inception in 1950, F1 has hosted over **1,142 World Championship events** across 76 seasons, 34 countries, and 77 racing circuits. Each event has generated a rich collection of data from categorical variables like **drivers, teams, and locations** to quantitative measures such as **lap times, points earned, and pit stop counts**.
 
 Leveraging these publicly available datasets, our team investigates the central question:
 
