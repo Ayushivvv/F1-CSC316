@@ -8,12 +8,157 @@ function viz1() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    // global
+    window.currentDriver = null;
+    let raceVis = null;
+
+    // modal elements
+    const driverModal = document.getElementById("driverModal");
+    const driverModalClose = document.getElementById("driverModalClose");
+
+    // close modal
+    driverModalClose.onclick = () => driverModal.style.display = "none";
+    window.onclick = (e) => {
+        if (e.target === driverModal) driverModal.style.display = "none";
+    };
+
+
+    window.onclick = (e) => {
+        if (e.target === driverModal) {
+            driverModal.style.display = "none";
+        }
+    };
+
     // const yearSelect = document.getElementById("yearSelect");
     const circuitSelect = document.getElementById("circuitSelect");
 
     // API hasn't been called yet, placeholder data
     const sampleYears = [2022, 2023, 2024];
     const sampleCircuits = ["Bahrain", "Monaco", "Silverstone", "Suzuka"];
+
+    const driverInfo = {
+        "Verstappen": {
+            img: "images/default_driver.png",
+            team: "Red Bull",
+            wins: 61,
+            podiums: 98,
+            championships: 3,
+            speedSeries: [180, 185, 182, 188],
+            championshipsSeries: [0,1,2,3],
+            crashSeries: [1,3,2,0],
+            podiumSeries: [10,12,15,17]
+        },
+        "Leclerc": {
+            img: "images/default_driver.png",
+            team: "Ferrari",
+            wins: 5,
+            podiums: 35,
+            championships: 0,
+            speedSeries: [178, 179, 177, 181],
+            championshipsSeries: [0,0,0,0],
+            crashSeries: [2,1,0,2],
+            podiumSeries: [5,7,12,14]
+        },
+        "Norris": {
+            img: "images/default_driver.png",
+            team: "McLaren",
+            wins: 1,
+            podiums: 15,
+            championships: 0,
+            speedSeries: [175, 177, 178, 180],
+            championshipsSeries: [0,0,0,0],
+            crashSeries: [1,2,1,0],
+            podiumSeries: [2,4,6,8]
+        },
+        "Hamilton": {
+            img: "images/default_driver.png",
+            team: "Mercedes",
+            wins: 103,
+            podiums: 197,
+            championships: 7,
+            speedSeries: [170, 172, 169, 171],
+            championshipsSeries: [1,2,3,4],
+            crashSeries: [0,1,0,1],
+            podiumSeries: [12,15,18,20]
+        },
+        "Sainz": {
+            img: "images/default_driver.png",
+            team: "Ferrari",
+            wins: 3,
+            podiums: 21,
+            championships: 0,
+            speedSeries: [174, 175, 173, 178],
+            championshipsSeries: [0,0,0,0],
+            crashSeries: [1,1,2,1],
+            podiumSeries: [3,5,7,9]
+        },
+        "Piastri": {
+            img: "images/default_driver.png",
+            team: "McLaren",
+            wins: 1,
+            podiums: 6,
+            championships: 0,
+            speedSeries: [176, 177, 175, 179],
+            championshipsSeries: [0,0,0,0],
+            crashSeries: [1,0,1,1],
+            podiumSeries: [1,2,4,6]
+        },
+        "Russell": {
+            img: "images/default_driver.png",
+            team: "Mercedes",
+            wins: 1,
+            podiums: 11,
+            championships: 0,
+            speedSeries: [171, 173, 172, 174],
+            championshipsSeries: [0,0,0,0],
+            crashSeries: [1,1,1,0],
+            podiumSeries: [3,4,6,7]
+        },
+        "Perez": {
+            img: "images/default_driver.png",
+            team: "Red Bull",
+            wins: 6,
+            podiums: 35,
+            championships: 0,
+            speedSeries: [172, 174, 173, 175],
+            championshipsSeries: [0,0,0,0],
+            crashSeries: [2,2,1,1],
+            podiumSeries: [4,5,7,8]
+        },
+        "Alonso": {
+            img: "images/default_driver.png",
+            team: "Aston Martin",
+            wins: 32,
+            podiums: 106,
+            championships: 2,
+            speedSeries: [169, 170, 168, 171],
+            championshipsSeries: [1,2,2,2],
+            crashSeries: [1,2,1,1],
+            podiumSeries: [8,9,10,11]
+        },
+        "Gasly": {
+            img: "images/default_driver.png",
+            team: "Alpine",
+            wins: 1,
+            podiums: 4,
+            championships: 0,
+            speedSeries: [168, 170, 169, 171],
+            championshipsSeries: [0,0,0,0],
+            crashSeries: [2,1,2,1],
+            podiumSeries: [1,2,3,4]
+        }
+    };
+
+    // This makes the modal open/close properly
+
+    driverModalClose.onclick = () => driverModal.style.display = "none";
+
+    window.onclick = (e) => {
+        if (e.target === driverModal) {
+            driverModal.style.display = "none";
+        }
+    };
+
 
     // sampleYears.forEach(y => {
     //     const opt = document.createElement("option");
@@ -29,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function () {
         circuitSelect.appendChild(opt);
     });
 
-    let raceVis = null;
 
     // yearSelect.addEventListener("change", () => {
     //     console.log("Year selected:", yearSelect.value);
@@ -53,6 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (raceVis) raceVis.stopAnimation();
     });
 
+    //Load track
     function loadTrack() {
         // const year = yearSelect.value;
         const circuit = circuitSelect.value.toLowerCase(); 
@@ -69,6 +214,98 @@ document.addEventListener("DOMContentLoaded", function () {
         // new vis
         raceVis = new novelTrackVis("#circuitContainer", circuit, {}, []); 
     }
+
+    // Load driver Graph
+    function loadDriverGraph(type, driver) {
+        const info = driverInfo[driver];
+        if (!info) return;
+
+        // Clear previous graph
+        const graph = d3.select("#driverGraphArea");
+        graph.html("");
+
+        // Pick the right dataset
+        let data;
+        if (type === "speed") data = info.speedSeries;
+        if (type === "championships") data = info.championshipsSeries;
+        if (type === "crashes") data = info.crashSeries;
+        if (type === "podiums") data = info.podiumSeries;
+
+        // Create SVG
+        const svg = graph.append("svg")
+            .attr("width", "100%")
+            .attr("height", 300);
+
+        const barWidth = 60;
+        const barSpacing = 20;
+
+        // Draw bars
+        svg.selectAll("rect")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => i * (barWidth + barSpacing))
+            .attr("y", d => 300 - d * 5)
+            .attr("width", barWidth)
+            .attr("height", d => d * 5)
+            .attr("fill", "var(--red)");
+
+        // Axis labels (optional)
+        svg.selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .text(d => d)
+            .attr("x", (d, i) => i * (barWidth + barSpacing) + barWidth / 3)
+            .attr("y", d => 300 - d * 5 - 10)
+            .attr("fill", "#333")
+            .attr("font-size", "12px");
+    }
+    // --- TAB BUTTONS FOR DRIVER MODAL ---
+
+    // --- TAB BUTTONS FOR DRIVER MODAL ---
+    document.querySelectorAll(".driver-tabs .tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+
+            // remove active class from all tabs
+            document.querySelectorAll(".driver-tabs .tab").forEach(t =>
+                t.classList.remove("active")
+            );
+
+            // add active class to clicked tab
+            tab.classList.add("active");
+
+            // get tab type (speed, championships, crashes, podiums)
+            const type = tab.dataset.tab;
+
+            // load the corresponding graph
+            loadDriverGraph(type, window.currentDriver);
+        });
+    });
+
+// CLICK TO OPEN DRIVER MODAL
+    document.getElementById("driverStatsBox").addEventListener("click", () => {
+
+        if (!window.currentDriver) return;
+
+        const info = driverInfo[window.currentDriver];
+        if (!info) return;
+
+        driverModal.style.display = "block";
+
+        document.getElementById("driverModalName").textContent = window.currentDriver;
+        document.getElementById("driverModalImg").src = info.img;
+        document.getElementById("driverModalTeam").textContent = info.team;
+
+        document.getElementById("driverSummary").innerHTML = `
+        <strong>Wins:</strong> ${info.wins}<br>
+        <strong>Podiums:</strong> ${info.podiums}<br>
+        <strong>Championships:</strong> ${info.championships}
+    `;
+
+        loadDriverGraph("speed", window.currentDriver);
+    });
+
 
 });
 
@@ -203,8 +440,13 @@ class novelTrackVis {
                 }
             })
             .on("click", (event, d) => {
+                // hide the placeholder, show the stats
+                document.getElementById("driverPlaceholder").style.display = "none";
+                document.getElementById("driverStatsContent").style.display = "block";
+
                 // mark this driver as "selected"
                 vis.selectedDriver = d.driver;
+                currentDriver = d.driver;
 
                 // highlight this circle
                 d3.selectAll(".race-dot").attr("stroke", "none");
@@ -276,6 +518,20 @@ class novelTrackVis {
                 circles
                     .attr("cx", d => d.x)
                     .attr("cy", d => d.y);
+
+            // Update leaderboard
+            const leaderboardList = document.getElementById("leaderboardList");
+
+            const ranking = dots
+                .slice()
+                .sort((a, b) => b.distance - a.distance)
+                .slice(0, 5);  // Show only top 5
+            leaderboardList.innerHTML = "";
+            ranking.forEach((d, idx) => {
+                const li = document.createElement("li");
+                li.textContent = d.driver;
+                leaderboardList.appendChild(li);
             });
-            
-    }}
+
+            });}
+}
