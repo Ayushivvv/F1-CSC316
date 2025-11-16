@@ -1,12 +1,3 @@
-viz1();
-
-function viz1() {
-    // load the data 
-    const DATA_PATH = "data/kaggle/";
-    const CIRCUITS_FILE = DATA_PATH + "circuits.csv"
-    const LAPTIMES_FILE = DATA_PATH + "lap_times.csv";
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     // global
     window.currentDriver = null;
@@ -29,8 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // const yearSelect = document.getElementById("yearSelect");
-    const circuitSelect = document.getElementById("circuitSelect");
+    const DATA_PATH = "data/kaggle/";
+
+    Promise.all([
+        d3.csv(DATA_PATH + "races.csv", d3.autoType),
+        d3.csv(DATA_PATH + "circuits.csv", d3.autoType)
+    ]).then(([races, circuits]) => {
+
+        const circuitSelect = document.getElementById("circuitSelect");
 
     // API hasn't been called yet, placeholder data
     const sampleYears = [2022, 2023, 2024];
@@ -172,13 +169,34 @@ document.addEventListener("DOMContentLoaded", function () {
         opt.value = c;
         opt.textContent = c;
         circuitSelect.appendChild(opt);
+        const wantedCircuits = ["Bahrain", "Monaco", "Silverstone"];
+
+        wantedCircuits.forEach(trackName => {
+
+            // find matching circuit
+            const circuit = circuits.find(c =>
+                (c.circuitRef && c.circuitRef.toLowerCase() === trackName.toLowerCase()) ||
+                (c.name && c.name.toLowerCase().includes(trackName.toLowerCase()))
+            );
+
+            if (!circuit) return;
+
+            const circuitId = circuit.circuitId;
+
+            // find all races for that circuit
+            const racesForCircuit = races.filter(r => r.circuitId === circuitId);
+
+            if (!racesForCircuit.length) return;
+
+            const latestYear = d3.max(racesForCircuit, r => r.year);
+
+            const opt = document.createElement("option");
+            opt.value = trackName;
+            opt.textContent = `${trackName} (${latestYear})`;
+            circuitSelect.appendChild(opt);
+        });
     });
 
-
-    // yearSelect.addEventListener("change", () => {
-    //     console.log("Year selected:", yearSelect.value);
-    //     loadTrack();
-    // });
 
     circuitSelect.addEventListener("change", () => {
         console.log("Circuit selected:", circuitSelect.value);
@@ -322,7 +340,7 @@ class novelTrackVis {
         this.isPaused = true;
         this.currentTime = 0;
         this.lastElapsed = 0;
-        this.speedFactor = 1.0;
+        this.speedFactor = 6.0;
         this.currentLap = 1;
         this.initVis();
     }
@@ -335,6 +353,124 @@ class novelTrackVis {
         this.isPaused = true;
     }
 
+    async loadRaceData() {
+        const dataPath = "data/kaggle/";
+
+        const racesFile = dataPath + "races.csv";
+        const lapsFile = dataPath + "lap_times.csv";
+        const driversFile = dataPath + "drivers.csv";
+        const circuitsFile = dataPath + "circuits.csv";
+        const resultsFile = dataPath + "results.csv";  
+        const constructorsFile = dataPath + "constructors.csv";  
+
+        const [races,laps,drivers,circuits,results,constructors] = await Promise.all([
+            d3.csv(racesFile, d3.autoType),
+            d3.csv(lapsFile, d3.autoType),
+            d3.csv(driversFile, d3.autoType),
+            d3.csv(circuitsFile, d3.autoType),
+            d3.csv(resultsFile, d3.autoType),
+            d3.csv(constructorsFile, d3.autoType)
+        ]);
+        const constructorById = new Map(constructors.map(c => [c.constructorId, c]));
+
+        const teamColours = {
+            "Red Bull": "#3671C6",
+            "Ferrari": "#C92D4B",
+            "Mercedes": "#6CD3BF",
+            "McLaren": "#FF8000",
+            "Aston Martin": "#358C75",
+            "Alpine F1 Team": "#2293D1",
+            "AlphaTauri": "#5E8FAA",
+            "Williams": "#64C4FF",
+            "Alfa Romeo": "#B6BABD",
+            "Haas F1 Team": "#E80020",
+            "Sauber": "#00E5FF"
+        };        
+
+        const circuitRef = this.trackName.toLowerCase();
+        const circuitRow = circuits.find(c =>
+            (c.circuitRef && c.circuitRef.toLowerCase() === circuitRef) ||
+            (c.name && c.name.toLowerCase().includes(circuitRef))
+        );
+
+        if (!circuitRow) {
+            console.warn("No circuit found in circuits.csv for track:", this.trackName);
+            return [];
+        }
+
+        const circuitId = circuitRow.circuitId;
+
+        const racesForCircuit = races.filter(r => r.circuitId === circuitId);
+        if (!racesForCircuit.length) {
+            console.warn("No races found for circuitId:", circuitId);
+            return [];
+        }
+
+        const maxYear = d3.max(racesForCircuit, r => r.year);
+        const latestRace = racesForCircuit.find(r => r.year === maxYear);
+        const raceId = latestRace.raceId;
+
+        const lapsForRace = laps.filter(l => l.raceId === raceId);
+
+        if (!lapsForRace.length) {
+            console.warn("No lap times found for raceId:", raceId);
+            return [];
+        }
+
+        const lapsByDriver = d3.group(lapsForRace, d => d.driverId);
+
+        const driverById = new Map(drivers.map(d => [d.driverId, d]));
+
+        const dots = [];
+
+        lapsByDriver.forEach((driverLaps, driverId) => {
+            driverLaps.sort((a, b) => d3.ascending(a.lap, b.lap));
+
+            const driverInfo = driverById.get(driverId);
+            const driverName = driverInfo
+                ? `${driverInfo.forename} ${driverInfo.surname}`
+                : `Driver ${driverId}`;
+
+            const bestLapMs = d3.min(driverLaps, d => d.milliseconds);
+            const avgLapMs = d3.mean(driverLaps, d => d.milliseconds);
+
+            // find the driver's constructor (team) using results.csv
+            const resultEntry = results.find(r =>
+                r.raceId === raceId && r.driverId === driverId
+            );
+
+            // default
+            let team = "Unknown";
+
+            // map constructor → team name
+            if (resultEntry) {
+                const constructorInfo = constructorById.get(resultEntry.constructorId);
+                if (constructorInfo && constructorInfo.name) {
+                    team = constructorInfo.name;
+                }
+            }
+
+            // choose colour based on team
+            const color = teamColours[team] || "#999999";
+
+            dots.push({
+                driverId: driverId,
+                driver: driverName,
+                team: team,
+                color: color,
+                laps: driverLaps,
+                lapElapsed: 0,
+                currentLapIndex: 0,
+                currentLap: driverLaps[0],
+                bestLapMs: bestLapMs,
+                avgLapMs: avgLapMs,
+                x: 0,
+                y: 0
+            });
+        });
+
+        return dots;
+    }    
 
     async initVis(){
         let vis = this;
@@ -374,147 +510,139 @@ class novelTrackVis {
                 vis.trackPath = vis.svg.select("path");
             }
 
-            vis.pathLength = vis.trackPath.node().getTotalLength(); // path length for animation
-            
-            const dots = [
-                { distance: 0, speed: 0.5 },
-                { distance: 0, speed: 0.6 },
-                { distance: 0, speed: 0.7 },
-                { distance: 0, speed: 0.8 },
-                { distance: 0, speed: 0.9 },
-                { distance: 0, speed: 1.0 },
-                { distance: 0, speed: 1.1 },
-                { distance: 0, speed: 1.2 },
-                { distance: 0, speed: 1.3 },
-                { distance: 0, speed: 1.4 },
-                { distance: 0, speed: 1.5 },
-                { distance: 0, speed: 1.6 },
-                { distance: 0, speed: 1.7 },
-                { distance: 0, speed: 1.8 },
-                { distance: 0, speed: 1.9 },
-                { distance: 0, speed: 2.0 },
-                { distance: 0, speed: 2.1 },
-                { distance: 0, speed: 2.2 },
-                { distance: 0, speed: 2.4 },
-                { distance: 0, speed: 2.5 }
-            ];
-            
+            // path length for animation
+            vis.pathLength = vis.trackPath.node().getTotalLength();
+
+            // ---- LOAD REAL RACE / LAP / DRIVER DATA FOR THIS TRACK ----
+            const dots = await vis.loadRaceData();
+
+            if (!dots || dots.length === 0) {
+                console.warn("No dots (drivers) created for this track.");
+                return;
+            }
+
+            // Create one circle per driver
             const circles = vis.svg.selectAll(".race-dot")
                 .data(dots)
                 .enter()
                 .append("circle")
                 .attr("class", "race-dot")
-                .attr("r", 10)
-                .attr("fill", (d, i) => {
-                    const colors = [
-                        "#5E8FAA",
-                        "#B6BABD",
-                        "#64C4FF",
-                        "#2293D1",
-                        "#C92D4B",
-                        "#358C75",
-                        "#FF8000",
-                        "#3671C6",
-                        "#6CD3BF",
-                        "#E80020"
-                      ];                      
-                    return colors[Math.floor(i / 2)]; // there are 2 circles of each colour
+                .attr("r", 8)
+                .attr("fill", d => d.color);
+
+            // Initialize all dots at the start of the track
+            dots.forEach(d => {
+                const point = vis.trackPath.node().getPointAtLength(0);
+                d.x = point.x;
+                d.y = point.y;
+            });
+
+            circles
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+
+            // references to the driver stats fields
+            const driverNameEl = document.getElementById("driverName");
+            const speedEl = document.getElementById("speed");
+
+            // tooltip div
+            const tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("position", "absolute")
+                .style("padding", "6px 10px")
+                .style("background", "#fff")
+                .style("border", "1px solid #ccc")
+                .style("border-radius", "5px")
+                .style("font-family", "Antonio, sans-serif")
+                .style("font-size", "0.9rem")
+                .style("pointer-events", "none")
+                .style("display", "none");
+
+            // Hover + click behaviour: update tooltip + stats panel
+            circles
+                .on("mouseover", (event, d) => {
+                    tooltip
+                        .style("display", "block")
+                        .text(d.driver);
+
+                    if (driverNameEl) {
+                        driverNameEl.textContent = d.driver || "Unknown";
+                    }
+                    if (speedEl) {
+                        const bestLapSeconds = d.bestLapMs
+                            ? (d.bestLapMs / 1000).toFixed(3)
+                            : "–";
+                        speedEl.textContent = bestLapSeconds + " s (best lap)";
+                    }
                 })
+                .on("mousemove", (event) => {
+                    tooltip
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                })
+                .on("mouseout", () => {
+                    tooltip.style("display", "none");
 
-        // references to the driver stats fields
-        const driverNameEl = document.getElementById("driverName");
-        const speedEl = document.getElementById("speed");
+                    if (!vis.selectedDriver && driverNameEl && speedEl) {
+                        driverNameEl.textContent = "–";
+                        speedEl.textContent = "–";
+                    }
+                })
+                .on("click", (event, d) => {
+                    vis.selectedDriver = d.driverId;
 
-        // handle hover + click
-        circles
-            .on("mouseover", (event, d) => {
-                // show driver + speed when hovered
-                driverNameEl.textContent = d.driver || "Unknown";
-                speedEl.textContent = d.speed.toFixed(2) + "x";
-            })
-            .on("mouseout", () => {
-                // if not selected, clear temporary hover info
-                if (!vis.selectedDriver) {
-                    driverNameEl.textContent = "–";
-                    speedEl.textContent = "–";
-                }
-            })
-            .on("click", (event, d) => {
-                // hide the placeholder, show the stats
-                document.getElementById("driverPlaceholder").style.display = "none";
-                document.getElementById("driverStatsContent").style.display = "block";
+                    d3.selectAll(".race-dot").attr("stroke", "none");
+                    d3.select(event.currentTarget)
+                        .attr("stroke", "#d40000")
+                        .attr("stroke-width", 3);
 
-                // mark this driver as "selected"
-                vis.selectedDriver = d.driver;
-                currentDriver = d.driver;
-
-                // highlight this circle
-                d3.selectAll(".race-dot").attr("stroke", "none");
-                d3.select(event.currentTarget)
-                    .attr("stroke", "#d40000")
-                    .attr("stroke-width", 3);
-
-                // update driver stats panel permanently
-                driverNameEl.textContent = d.driver || "Unknown";
-                speedEl.textContent = d.speed.toFixed(2) + "x";
-            });
-
-        // hover over driver circles - placeholder names
-        const driverNames = [
-            "Verstappen", "Leclerc", "Norris", "Hamilton", "Sainz",
-            "Piastri", "Russell", "Perez", "Alonso", "Gasly"
-        ];
-
-        // attach driver name to each dot
-        dots.forEach((d, i) => {
-            d.driver = driverNames[i % driverNames.length];
-        });
-
-        // tooltip div
-        const tooltip = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("position", "absolute")
-            .style("padding", "6px 10px")
-            .style("background", "#fff")
-            .style("border", "1px solid #ccc")
-            .style("border-radius", "5px")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "0.9rem")
-            .style("pointer-events", "none")
-            .style("display", "none");
-
-        // add hover behavior
-        circles
-            .on("mouseover", (event, d) => {
-                tooltip.style("display", "block")
-                    .text(d.driver);
-            })
-            .on("mousemove", (event) => {
-                tooltip
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 20) + "px");
-            })
-            .on("mouseout", () => {
-                tooltip.style("display", "none");
-            });
-
-
-        d3.timer(() => {
-                if (vis.isPaused) return; // skip updates while paused
-
-                dots.forEach(dot => {
-                    // move forward along the path
-                    dot.distance += dot.speed;
-                    
-                    // use modulo to wrap, keeps going in same direction
-                    const wrappedDistance = dot.distance % vis.pathLength;
-                    
-                    // get the point at this distance
-                    const point = vis.trackPath.node().getPointAtLength(wrappedDistance);
-                    dot.x = point.x;
-                    dot.y = point.y;
+                    if (driverNameEl) {
+                        driverNameEl.textContent = d.driver || "Unknown";
+                    }
+                    if (speedEl) {
+                        const avgLapSeconds = d.avgLapMs
+                            ? (d.avgLapMs / 1000).toFixed(3)
+                            : "–";
+                        speedEl.textContent = avgLapSeconds + " s (avg lap)";
+                    }
                 });
-                
+
+            // ---- D3 TIMER: MOVE DOTS ACCORDING TO REAL LAP TIMES ----
+            vis.lastElapsed = 0;
+
+            d3.timer((elapsed) => {
+                if (vis.isPaused) {
+                    // keep timer running but do not advance laps while paused
+                    vis.lastElapsed = elapsed;
+                    return;
+                }
+
+                // time step in ms, scaled by speedFactor (>1 = faster than real time)
+                const delta = (elapsed - vis.lastElapsed) * vis.speedFactor;
+                vis.lastElapsed = elapsed;
+
+                dots.forEach(d => {
+                    if (!d.laps || d.laps.length === 0) return;
+
+                    d.lapElapsed += delta;
+
+                    // advance through laps if we've exceeded current lap duration
+                    while (d.lapElapsed > d.currentLap.milliseconds) {
+                        d.lapElapsed -= d.currentLap.milliseconds;
+                        d.currentLapIndex = (d.currentLapIndex + 1) % d.laps.length;
+                        d.currentLap = d.laps[d.currentLapIndex];
+                    }
+
+                    const progress = d.currentLap.milliseconds > 0
+                        ? d.lapElapsed / d.currentLap.milliseconds
+                        : 0;
+
+                    const distance = progress * vis.pathLength;
+                    const point = vis.trackPath.node().getPointAtLength(distance);
+                    d.x = point.x;
+                    d.y = point.y;
+                });
+
                 circles
                     .attr("cx", d => d.x)
                     .attr("cy", d => d.y);
