@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00D2BE,1.0,1.0,Finished,0 days 01:35:29.972000,25.0,,2018,Spanish Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,2.0,2.0,Finished,0 days 00:00:20.593000,18.0,,2018,Spanish Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1E41FF,5.0,3.0,Finished,0 days 00:00:26.873000,15.0,,2018,Spanish Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,3.0,4.0,Finished,0 days 00:00:27.584000,12.0,,2018,Spanish Grand Prix,R
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,6.0,5.0,Finished,0 days 00:00:50.058000,10.0,,2018,Spanish Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,7.0,6.0,+1 Lap,,8.0,,2018,Spanish Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,9.0,7.0,+1 Lap,,6.0,,2018,Spanish Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,8.0,8.0,+1 Lap,,4.0,,2018,Spanish Grand Prix,R
+PER,Sergio Perez,Force India,F596C8,15.0,9.0,+2 Laps,,2.0,,2018,Spanish Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,14.0,10.0,+2 Laps,,1.0,,2018,Spanish Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,18.0,11.0,+2 Laps,,0.0,,2018,Spanish Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,20.0,12.0,+2 Laps,,0.0,,2018,Spanish Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,17.0,13.0,+2 Laps,,0.0,,2018,Spanish Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,19.0,14.0,+3 Laps,,0.0,,2018,Spanish Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,11.0,15.0,Gearbox,,0.0,,2018,Spanish Grand Prix,R
+OCO,Esteban Ocon,Force India,F596C8,13.0,16.0,Oil leak,,0.0,,2018,Spanish Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,4.0,17.0,Turbo,,0.0,,2018,Spanish Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,10.0,18.0,Collision,,0.0,,2018,Spanish Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,12.0,19.0,Collision,,0.0,,2018,Spanish Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,16.0,20.0,Collision,,0.0,,2018,Spanish Grand Prix,R

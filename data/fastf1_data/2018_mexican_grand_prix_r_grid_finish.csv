@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+VER,Max Verstappen,Red Bull Racing,1E41FF,2.0,1.0,Finished,0 days 01:38:28.851000,25.0,,2018,Mexican Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,4.0,2.0,Finished,0 days 00:00:17.316000,18.0,,2018,Mexican Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,6.0,3.0,Finished,0 days 00:00:49.914000,15.0,,2018,Mexican Grand Prix,R
+HAM,Lewis Hamilton,Mercedes,00D2BE,3.0,4.0,Finished,0 days 00:01:18.738000,12.0,,2018,Mexican Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,5.0,5.0,+1 Lap,,10.0,,2018,Mexican Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,7.0,6.0,+2 Laps,,8.0,,2018,Mexican Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,9.0,7.0,+2 Laps,,6.0,,2018,Mexican Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,15.0,8.0,+2 Laps,,4.0,,2018,Mexican Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,10.0,9.0,+2 Laps,,2.0,,2018,Mexican Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,20.0,10.0,+2 Laps,,1.0,,2018,Mexican Grand Prix,R
+OCO,Esteban Ocon,Racing Point,f596c8,11.0,11.0,+2 Laps,,0.0,,2018,Mexican Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,17.0,12.0,+2 Laps,,0.0,,2018,Mexican Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,19.0,13.0,+2 Laps,,0.0,,2018,Mexican Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,14.0,14.0,+2 Laps,,0.0,,2018,Mexican Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,16.0,15.0,+2 Laps,,0.0,,2018,Mexican Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,18.0,16.0,+3 Laps,,0.0,,2018,Mexican Grand Prix,R
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,1.0,17.0,Engine,,0.0,,2018,Mexican Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,13.0,18.0,Brakes,,0.0,,2018,Mexican Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,8.0,19.0,Suspension,,0.0,,2018,Mexican Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,12.0,20.0,Engine,,0.0,,2018,Mexican Grand Prix,R

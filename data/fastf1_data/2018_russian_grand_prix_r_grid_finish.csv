@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00D2BE,2.0,1.0,Finished,0 days 01:27:25.181000,25.0,,2018,Russian Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,1.0,2.0,Finished,0 days 00:00:02.545000,18.0,,2018,Russian Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,3.0,3.0,Finished,0 days 00:00:07.487000,15.0,,2018,Russian Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,4.0,4.0,Finished,0 days 00:00:16.543000,12.0,,2018,Russian Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1E41FF,19.0,5.0,Finished,0 days 00:00:31.016000,10.0,,2018,Russian Grand Prix,R
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,18.0,6.0,Finished,0 days 00:01:20.451000,8.0,,2018,Russian Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,7.0,7.0,Finished,0 days 00:01:38.390000,6.0,,2018,Russian Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,5.0,8.0,+1 Lap,,4.0,,2018,Russian Grand Prix,R
+OCO,Esteban Ocon,Racing Point,f596c8,6.0,9.0,+1 Lap,,2.0,,2018,Russian Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,8.0,10.0,+1 Lap,,1.0,,2018,Russian Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,9.0,11.0,+1 Lap,,0.0,,2018,Russian Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,12.0,12.0,+1 Lap,,0.0,,2018,Russian Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,10.0,13.0,+1 Lap,,0.0,,2018,Russian Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,16.0,14.0,+1 Lap,,0.0,,2018,Russian Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,14.0,15.0,+1 Lap,,0.0,,2018,Russian Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,15.0,16.0,+2 Laps,,0.0,,2018,Russian Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,11.0,17.0,+2 Laps,,0.0,,2018,Russian Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,13.0,18.0,+2 Laps,,0.0,,2018,Russian Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,17.0,19.0,Brakes,,0.0,,2018,Russian Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,20.0,20.0,Brakes,,0.0,,2018,Russian Grand Prix,R

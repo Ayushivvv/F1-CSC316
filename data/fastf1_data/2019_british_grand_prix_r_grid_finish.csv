@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00d2be,2.0,1.0,Finished,0 days 01:21:08.452000,26.0,https://www.formula1.com/content/dam/fom-website/drivers/L/LEWHAM01_Lewis_Hamilton/lewham01.png,2019,British Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00d2be,1.0,2.0,Finished,0 days 00:00:24.928000,18.0,https://www.formula1.com/content/dam/fom-website/drivers/V/VALBOT01_Valtteri_Bottas/valbot01.png,2019,British Grand Prix,R
+LEC,Charles Leclerc,Ferrari,dc0000,3.0,3.0,Finished,0 days 00:00:30.117000,15.0,https://www.formula1.com/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png,2019,British Grand Prix,R
+GAS,Pierre Gasly,Red Bull Racing,1e41ff,5.0,4.0,Finished,0 days 00:00:34.692000,12.0,https://www.formula1.com/content/dam/fom-website/drivers/P/PIEGAS01_Pierre_Gasly/piegas01.png,2019,British Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1e41ff,4.0,5.0,Finished,0 days 00:00:39.458000,10.0,https://www.formula1.com/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png,2019,British Grand Prix,R
+SAI,Carlos Sainz,McLaren,ff8700,13.0,6.0,Finished,0 days 00:00:53.639000,8.0,https://www.formula1.com/content/dam/fom-website/drivers/C/CARSAI01_Carlos_Sainz/carsai01.png,2019,British Grand Prix,R
+RIC,Daniel Ricciardo,Renault,fff500,7.0,7.0,Finished,0 days 00:00:54.401000,6.0,https://www.formula1.com/content/dam/fom-website/drivers/D/DANRIC01_Daniel_Ricciardo/danric01.png,2019,British Grand Prix,R
+RAI,Kimi Räikkönen,Alfa Romeo Racing,9b0000,12.0,8.0,Finished,0 days 00:01:05.540000,4.0,https://www.formula1.com/content/dam/fom-website/drivers/K/KIMRAI01_Kimi_R%C3%A4ikk%C3%B6nen/kimrai01.png,2019,British Grand Prix,R
+KVY,Daniil Kvyat,Toro Rosso,469bff,17.0,9.0,Finished,0 days 00:01:06.720000,2.0,https://www.formula1.com/content/dam/fom-website/drivers/D/DANKVY01_Daniil_Kvyat/dankvy01.png,2019,British Grand Prix,R
+HUL,Nico Hulkenberg,Renault,fff500,10.0,10.0,Finished,0 days 00:01:12.733000,1.0,https://www.formula1.com/content/dam/fom-website/drivers/N/NICHUL01_Nico_Hulkenberg/nichul01.png,2019,British Grand Prix,R
+NOR,Lando Norris,McLaren,ff8700,8.0,11.0,Finished,0 days 00:01:14.281000,0.0,https://www.formula1.com/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png,2019,British Grand Prix,R
+ALB,Alexander Albon,Toro Rosso,469bff,9.0,12.0,Finished,0 days 00:01:15.617000,0.0,https://www.formula1.com/content/dam/fom-website/drivers/A/ALEALB01_Alexander_Albon/alealb01.png,2019,British Grand Prix,R
+STR,Lance Stroll,Racing Point,f596c8,18.0,13.0,Finished,0 days 00:01:21.086000,0.0,https://www.formula1.com/content/dam/fom-website/drivers/L/LANSTR01_Lance_Stroll/lanstr01.png,2019,British Grand Prix,R
+RUS,George Russell,Williams,ffffff,19.0,14.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png,2019,British Grand Prix,R
+KUB,Robert Kubica,Williams,ffffff,20.0,15.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/R/ROBKUB01_Robert_Kubica/robkub01.png,2019,British Grand Prix,R
+VET,Sebastian Vettel,Ferrari,dc0000,6.0,16.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/S/SEBVET01_Sebastian_Vettel/sebvet01.png,2019,British Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,15.0,17.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/S/SERPER01_Sergio_Perez/serper01.png,2019,British Grand Prix,R
+GIO,Antonio Giovinazzi,Alfa Romeo Racing,9b0000,11.0,18.0,Spun off,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/A/ANTGIO01_Antonio_Giovinazzi/antgio01.png,2019,British Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,bd9e57,14.0,19.0,Collision,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/R/ROMGRO01_Romain_Grosjean/romgro01.png,2019,British Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,bd9e57,16.0,20.0,Collision,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/K/KEVMAG01_Kevin_Magnussen/kevmag01.png,2019,British Grand Prix,R

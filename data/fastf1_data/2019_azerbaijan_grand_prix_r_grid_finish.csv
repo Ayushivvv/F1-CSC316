@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+BOT,Valtteri Bottas,Mercedes,00d2be,1.0,1.0,Finished,0 days 01:31:52.942000,25.0,,2019,Azerbaijan Grand Prix,R
+HAM,Lewis Hamilton,Mercedes,00d2be,2.0,2.0,Finished,0 days 00:00:01.524000,18.0,,2019,Azerbaijan Grand Prix,R
+VET,Sebastian Vettel,Ferrari,dc0000,3.0,3.0,Finished,0 days 00:00:11.739000,15.0,,2019,Azerbaijan Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1e41ff,4.0,4.0,Finished,0 days 00:00:17.493000,12.0,,2019,Azerbaijan Grand Prix,R
+LEC,Charles Leclerc,Ferrari,dc0000,8.0,5.0,Finished,0 days 00:01:09.107000,11.0,,2019,Azerbaijan Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,5.0,6.0,Finished,0 days 00:01:16.416000,8.0,,2019,Azerbaijan Grand Prix,R
+SAI,Carlos Sainz,McLaren,ff8700,9.0,7.0,Finished,0 days 00:01:23.826000,6.0,,2019,Azerbaijan Grand Prix,R
+NOR,Lando Norris,McLaren,ff8700,7.0,8.0,Finished,0 days 00:01:40.268000,4.0,,2019,Azerbaijan Grand Prix,R
+STR,Lance Stroll,Racing Point,f596c8,13.0,9.0,Finished,0 days 00:01:43.816000,2.0,,2019,Azerbaijan Grand Prix,R
+RAI,Kimi Räikkönen,Alfa Romeo Racing,9b0000,0.0,10.0,+1 Lap,,1.0,,2019,Azerbaijan Grand Prix,R
+ALB,Alexander Albon,Toro Rosso,469bff,11.0,11.0,+1 Lap,,0.0,,2019,Azerbaijan Grand Prix,R
+GIO,Antonio Giovinazzi,Alfa Romeo Racing,9b0000,17.0,12.0,+1 Lap,,0.0,,2019,Azerbaijan Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,bd9e57,12.0,13.0,+1 Lap,,0.0,,2019,Azerbaijan Grand Prix,R
+HUL,Nico Hulkenberg,Renault,fff500,15.0,14.0,+1 Lap,,0.0,,2019,Azerbaijan Grand Prix,R
+RUS,George Russell,Williams,ffffff,16.0,15.0,+2 Laps,,0.0,,2019,Azerbaijan Grand Prix,R
+KUB,Robert Kubica,Williams,ffffff,0.0,16.0,+2 Laps,,0.0,,2019,Azerbaijan Grand Prix,R
+GAS,Pierre Gasly,Red Bull Racing,1e41ff,0.0,17.0,Transmission,,0.0,,2019,Azerbaijan Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,bd9e57,14.0,18.0,Brakes,,0.0,,2019,Azerbaijan Grand Prix,R
+KVY,Daniil Kvyat,Toro Rosso,469bff,6.0,19.0,Collision,,0.0,,2019,Azerbaijan Grand Prix,R
+RIC,Daniel Ricciardo,Renault,fff500,10.0,20.0,Collision,,0.0,,2019,Azerbaijan Grand Prix,R

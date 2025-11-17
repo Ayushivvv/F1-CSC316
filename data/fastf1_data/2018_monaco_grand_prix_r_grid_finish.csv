@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,1.0,1.0,Finished,0 days 01:42:54.807000,25.0,,2018,Monaco Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,2.0,2.0,Finished,0 days 00:00:07.336000,18.0,,2018,Monaco Grand Prix,R
+HAM,Lewis Hamilton,Mercedes,00D2BE,3.0,3.0,Finished,0 days 00:00:17.013000,15.0,,2018,Monaco Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,4.0,4.0,Finished,0 days 00:00:18.127000,12.0,,2018,Monaco Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,5.0,5.0,Finished,0 days 00:00:18.822000,10.0,,2018,Monaco Grand Prix,R
+OCO,Esteban Ocon,Force India,F596C8,6.0,6.0,Finished,0 days 00:00:23.667000,8.0,,2018,Monaco Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,10.0,7.0,Finished,0 days 00:00:24.331000,6.0,,2018,Monaco Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,11.0,8.0,Finished,0 days 00:00:24.839000,4.0,,2018,Monaco Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1E41FF,20.0,9.0,Finished,0 days 00:00:25.317000,2.0,,2018,Monaco Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,8.0,10.0,Finished,0 days 00:01:09.013000,1.0,,2018,Monaco Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,16.0,11.0,Finished,0 days 00:01:09.864000,0.0,,2018,Monaco Grand Prix,R
+PER,Sergio Perez,Force India,F596C8,9.0,12.0,Finished,0 days 00:01:10.461000,0.0,,2018,Monaco Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,19.0,13.0,Finished,0 days 00:01:14.823000,0.0,,2018,Monaco Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,12.0,14.0,+1 Lap,,0.0,,2018,Monaco Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,18.0,15.0,+1 Lap,,0.0,,2018,Monaco Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,13.0,16.0,+1 Lap,,0.0,,2018,Monaco Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,17.0,17.0,+2 Laps,,0.0,,2018,Monaco Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,14.0,18.0,Collision,,0.0,,2018,Monaco Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,15.0,19.0,Collision,,0.0,,2018,Monaco Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,7.0,20.0,Gearbox,,0.0,,2018,Monaco Grand Prix,R

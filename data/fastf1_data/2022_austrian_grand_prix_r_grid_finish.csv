@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+LEC,Charles Leclerc,Ferrari,ed1c24,2.0,1.0,Finished,0 days 01:24:24.312000,25.0,https://www.formula1.com/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1e5bc6,1.0,2.0,Finished,0 days 00:00:01.532000,19.0,https://www.formula1.com/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+HAM,Lewis Hamilton,Mercedes,6cd3bf,8.0,3.0,Finished,0 days 00:00:41.217000,15.0,https://www.formula1.com/content/dam/fom-website/drivers/L/LEWHAM01_Lewis_Hamilton/lewham01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+RUS,George Russell,Mercedes,6cd3bf,4.0,4.0,Finished,0 days 00:00:58.972000,12.0,https://www.formula1.com/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+OCO,Esteban Ocon,Alpine,2293d1,6.0,5.0,Finished,0 days 00:01:08.436000,10.0,https://www.formula1.com/content/dam/fom-website/drivers/E/ESTOCO01_Esteban_Ocon/estoco01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+MSC,Mick Schumacher,Haas F1 Team,b6babd,9.0,6.0,+1 Lap,,8.0,https://www.formula1.com/content/dam/fom-website/drivers/M/MICSCH02_Mick_Schumacher/micsch02.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+NOR,Lando Norris,McLaren,f58020,10.0,7.0,+1 Lap,,6.0,https://www.formula1.com/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,b6babd,7.0,8.0,+1 Lap,,4.0,None,2022,Austrian Grand Prix,R
+RIC,Daniel Ricciardo,McLaren,f58020,11.0,9.0,+1 Lap,,2.0,https://www.formula1.com/content/dam/fom-website/drivers/D/DANRIC01_Daniel_Ricciardo/danric01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+ALO,Fernando Alonso,Alpine,2293d1,19.0,10.0,+1 Lap,,1.0,https://www.formula1.com/content/dam/fom-website/drivers/F/FERALO01_Fernando_Alonso/feralo01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+BOT,Valtteri Bottas,Alfa Romeo,b12039,0.0,11.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/V/VALBOT01_Valtteri_Bottas/valbot01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+ALB,Alexander Albon,Williams,37bedd,15.0,12.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/A/ALEALB01_Alexander_Albon/alealb01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+STR,Lance Stroll,Aston Martin,2d826d,12.0,13.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/L/LANSTR01_Lance_Stroll/lanstr01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+ZHO,Guanyu Zhou,Alfa Romeo,b12039,13.0,14.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/G/GUAZHO01_Guanyu_Zhou/guazho01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+GAS,Pierre Gasly,AlphaTauri,4e7c9b,14.0,15.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/P/PIEGAS01_Pierre_Gasly/piegas01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+TSU,Yuki Tsunoda,AlphaTauri,4e7c9b,16.0,16.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/Y/YUKTSU01_Yuki_Tsunoda/yuktsu01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+VET,Sebastian Vettel,Aston Martin,2d826d,18.0,17.0,+1 Lap,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/S/SEBVET01_Sebastian_Vettel/sebvet01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+SAI,Carlos Sainz,Ferrari,ed1c24,3.0,18.0,Power Unit,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/C/CARSAI01_Carlos_Sainz/carsai01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+LAT,Nicholas Latifi,Williams,37bedd,17.0,19.0,Undertray,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/N/NICLAF01_Nicholas_Latifi/niclaf01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
+PER,Sergio Perez,Red Bull Racing,1e5bc6,5.0,20.0,Collision damage,,0.0,https://www.formula1.com/content/dam/fom-website/drivers/S/SERPER01_Sergio_Perez/serper01.png.transform/1col/image.png,2022,Austrian Grand Prix,R
