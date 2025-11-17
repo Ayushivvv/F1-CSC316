@@ -156,45 +156,32 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+    
+    const wantedCircuits = ["Bahrain", "Monaco", "Silverstone"];
 
-    // sampleYears.forEach(y => {
-    //     const opt = document.createElement("option");
-    //     opt.value = y;
-    //     opt.textContent = y;
-    //     yearSelect.appendChild(opt);
-    // });
+    wantedCircuits.forEach(trackName => {
 
-    sampleCircuits.forEach(c => {
+        // find matching circuit
+        const circuit = circuits.find(c =>
+            (c.circuitRef && c.circuitRef.toLowerCase() === trackName.toLowerCase()) ||
+            (c.name && c.name.toLowerCase().includes(trackName.toLowerCase()))
+        );
+
+        if (!circuit) return;
+
+        const circuitId = circuit.circuitId;
+
+        // find all races for that circuit
+        const racesForCircuit = races.filter(r => r.circuitId === circuitId);
+
+        if (!racesForCircuit.length) return;
+
+        const latestYear = d3.max(racesForCircuit, r => r.year);
+
         const opt = document.createElement("option");
-        opt.value = c;
-        opt.textContent = c;
+        opt.value = trackName;
+        opt.textContent = `${trackName} (${latestYear})`;
         circuitSelect.appendChild(opt);
-        const wantedCircuits = ["Bahrain", "Monaco", "Silverstone"];
-
-        wantedCircuits.forEach(trackName => {
-
-            // find matching circuit
-            const circuit = circuits.find(c =>
-                (c.circuitRef && c.circuitRef.toLowerCase() === trackName.toLowerCase()) ||
-                (c.name && c.name.toLowerCase().includes(trackName.toLowerCase()))
-            );
-
-            if (!circuit) return;
-
-            const circuitId = circuit.circuitId;
-
-            // find all races for that circuit
-            const racesForCircuit = races.filter(r => r.circuitId === circuitId);
-
-            if (!racesForCircuit.length) return;
-
-            const latestYear = d3.max(racesForCircuit, r => r.year);
-
-            const opt = document.createElement("option");
-            opt.value = trackName;
-            opt.textContent = `${trackName} (${latestYear})`;
-            circuitSelect.appendChild(opt);
-        });
     });
 
 
@@ -300,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
             loadDriverGraph(type, window.currentDriver);
         });
     });
-
+});
 // CLICK TO OPEN DRIVER MODAL
     document.getElementById("driverStatsBox").addEventListener("click", () => {
 
@@ -340,7 +327,7 @@ class novelTrackVis {
         this.isPaused = true;
         this.currentTime = 0;
         this.lastElapsed = 0;
-        this.speedFactor = 6.0;
+        this.speedFactor = 10.0;
         this.currentLap = 1;
         this.initVis();
     }
@@ -374,7 +361,7 @@ class novelTrackVis {
         const constructorById = new Map(constructors.map(c => [c.constructorId, c]));
 
         const teamColours = {
-            "Red Bull": "#3671C6",
+            "Red Bull": "#FFFF00",
             "Ferrari": "#C92D4B",
             "Mercedes": "#6CD3BF",
             "McLaren": "#FF8000",
@@ -590,12 +577,16 @@ class novelTrackVis {
                 })
                 .on("click", (event, d) => {
                     vis.selectedDriver = d.driverId;
-
+                
                     d3.selectAll(".race-dot").attr("stroke", "none");
                     d3.select(event.currentTarget)
                         .attr("stroke", "#d40000")
                         .attr("stroke-width", 3);
-
+                
+                    // Extract surname for modal lookup
+                    const surname = d.driver.split(" ").pop();
+                    window.currentDriver = surname;
+                
                     if (driverNameEl) {
                         driverNameEl.textContent = d.driver || "Unknown";
                     }
@@ -649,17 +640,25 @@ class novelTrackVis {
 
             // Update leaderboard
             const leaderboardList = document.getElementById("leaderboardList");
+            if (leaderboardList) {
+                // Calculate each driver's distance along the track
+                dots.forEach(d => {
+                    d.distance = (d.currentLapIndex * vis.pathLength) + 
+                                 (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
+                });
 
-            const ranking = dots
-                .slice()
-                .sort((a, b) => b.distance - a.distance)
-                .slice(0, 5);  // Show only top 5
-            leaderboardList.innerHTML = "";
-            ranking.forEach((d, idx) => {
-                const li = document.createElement("li");
-                li.textContent = d.driver;
-                leaderboardList.appendChild(li);
-            });
-
-            });}
+                const ranking = dots
+                    .slice()
+                    .sort((a, b) => b.distance - a.distance)
+                    .slice(0, 5);  // Show only top 5
+                
+                leaderboardList.innerHTML = "";
+                ranking.forEach((d, idx) => {
+                    const li = document.createElement("li");
+                    li.textContent = d.driver;  
+                    leaderboardList.appendChild(li);
+                });
+            }
+        });
+    }
 }
