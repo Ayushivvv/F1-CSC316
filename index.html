@@ -6,164 +6,149 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>The Furious Five: F1</title>
 
-    <!-- Motorsport-inspired font -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Playfair+Display:wght@500;700&display=swap"
-        rel="stylesheet" />
+            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Playfair+Display:wght@500;700&display=swap"
+            rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600&display=swap"
-        rel="stylesheet" />
+          rel="stylesheet" />
 
-    <!-- Your stylesheet -->
-    <link rel="stylesheet" href="css\style.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
 </head>
 
 <body>
-    <!-- HEADER -->
-    <header class="site-header">
-        <h1>The Furious Five: What Makes an F1 Champion</h1>
-        <h3>CSC316 Final Project</h3>
-        <ul class="contributors">
-            <li>Sonia Vaidya</li>
-            <li>Alisa Iskakova</li>
-            <li>Banke Akande</li>
-            <li>Jonathan Qiao</li>
-            <li>Ayusha Verma</li>
-        </ul>
-    </header>
+<header class="site-header">
+    <h1>The Furious Five: What Makes an F1 Champion</h1>
+    <h3>CSC316 Final Project</h3>
+    <ul class="contributors">
+        <li>Sonia Vaidya</li>
+        <li>Alisa Iskakova</li>
+        <li>Banke Akande</li>
+        <li>Jonathan Qiao</li>
+        <li>Ayusha Verma</li>
+    </ul>
+</header>
 
-    <!-- INTRO -->
-    <section class="about-wrapper">
-        <h2>About the Project</h2>
+<section class="about-wrapper">
+    <h2>About the Project</h2>
 
-        <section class="intro card">
-            <p>
-                Our project explores the world of
-                <strong>Formula One (F1)</strong> through the lens of data. Since its
-                inception in 1950, F1 has hosted over
-                <strong>1,142 World Championship events</strong> across 76 seasons, 34
-                countries, and 77 circuits. Each event generates a wealth of
-                information — from categorical data like
-                <em>drivers, teams, and locations</em> to quantitative measures like
-                <em>lap times, points earned, and pit stop counts</em>.
-            </p>
+    <section class="intro card">
+        <p>
+            Our project explores the world of
+            <strong>Formula One (F1)</strong> through the lens of data. Since its
+            inception in 1950, F1 has hosted over
+            <strong>1,142 World Championship events</strong> across 76 seasons, 34
+            countries, and 77 circuits. Each event generates a wealth of
+            information — from categorical data like
+            <em>drivers, teams, and locations</em> to quantitative measures like
+            <em>lap times, points earned, and pit stop counts</em>.
+        </p>
 
-            <p>
-                Leveraging these datasets, we aim to answer the central question:
-                <strong>What Makes an F1 Champion?</strong> By analyzing differences
-                between teams and drivers, as well as race conditions and strategies,
-                we uncover the factors that define success.
-            </p>
-        </section>
+        <p>
+            Leveraging these datasets, we aim to answer the central question:
+            <strong>What Makes an F1 Champion?</strong> By analyzing differences
+            between teams and drivers, as well as race conditions and strategies,
+            we uncover the factors that define success.
+        </p>
     </section>
+</section>
 
-    <!-- MARQUEE STRIP -->
-    <div class="marquee">
+<div class="marquee">
         <span>★ What Makes an F1 Champion? ★ A Data Drive Exploration ★ By: The
             Furious Five ★</span>
-    </div>
+</div>
 
-    <!-- THE DATA -->
-    <section class="data-section">
-        <h2>THE DATA</h2>
-        <div class="data-cards">
-            <!-- FastF1 -->
-            <div class="data-card">
-                <div class="circle-img">
-                    <img src="images/fastf1logo.png" alt="FastF1 Logo" />
-                </div>
-                <h3>FastF1</h3>
-                <p>
-                    A Python API for accessing detailed Formula 1 telemetry, timing, and
-                    session data.
-                </p>
-                <a href="https://docs.fastf1.dev/" target="_blank">Learn more</a>
+<section class="data-section">
+    <h2>THE DATA</h2>
+    <div class="data-cards">
+        <div class="data-card">
+            <div class="circle-img">
+                <img src="images/fastf1logo.png" alt="FastF1 Logo" />
             </div>
-
-            <!-- OpenF1 -->
-            <div class="data-card">
-                <div class="circle-img">
-                    <img src="images/openf1logo.png" alt="OpenF1 Logo" />
-                </div>
-                <h3>OpenF1</h3>
-                <p>
-                    An open API providing historical and real-time F1 race data such as
-                    weather, radio, and results.
-                </p>
-                <a href="https://openf1.org/#introduction" target="_blank">Learn more</a>
-            </div>
-
-            <!-- Kaggle -->
-            <div class="data-card">
-                <div class="circle-img">
-                    <img src="images/kagglelogo.png" alt="Kaggle Logo" />
-                </div>
-                <h3>Kaggle</h3>
-                <p>
-                    Comprehensive F1 dataset with races, drivers, constructors,
-                    circuits, and championship history.
-                </p>
-                <a href="https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020"
-                    target="_blank">Learn more</a>
-            </div>
+            <h3>FastF1</h3>
+            <p>
+                A Python API for accessing detailed Formula 1 telemetry, timing, and
+                session data.
+            </p>
+            <a href="https://docs.fastf1.dev/" target="_blank">Learn more</a>
         </div>
-    </section>
 
-    <!-- MARQUEE STRIP -->
-    <div class="marquee">
+        <div class="data-card">
+            <div class="circle-img">
+                <img src="images/openf1logo.png" alt="OpenF1 Logo" />
+            </div>
+            <h3>OpenF1</h3>
+            <p>
+                An open API providing historical and real-time F1 race data such as
+                weather, radio, and results.
+            </p>
+            <a href="https://openf1.org/#introduction" target="_blank">Learn more</a>
+        </div>
+
+        <div class="data-card">
+            <div class="circle-img">
+                <img src="images/kagglelogo.png" alt="Kaggle Logo" />
+            </div>
+            <h3>Kaggle</h3>
+            <p>
+                Comprehensive F1 dataset with races, drivers, constructors,
+                circuits, and championship history.
+            </p>
+            <a href="https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020"
+               target="_blank">Learn more</a>
+        </div>
+    </div>
+</section>
+
+<div class="marquee">
         <span>★ What Makes an F1 Champion? ★ A Data Drive Exploration ★ By: The
             Furious Five ★</span>
-    </div>
+</div>
 
-    <!-- VISUALIZATIONS -->
-
-    <section class="viz-section">
-        <h2>Visualizations</h2>
-        <section class="intro card">
-            <p>
-                Where can we start to explore what makes an F1 champion? Obviously
-                their race performance! Use this visualization to explore how the
-                performance of different drivers changes throughout various circuits
-                and seasons. Discover which teams and drivers tend to come out on top
-                at specific tracks and compare their speeds throughout each race. You
-                can also spot patterns in consistency, race strategy, and how drivers
-                adapt to different layouts, from high-speed straights to technical
-                corner-heavy circuits. As you move through the seasons, see how
-                drivers evolve, how teams improve, and what separates good drivers
-                from the truly elite.
-            </p>
-        </section>
-        <div class="viz-grid">
-            <div id="viz1" class="viz-card">
-                <div class="viz1-container">
-                    <!-- === LEFT PANEL === -->
-                    <div id="controls">
-                        <!-- YEAR SELECT -->
-                        <div id="selectionRow">
-                            <!-- <div class="selectGroup">
-                            <label for="yearSelect">Select a Year</label>
-                            <select id="yearSelect">
-                                <option>Select a year</option>
+<section class="viz-section">
+    <h2>Visualizations</h2>
+    <section class="intro card">
+        <p>
+            Where can we start to explore what makes an F1 champion? Obviously
+            their race performance! Use this visualization to explore how the
+            performance of different drivers changes throughout various circuits
+            and seasons. Discover which teams and drivers tend to come out on top
+            at specific tracks and compare their speeds throughout each race. You
+            can also spot patterns in consistency, race strategy, and how drivers
+            adapt to different layouts, from high-speed straights to technical
+            corner-heavy circuits. As you move through the seasons, see how
+            drivers evolve, how teams improve, and what separates good drivers
+            from the truly elite.
+        </p>
+    </section>
+    <div class="viz-grid">
+        <div id="viz1" class="viz-card">
+            <div class="viz1-container">
+                <div id="controls">
+                    <div id="selectionRow">
+                        <div class="selectGroup">
+                            <label for="circuitSelect">Select a Circuit</label>
+                            <select id="circuitSelect">
+                                <option>Select a circuit</option>
                             </select>
-                        </div> -->
-                            <div class="selectGroup">
-                                <label for="circuitSelect">Select a Circuit</label>
-                                <select id="circuitSelect">
-                                    <option>Select a circuit</option>
-                                </select>
-                            </div>
                         </div>
+                    </div>
 
-                    <!-- DRIVER STATS BOX -->
                     <div id="driverStatsBox" class="clickable-stats">
-
                         <h3>Driver Stats <img src="images/info.svg" class="click-icon"></h3>
 
-                        <!-- Placeholder message BEFORE a driver is selected -->
                         <div id="driverPlaceholder" class="placeholder-msg">
                             Pause and click a driver on the track to view stats
                         </div>
 
-                        <!-- Real stats (hidden until a driver is selected) -->
                         <div id="driverStatsContent" style="display:none;">
                             <div class="stat-line">
                                 <span class="label">Driver:</span>
@@ -174,105 +159,101 @@
                                 <span id="speed">–</span>
                             </div>
                         </div>
-
                     </div>
-                    <!-- Leader board-->
+
                     <div id="leaderboardBox" class="stats-box">
                         <h3>Leaderboard</h3>
                         <ol id="leaderboardList"></ol>
                     </div>
+                </div>
 
-                    <!-- === RIGHT SIDE: CIRCUIT VISUALIZATION === -->
-                    <div id="circuitContainer">
-                        <p class="awaitingText">Awaiting Circuit…</p>
-                        <svg id="circuitSVG" width="600" height="400"></svg>
-                    </div>
+                <div id="circuitContainer">
+                    <p class="awaitingText">Awaiting Circuit…</p>
+                    <svg id="circuitSVG" width="600" height="400"></svg>
                 </div>
             </div>
+        </div>
 
-            <section class="intro card">
-                <p>
-                    The next piece of the puzzle is the car itself! In Formula One, even
-                    the most talented drivers depend on the engineering beneath them.
-                    This visualization lets you dive into how each team’s car evolves
-                    year by year and how those changes shape a driver’s performance.
-                    Select a season, choose a team, and explore the car your chosen
-                    driver took to the track. By clicking different parts of the car,
-                    you can reveal deeper stats like pit stop times, finishing
-                    positions, and lap-time trends. Together, these details help
-                    highlight just how much the car contributes to a driver’s success,
-                    and where the line between machinery and mastery begins to blur.
-                </p>
-            </section>
+        <section class="intro card">
+            <p>
+                The next piece of the puzzle is the car itself! In Formula One, even
+                the most talented drivers depend on the engineering beneath them.
+                This visualization lets you dive into how each team’s car evolves
+                year by year and how those changes shape a driver’s performance.
+                Select a season, choose a team, and explore the car your chosen
+                driver took to the track. By clicking different parts of the car,
+                you can reveal deeper stats like pit stop times, finishing
+                positions, and lap-time trends. Together, these details help
+                highlight just how much the car contributes to a driver’s success,
+                and where the line between machinery and mastery begins to blur.
+            </p>
+        </section>
 
-            <div id="viz2" class="viz-card">
-                <div class="viz2-container">
-                    <div id="viz2-controls" class="controls-panel">
-                        <div class="selectGroup">
-                            <label for="viz2-yearSelect">Select Year</label>
-                            <select id="viz2-yearSelect"></select>
-                        </div>
-
-                        <div class="selectGroup">
-                            <label for="viz2-teamSelect">Select Team</label>
-                            <select id="viz2-teamSelect">
-                                <option>Select a year first</option>
-                            </select>
-                        </div>
-
-                        <div class="selectGroup">
-                            <label for="viz2-driverSelect">Select Driver</label>
-                            <select id="viz2-driverSelect">
-                                <option>Select a team first</option>
-                            </select>
-                        </div>
-
-                        <div id="viz2-infoBox" class="stats-box">
-                            <h3>Car & Driver</h3>
-                            <div class="stat-line">
-                                <span class="label">Team:</span>
-                                <span id="info-teamName">–</span>
-                            </div>
-                            <div class="stat-line">
-                                <span class="label">Driver:</span>
-                                <span id="info-driverName">–</span>
-                            </div>
-                        </div>
+        <div id="viz2" class="viz-card">
+            <div class="viz2-container">
+                <div id="viz2-controls" class="controls-panel">
+                    <div class="selectGroup">
+                        <label for="viz2-yearSelect">Select Year</label>
+                        <select id="viz2-yearSelect"></select>
                     </div>
 
-                    <div id="carContainer">
-                        <p class="awaitingText">Loading Car...</p>
+                    <div class="selectGroup">
+                        <label for="viz2-teamSelect">Select Team</label>
+                        <select id="viz2-teamSelect">
+                            <option>Select a year first</option>
+                        </select>
                     </div>
+
+                    <div class="selectGroup">
+                        <label for="viz2-driverSelect">Select Driver</label>
+                        <select id="viz2-driverSelect">
+                            <option>Select a team first</option>
+                        </select>
+                    </div>
+
+                    <div id="viz2-infoBox" class="stats-box">
+                        <h3>Car & Driver</h3>
+                        <div class="stat-line">
+                            <span class="label">Team:</span>
+                            <span id="info-teamName">–</span>
+                        </div>
+                        <div class="stat-line">
+                            <span class="label">Driver:</span>
+                            <span id="info-driverName">–</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="carContainer">
+                    <p class="awaitingText">Loading Car...</p>
                 </div>
             </div>
+        </div>
 
-            <!-- <div id="viz3" class="viz-card">
-                <div class="selectWeather">
-                    <label for="weather-select"></label>
-                    <select id="weather-select" class="weather-select">
-                        <option value="hot">Hot</option>
-                        <option value="cold">Cold</option>
-                        <option value="rain">Rain</option>
-                        <option value="windy">Windy</option>
-                    </select>
-                </div>
+        <div id="viz3" class="viz-card">
+            <div class="selectWeather">
+                <label for="weather-select"></label>
+                <select id="weather-select" class="weather-select">
+                    <option value="hot">Hot</option>
+                    <option value="cold">Cold</option>
+                    <option value="rain">Rain</option>
+                    <option value="windy">Windy</option>
+                </select>
+            </div>
 
-                <div id="viz3-main">
-                    <p class="awaitingText">Loading Viz...</p>
-                </div>
-            </div> -->
-
-        <div id="viz3" class="viz-card">Viz 3 · Awaiting Data</div>
+            <div id="viz3-main">
+                <p class="awaitingText">Loading Viz...</p>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Vis 1 Modal-->
 <div id="driverModal" class="viz-modal">
     <div class="modal-content driver-modal">
         <span class="close-btn" id="driverModalClose">&times;</span>
 
         <div class="driver-header">
-            <img id="driverModalImg"/>
+            <img id="driverModalImg" />
             <h3 id="driverModalName"></h3>
             <p id="driverModalTeam"></p>
         </div>
@@ -285,7 +266,6 @@
         </div>
 
         <div id="driverGraphArea"></div>
-
         <div id="driverSummary"></div>
     </div>
 </div>
@@ -295,75 +275,51 @@
         <span class="close-btn">&times;</span>
         <h3 id="modal-title">Modal Title</h3>
         <p id="modal-description"></p>
-        <div id="modal-chart">
-        </div>
-    </section>
+        <div id="modal-chart"></div>
+        <div id="modal-overtakes"></div>
+    </div>
+</div>
 
-    <div id="viz2-modal" class="viz-modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h3 id="modal-title">Modal Title</h3>
-            <p id="modal-description"></p>
-            <div id="modal-chart"></div>
-            <div id="modal-overtakes"></div>
+<section class="racers-section">
+    <h2>The Racers</h2>
+    <div class="racers-grid">
+        <div class="racer">
+            <div class="racer-img">
+                <img src="images/leclerc.png" alt="Ayusha Verma" />
+            </div>
+            <p>Ayusha Verma</p>
+        </div>
+        <div class="racer">
+            <div class="racer-img">
+                <img src="images/sainz.png" alt="Alisa Iskakova" />
+            </div>
+            <p>Alisa Iskakova</p>
+        </div>
+        <div class="racer">
+            <div class="racer-img">
+                <img src="images/piastri.png" alt="Sonia Vaidya" />
+            </div>
+            <p>Sonia Vaidya</p>
+        </div>
+        <div class="racer">
+            <div class="racer-img">
+                <img src="images/norris.png" alt="Jonathan Qiao" />
+            </div>
+            <p>Jonathan Qiao</p>
+        </div>
+        <div class="racer">
+            <div class="racer-img">
+                <img src="images/hamilton.png" alt="Banke Akande" />
+            </div>
+            <p>Banke Akande</p>
         </div>
     </div>
+</section>
 
-    <div id="viz3" class="viz-card">
-        <div class="selectWeather">
-            <label for="weather-select"></label>
-            <select id="weather-select" class="weather-select">
-                <option value="hot">Hot</option>
-                <option value="cold">Cold</option>
-                <option value="rain">Rain</option>
-                <option value="windy">Windy</option>
-            </select>
-        </div>
-
-        <div id="viz3-main">
-            <p class="awaitingText">Loading Viz...</p>
-        </div>
-    </div>
-    <!-- RACERS SECTION -->
-    <section class="racers-section">
-        <h2>The Racers</h2>
-        <div class="racers-grid">
-            <div class="racer">
-                <div class="racer-img">
-                    <img src="images/leclerc.png" alt="Ayusha Verma" />
-                </div>
-                <p>Ayusha Verma</p>
-            </div>
-            <div class="racer">
-                <div class="racer-img">
-                    <img src="images/sainz.png" alt="Alisa Iskakova" />
-                </div>
-                <p>Alisa Iskakova</p>
-            </div>
-            <div class="racer">
-                <div class="racer-img">
-                    <img src="images/piastri.png" alt="Sonia Vaidya" />
-                </div>
-                <p>Sonia Vaidya</p>
-            </div>
-            <div class="racer">
-                <div class="racer-img">
-                    <img src="images/norris.png" alt="Jonathan Qiao" />
-                </div>
-                <p>Jonathan Qiao</p>
-            </div>
-            <div class="racer">
-                <div class="racer-img">
-                    <img src="images/hamilton.png" alt="Banke Akande" />
-                </div>
-                <p>Banke Akande</p>
-            </div>
-        </div>
-    </section>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="js/vis1.js"></script>
-    <script src="js/vis2.js"></script>
-    <script src="js/vis3.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="js/vis1.js"></script>
+<script type="module" src="js/vis2.js"></script>
+<script src="js/vis3.js"></script>
 </body>
 
 </html>
