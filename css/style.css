@@ -702,3 +702,48 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     transition: opacity 0.1s ease;
 }
+
+/* ===== Viz3 ===== */
+
+
+
+/* --- Container for the visualization --- */
+#viz3-main {
+    width: 100%;             /* fill available width */
+    max-width: 1000px;       /* optional max-width */
+    margin: 0 auto;           /* center on page */
+    padding: 0;
+}
+
+/* --- SVG inside container --- */
+#weather-svg {
+    width: 100%;             /* fill container */
+    height: auto;
+    display: block;          /* avoid inline spacing issues */
+}
+
+/* --- Reduce slider wrapper width to allow more viz space --- */
+.weather-slider-wrapper {
+    width: 320px;            /* smaller than viz container */
+    max-width: 100%;
+    margin: 10px 0;
+    pointer-events: auto;
+}
+
+/* --- Keep ticks tight and aligned --- */
+.slider-ticks {
+    display: flex;
+    justify-content: space-around;
+    font-size: clamp(0.7rem, 1vw, 0.85rem);
+    width: 100%;
+    max-width: 320px;
+    margin: 0.25rem auto 0;
+    padding: 0;
+    gap: 0;
+}
+
+.slider-ticks span {
+    flex: none;
+    text-align: center;
+    white-space: nowrap;
+}
