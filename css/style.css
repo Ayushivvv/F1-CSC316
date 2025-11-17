@@ -703,9 +703,117 @@ body {
     transition: opacity 0.1s ease;
 }
 
+/* --- Visualization 4 Layout (yes called vis3 though)--- */
+.viz3-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+#viz3-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    background: var(--card);
+    border: 2px solid var(--black);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+#viz3-trackContainer {
+    flex: 2;
+    background: var(--black);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    position: relative;
+}
+
+/* Team legend */
+#teamLegend {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+}
+
+.team-legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-family: 'Titillium Web', sans-serif;
+    color: var(--black);
+}
+
+.team-legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 0.3rem;
+    border: 1px solid var(--black);
+}
+
+/* Tooltip for viz3 (extends your existing .tooltip) */
+.tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+    font-family: 'Titillium Web', sans-serif;
+    border: 1px solid #ddd;
+    opacity: 0;
+    z-index: 999;
+}
+
+.tooltip h4 {
+    margin: 0 0 0.2rem 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--red);
+}
+
+.tooltip img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.5rem;
+    border: 2px solid var(--red);
+}
+
+.tooltip .tooltip-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+.tooltip .tooltip-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+.tooltip .label {
+    font-weight: 600;
+}
+
+.change-label {
+    text-shadow: 0 0 4px rgba(0,0,0,0.7);
+}
 /* ===== Viz3 ===== */
-
-
 
 /* --- Container for the visualization --- */
 #viz3-main {

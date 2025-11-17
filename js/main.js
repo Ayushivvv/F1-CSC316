@@ -7,6 +7,7 @@
     // Create each visualization section immediately
     viz1();
     viz2();
+    viz4();
 
     // Visualization 1
     function viz1() {
