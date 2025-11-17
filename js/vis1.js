@@ -1,11 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
     // global
-    window.currentDriver = null;
+    window.currentDriverId = null;
+    window.currentDriverName = "";
     let raceVis = null;
 
     // modal elements
     const driverModal = document.getElementById("driverModal");
     const driverModalClose = document.getElementById("driverModalClose");
+    const DATA_PATH = "data/kaggle/";
+    const driverStats = new Map();
+    const driverStatsReady = loadDriverStats();
 
     // close modal
     driverModalClose.onclick = () => (driverModal.style.display = "none");
@@ -14,209 +18,295 @@ document.addEventListener("DOMContentLoaded", function () {
             driverModal.style.display = "none";
         }
     };
+    const driverTabs = document.querySelector(".driver-tabs");
+    const driverGraphArea = document.getElementById("driverGraphArea");
 
-    const DATA_PATH = "data/kaggle/";
-
-    // ---------- DRIVER INFO (STATIC) ----------
-    const driverInfo = {
-        Verstappen: {
-            img: "images/default_driver.png",
-            team: "Red Bull",
-            wins: 61,
-            podiums: 98,
-            championships: 3,
-            speedSeries: [180, 185, 182, 188],
-            championshipsSeries: [0, 1, 2, 3],
-            crashSeries: [1, 3, 2, 0],
-            podiumSeries: [10, 12, 15, 17],
-        },
-        Leclerc: {
-            img: "images/default_driver.png",
-            team: "Ferrari",
-            wins: 5,
-            podiums: 35,
-            championships: 0,
-            speedSeries: [178, 179, 177, 181],
-            championshipsSeries: [0, 0, 0, 0],
-            crashSeries: [2, 1, 0, 2],
-            podiumSeries: [5, 7, 12, 14],
-        },
-        Norris: {
-            img: "images/default_driver.png",
-            team: "McLaren",
-            wins: 1,
-            podiums: 15,
-            championships: 0,
-            speedSeries: [175, 177, 178, 180],
-            championshipsSeries: [0, 0, 0, 0],
-            crashSeries: [1, 2, 1, 0],
-            podiumSeries: [2, 4, 6, 8],
-        },
-        Hamilton: {
-            img: "images/default_driver.png",
-            team: "Mercedes",
-            wins: 103,
-            podiums: 197,
-            championships: 7,
-            speedSeries: [170, 172, 169, 171],
-            championshipsSeries: [1, 2, 3, 4],
-            crashSeries: [0, 1, 0, 1],
-            podiumSeries: [12, 15, 18, 20],
-        },
-        Sainz: {
-            img: "images/default_driver.png",
-            team: "Ferrari",
-            wins: 3,
-            podiums: 21,
-            championships: 0,
-            speedSeries: [174, 175, 173, 178],
-            championshipsSeries: [0, 0, 0, 0],
-            crashSeries: [1, 1, 2, 1],
-            podiumSeries: [3, 5, 7, 9],
-        },
-        Piastri: {
-            img: "images/default_driver.png",
-            team: "McLaren",
-            wins: 1,
-            podiums: 6,
-            championships: 0,
-            speedSeries: [176, 177, 175, 179],
-            championshipsSeries: [0, 0, 0, 0],
-            crashSeries: [1, 0, 1, 1],
-            podiumSeries: [1, 2, 4, 6],
-        },
-        Russell: {
-            img: "images/default_driver.png",
-            team: "Mercedes",
-            wins: 1,
-            podiums: 11,
-            championships: 0,
-            speedSeries: [171, 173, 172, 174],
-            championshipsSeries: [0, 0, 0, 0],
-            crashSeries: [1, 1, 1, 0],
-            podiumSeries: [3, 4, 6, 7],
-        },
-        Perez: {
-            img: "images/default_driver.png",
-            team: "Red Bull",
-            wins: 6,
-            podiums: 35,
-            championships: 0,
-            speedSeries: [172, 174, 173, 175],
-            championshipsSeries: [0, 0, 0, 0],
-            crashSeries: [2, 2, 1, 1],
-            podiumSeries: [4, 5, 7, 8],
-        },
-        Alonso: {
-            img: "images/default_driver.png",
-            team: "Aston Martin",
-            wins: 32,
-            podiums: 106,
-            championships: 2,
-            speedSeries: [169, 170, 168, 171],
-            championshipsSeries: [1, 2, 2, 2],
-            crashSeries: [1, 2, 1, 1],
-            podiumSeries: [8, 9, 10, 11],
-        },
-        Gasly: {
-            img: "images/default_driver.png",
-            team: "Alpine",
-            wins: 1,
-            podiums: 4,
-            championships: 0,
-            speedSeries: [168, 170, 169, 171],
-            championshipsSeries: [0, 0, 0, 0],
-            crashSeries: [2, 1, 2, 1],
-            podiumSeries: [1, 2, 3, 4],
-        },
+    const GRAPH_CONFIG = {
+        points: { key: "points", label: "Season Points", color: "var(--red)" },
+        wins: { key: "wins", label: "Season Wins", color: "#f4a259" },
+        podiums: { key: "podiums", label: "Season Podiums", color: "#5b8bf7" },
+        races: { key: "races", label: "Race Starts", color: "#2b2d42" },
     };
 
-    // ---------- DRIVER GRAPH (TABS) ----------
-    function loadDriverGraph(type, driver) {
-        const info = driverInfo[driver];
-        if (!info) return;
+    function formatPoints(value) {
+        if (!Number.isFinite(value)) return "–";
+        return Number.isInteger(value) ? value.toString() : value.toFixed(1);
+    }
 
+    async function loadDriverStats() {
+        const [drivers, results, races, constructors] = await Promise.all([
+            d3.csv(DATA_PATH + "drivers.csv", d3.autoType),
+            d3.csv(DATA_PATH + "results.csv", d3.autoType),
+            d3.csv(DATA_PATH + "races.csv", d3.autoType),
+            d3.csv(DATA_PATH + "constructors.csv", d3.autoType),
+        ]);
+
+        const constructorById = new Map(constructors.map((c) => [c.constructorId, c]));
+        const raceOrderById = new Map(
+            races.map((race) => [
+                race.raceId,
+                (race.year || 0) * 1000 + (race.round || 0),
+            ])
+        );
+        const raceYearById = new Map(races.map((race) => [race.raceId, race.year]));
+
+        drivers.forEach((driver) => {
+            driverStats.set(driver.driverId, {
+                driverId: driver.driverId,
+                name: `${driver.forename} ${driver.surname}`,
+                surname: driver.surname,
+                nationality: driver.nationality,
+                dob: driver.dob,
+                totalRaces: 0,
+                wins: 0,
+                podiums: 0,
+                points: 0,
+                latestTeam: null,
+                latestSeason: null,
+                latestRaceOrder: -Infinity,
+                yearly: new Map(),
+            });
+        });
+
+        results.forEach((result) => {
+            const stat = driverStats.get(result.driverId);
+            if (!stat) return;
+
+            stat.totalRaces += 1;
+
+            const positionNumeric = Number.isFinite(result.position)
+                ? result.position
+                : Number.isFinite(Number(result.positionText))
+                ? Number(result.positionText)
+                : null;
+
+            if (positionNumeric === 1) {
+                stat.wins += 1;
+            }
+
+            if (positionNumeric && positionNumeric <= 3) {
+                stat.podiums += 1;
+            }
+
+            if (Number.isFinite(result.points)) {
+                stat.points += result.points;
+            }
+
+            const raceYear = raceYearById.get(result.raceId);
+            if (raceYear) {
+                let yearly = stat.yearly.get(raceYear);
+                if (!yearly) {
+                    yearly = { year: raceYear, points: 0, wins: 0, podiums: 0, races: 0 };
+                    stat.yearly.set(raceYear, yearly);
+                }
+                yearly.races += 1;
+                yearly.points += Number.isFinite(result.points) ? result.points : 0;
+                if (positionNumeric === 1) {
+                    yearly.wins += 1;
+                }
+                if (positionNumeric && positionNumeric <= 3) {
+                    yearly.podiums += 1;
+                }
+            }
+
+            const raceOrder = raceOrderById.get(result.raceId) ?? -Infinity;
+            if (raceOrder >= stat.latestRaceOrder) {
+                stat.latestRaceOrder = raceOrder;
+                const constructorInfo = constructorById.get(result.constructorId);
+                stat.latestTeam = constructorInfo ? constructorInfo.name : null;
+                stat.latestSeason = raceYearById.get(result.raceId) || null;
+            }
+        });
+    }
+
+    function buildSeries(stat, key) {
+        if (!stat || !stat.yearly) return [];
+        const entries = Array.from(stat.yearly.values());
+        entries.sort((a, b) => a.year - b.year);
+        return entries.map((d) => ({
+            year: d.year,
+            value: Number.isFinite(d[key]) ? d[key] : 0,
+        }));
+    }
+
+    function loadDriverGraph(type, driverId) {
+        if (!driverGraphArea) return;
+        const stat = driverStats.get(driverId);
+        if (!stat) return;
+        const config = GRAPH_CONFIG[type];
         const graph = d3.select("#driverGraphArea");
         graph.html("");
 
-        let data;
-        if (type === "speed") data = info.speedSeries;
-        else if (type === "championships") data = info.championshipsSeries;
-        else if (type === "crashes") data = info.crashSeries;
-        else if (type === "podiums") data = info.podiumSeries;
+        if (!config) {
+            graph
+                .append("p")
+                .attr("class", "graph-placeholder")
+                .text("No chart configuration found.");
+            return;
+        }
+
+        const data = buildSeries(stat, config.key);
+        if (!data.length) {
+            graph
+                .append("p")
+                .attr("class", "graph-placeholder")
+                .text("No season data available for this driver.");
+            return;
+        }
+
+        const margin = { top: 25, right: 20, bottom: 45, left: 60 };
+        const width = 520 - margin.left - margin.right;
+        const height = 320 - margin.top - margin.bottom;
 
         const svg = graph
             .append("svg")
-            .attr("width", "100%")
-            .attr("height", 300);
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const barWidth = 60;
-        const barSpacing = 20;
+        const xScale = d3
+            .scaleBand()
+            .domain(data.map((d) => d.year))
+            .range([0, width])
+            .padding(0.25);
 
-        svg
-            .selectAll("rect")
+        const yMax = d3.max(data, (d) => d.value) || 1;
+        const yScale = d3.scaleLinear().domain([0, yMax * 1.1]).range([height, 0]);
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(xScale).tickFormat((d) => d.toString()))
+            .selectAll("text")
+            .style("font-family", "Antonio, sans-serif")
+            .style("font-size", "12px");
+
+        svg.append("g")
+            .call(d3.axisLeft(yScale))
+            .selectAll("text")
+            .style("font-family", "Antonio, sans-serif")
+            .style("font-size", "12px");
+
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", -5)
+            .attr("text-anchor", "middle")
+            .style("font-family", "Antonio, sans-serif")
+            .style("font-size", "14px")
+            .style("font-weight", "bold")
+            .text(config.label);
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height / 2)
+            .attr("y", -margin.left + 20)
+            .attr("text-anchor", "middle")
+            .style("font-family", "Antonio, sans-serif")
+            .style("font-size", "12px")
+            .text(config.label);
+
+        svg.selectAll(".bar")
             .data(data)
             .enter()
             .append("rect")
-            .attr("x", (d, i) => i * (barWidth + barSpacing))
-            .attr("y", (d) => 300 - d * 5)
-            .attr("width", barWidth)
-            .attr("height", (d) => d * 5)
-            .attr("fill", "var(--red)");
+            .attr("class", "bar")
+            .attr("x", (d) => xScale(d.year))
+            .attr("y", (d) => yScale(d.value))
+            .attr("width", xScale.bandwidth())
+            .attr("height", (d) => height - yScale(d.value))
+            .attr("fill", config.color);
 
-        svg
-            .selectAll("text")
+        svg.selectAll(".bar-label")
             .data(data)
             .enter()
             .append("text")
-            .text((d) => d)
-            .attr("x", (d, i) => i * (barWidth + barSpacing) + barWidth / 3)
-            .attr("y", (d) => 300 - d * 5 - 10)
-            .attr("fill", "#333")
-            .attr("font-size", "12px");
+            .attr("class", "bar-label")
+            .attr("x", (d) => xScale(d.year) + xScale.bandwidth() / 2)
+            .attr("y", (d) => yScale(d.value) - 6)
+            .attr("text-anchor", "middle")
+            .style("font-family", "Antonio, sans-serif")
+            .style("font-size", "11px")
+            .style("font-weight", "bold")
+            .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(1)));
     }
 
-    // Tabs inside modal
     document.querySelectorAll(".driver-tabs .tab").forEach((tab) => {
-        tab.addEventListener("click", () => {
+        tab.addEventListener("click", async () => {
             document
                 .querySelectorAll(".driver-tabs .tab")
                 .forEach((t) => t.classList.remove("active"));
             tab.classList.add("active");
 
             const type = tab.dataset.tab;
-            if (window.currentDriver) {
-                loadDriverGraph(type, window.currentDriver);
+            if (window.currentDriverId && type) {
+                await driverStatsReady;
+                loadDriverGraph(type, window.currentDriverId);
             }
         });
     });
 
-    // CLICK TO OPEN DRIVER MODAL
-    document
-        .getElementById("driverStatsBox")
-        .addEventListener("click", () => {
-            if (!window.currentDriver) return;
+    async function showDriverModal() {
+        if (!window.currentDriverId) return;
 
-            const info = driverInfo[window.currentDriver];
-            if (!info) return;
+        await driverStatsReady;
 
-            driverModal.style.display = "block";
+        const info = driverStats.get(window.currentDriverId);
+        if (!info) return;
 
-            document.getElementById("driverModalName").textContent =
-                window.currentDriver;
-            document.getElementById("driverModalImg").src = info.img;
-            document.getElementById("driverModalTeam").textContent = info.team;
+        driverModal.style.display = "block";
 
-            document.getElementById("driverSummary").innerHTML = `
-        <strong>Wins:</strong> ${info.wins}<br>
-        <strong>Podiums:</strong> ${info.podiums}<br>
-        <strong>Championships:</strong> ${info.championships}
+        const modalName = document.getElementById("driverModalName");
+        const modalImg = document.getElementById("driverModalImg");
+        const modalTeam = document.getElementById("driverModalTeam");
+        const driverSummary = document.getElementById("driverSummary");
+
+        modalName.textContent = info.name || window.currentDriverName || "Driver";
+        modalImg.src = "images/default_driver.png";
+
+        if (driverTabs) {
+            driverTabs.style.display = "flex";
+        }
+        if (driverGraphArea) {
+            driverGraphArea.style.display = "block";
+        }
+
+        const teamParts = [];
+        if (info.latestTeam) {
+            teamParts.push(
+                info.latestSeason
+                    ? `${info.latestTeam} (${info.latestSeason})`
+                    : info.latestTeam
+            );
+        }
+        if (info.nationality) {
+            teamParts.push(info.nationality);
+        }
+        modalTeam.textContent = teamParts.join(" • ") || "Details unavailable";
+
+        driverSummary.innerHTML = `
+        <strong>Race Starts:</strong> ${info.totalRaces || 0}<br>
+        <strong>Wins:</strong> ${info.wins || 0}<br>
+        <strong>Podiums:</strong> ${info.podiums || 0}<br>
+        <strong>Career Points:</strong> ${formatPoints(info.points)}
     `;
 
-            loadDriverGraph("speed", window.currentDriver);
+        const tabs = document.querySelectorAll(".driver-tabs .tab");
+        let defaultTabType = "points";
+        tabs.forEach((tab, index) => {
+            if (index === 0) {
+                defaultTabType = tab.dataset.tab || defaultTabType;
+            }
+            tab.classList.toggle("active", index === 0);
         });
 
-    // ---------- CIRCUIT DROPDOWN & CONTROLS ----------
+        loadDriverGraph(defaultTabType, window.currentDriverId);
+    }
+    window.showDriverModal = showDriverModal;
+
+    document
+        .getElementById("driverStatsBox")
+        .addEventListener("click", showDriverModal);
+
     const circuitSelect = document.getElementById("circuitSelect");
     const playBtn = document.getElementById("playBtn");
     const pauseBtn = document.getElementById("pauseBtn");
@@ -242,7 +332,6 @@ document.addEventListener("DOMContentLoaded", function () {
         raceVis = new novelTrackVis("#circuitContainer", circuit, {}, []);
     }
 
-    // Populate dropdown with latest-year Bahrain / Monaco / Silverstone
     Promise.all([
         d3.csv(DATA_PATH + "races.csv", d3.autoType),
         d3.csv(DATA_PATH + "circuits.csv", d3.autoType),
@@ -307,6 +396,12 @@ class novelTrackVis {
         this.lastElapsed = 0;
         this.speedFactor = 10.0;
         this.currentLap = 1;
+        this.totalLaps = 0;
+        this.completedLaps = 0;
+        this.lapCounterEl = document.getElementById("lapCounter");
+        if (this.lapCounterEl) {
+            this.lapCounterEl.textContent = "Lap 0 / –";
+        }
         this.initVis();
     }
 
@@ -319,6 +414,7 @@ class novelTrackVis {
     }
 
     async loadRaceData() {
+        const vis = this;
         const dataPath = "data/kaggle/";
 
         const racesFile = dataPath + "races.csv";
@@ -382,6 +478,13 @@ class novelTrackVis {
             return [];
         }
 
+        vis.totalLaps = d3.max(lapsForRace, d => d.lap) || 0;
+        vis.completedLaps = 0;
+        if (vis.lapCounterEl) {
+            const totalText = vis.totalLaps > 0 ? vis.totalLaps : "–";
+            vis.lapCounterEl.textContent = `Lap 0 / ${totalText}`;
+        }
+
         const lapsByDriver = d3.group(lapsForRace, d => d.driverId);
 
         const driverById = new Map(drivers.map(d => [d.driverId, d]));
@@ -425,6 +528,7 @@ class novelTrackVis {
                 currentLap: driverLaps[0],
                 bestLapMs: bestLapMs,
                 avgLapMs: avgLapMs,
+                completedLaps: 0,
                 x: 0,
                 y: 0
             });
@@ -501,20 +605,24 @@ class novelTrackVis {
             const tooltip = d3.select("body").append("div")
                 .attr("class", "tooltip")
                 .style("position", "absolute")
-                .style("padding", "6px 10px")
+                .style("padding", "8px 12px")
                 .style("background", "#fff")
                 .style("border", "1px solid #ccc")
-                .style("border-radius", "5px")
+                .style("box-shadow", "0 2px 6px rgba(0,0,0,0.15)")
+                .style("border-radius", "6px")
                 .style("font-family", "Antonio, sans-serif")
-                .style("font-size", "0.9rem")
+                .style("font-size", "0.85rem")
+                .style("line-height", "1.4")
                 .style("pointer-events", "none")
                 .style("display", "none");
 
+
             circles
                 .on("mouseover", (event, d) => {
+                    const lapNumber = (d.currentLapIndex || 0) + 1;
                     tooltip
                         .style("display", "block")
-                        .text(d.driver);
+                        .html(`<strong>${d.driver}</strong><br>${d.team || "–"}<br>Lap ${lapNumber} of ${vis.totalLaps || "?"}`);
 
                     if (driverNameEl) {
                         driverNameEl.textContent = d.driver || "Unknown";
@@ -547,8 +655,8 @@ class novelTrackVis {
                         .attr("stroke", "#d40000")
                         .attr("stroke-width", 3);
                 
-                    const surname = d.driver.split(" ").pop();
-                    window.currentDriver = surname;
+                    window.currentDriverId = d.driverId;
+                    window.currentDriverName = d.driver;
                 
                     if (driverNameEl) {
                         driverNameEl.textContent = d.driver || "Unknown";
@@ -558,6 +666,10 @@ class novelTrackVis {
                             ? (d.avgLapMs / 1000).toFixed(3)
                             : "–";
                         speedEl.textContent = avgLapSeconds + " s (avg lap)";
+                    }
+
+                    if (window.showDriverModal) {
+                        window.showDriverModal();
                     }
                 });
 
@@ -570,7 +682,6 @@ class novelTrackVis {
                     return;
                 }
 
-                // time step in ms, scaled by speedFactor (>1 = faster than real time)
                 const delta = (elapsed - vis.lastElapsed) * vis.speedFactor;
                 vis.lastElapsed = elapsed;
 
@@ -579,9 +690,20 @@ class novelTrackVis {
 
                     d.lapElapsed += delta;
 
-                    // advance through laps if we've exceeded current lap duration
                     while (d.lapElapsed > d.currentLap.milliseconds) {
                         d.lapElapsed -= d.currentLap.milliseconds;
+                        d.completedLaps = (d.completedLaps || 0) + 1;
+                        if (vis.totalLaps > 0) {
+                            const capped = Math.min(d.completedLaps, vis.totalLaps);
+                            if (capped > vis.completedLaps) {
+                                vis.completedLaps = capped;
+                                if (vis.lapCounterEl) {
+                                    vis.lapCounterEl.textContent = `Lap ${vis.completedLaps} / ${vis.totalLaps}`;
+                                }
+                            }
+                        } else if (vis.lapCounterEl) {
+                            vis.lapCounterEl.textContent = `Lap ${d.completedLaps}`;
+                        }
                         d.currentLapIndex = (d.currentLapIndex + 1) % d.laps.length;
                         d.currentLap = d.laps[d.currentLapIndex];
                     }
@@ -603,7 +725,6 @@ class novelTrackVis {
             // Update leaderboard
             const leaderboardList = document.getElementById("leaderboardList");
             if (leaderboardList) {
-                // Calculate each driver's distance along the track
                 dots.forEach(d => {
                     d.distance = (d.currentLapIndex * vis.pathLength) + 
                                  (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
@@ -612,7 +733,7 @@ class novelTrackVis {
                 const ranking = dots
                     .slice()
                     .sort((a, b) => b.distance - a.distance)
-                    .slice(0, 5);  // Show only top 5
+                    .slice(0, 5); 
                 
                 leaderboardList.innerHTML = "";
                 ranking.forEach((d, idx) => {
