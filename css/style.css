@@ -402,6 +402,38 @@ body {
 .stat-line span {
     color: var(--gray);
 }
+.clickable-stats {
+    cursor: pointer;
+}
+
+.clickable-stats:hover {
+    background: #f0f0f0;
+}
+
+#driverStatsBox {
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#driverStatsBox:hover {
+    transform: scale(1.02);
+    background-color: #fafafa;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+}
+.click-icon {
+    width: 14px;
+    opacity: 0.6;
+    margin-left: 5px;
+}
+
+.placeholder-msg {
+    text-align: center;
+    color: #777;
+    font-size: 0.9rem;
+    padding: 5px 0;
+    opacity: 0.8;
+}
+
 
 /* Right side circuit area */
 #circuitContainer {
@@ -414,6 +446,57 @@ body {
     align-items: center;
     min-height: 400px;
 }
+
+/*Driver Information Pop up*/
+.driver-modal {
+    max-width: 900px;
+}
+
+.driver-header {
+    text-align: center;
+}
+
+.driver-header img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid var(--red);
+    object-fit: cover;
+    margin-bottom: 0.75rem;
+}
+
+.driver-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.driver-tabs .tab {
+    background: var(--card);
+    border: 2px solid var(--red);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.driver-tabs .tab.active {
+    background: var(--red);
+    color: white;
+}
+
+#driverGraphArea {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 1rem;
+}
+
+#driverSummary {
+    font-family: 'Titillium Web';
+    margin-top: 1rem;
+}
+
 
 /* --- Visualization 2 Layout --- */
 .viz2-container {
@@ -457,6 +540,12 @@ body {
     color: var(--red);
     margin-bottom: 1rem;
     text-align: center;
+}
+
+#leaderboardList li {
+    margin: 0.3rem 0;
+    font-family: 'Titillium Web', sans-serif;
+    color: var(--black);
 }
 
 /* Reusable select group */

@@ -1,8 +1,5 @@
 //
-// === UPDATED VERSION: js/vis2.js (Kaggle CSVs) ===
-//
-// This version adds the Team Name to the tooltip
-// on the "Tire" scatter plot (Position vs. Avg Pit Stop).
+// === UPDATED VERSION: js/vis2.js ===
 //
 document.addEventListener("DOMContentLoaded", function () {
     // Check if we are on the main page and viz2 exists
@@ -27,9 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const modal = d3.select("#viz2-modal");
         const modalTitle = d3.select("#modal-title");
         const modalChart = d3.select("#modal-chart");
-        const modalOvertakes = d3.select("#modal-overtakes"); // Will be hidden
-        const modalCloseBtn = d3.select(".close-btn");
+        const modalOvertakes = d3.select("#modal-overtakes");
         const modalDescription = d3.select("#modal-description");
+
+        // Select the close button specifically within the Viz 2 modal
+        const modalCloseBtn = modal.select(".close-btn");
 
         const yearSelect = d3.select("#viz2-yearSelect");
         const teamSelect = d3.select("#viz2-teamSelect");
@@ -38,9 +37,23 @@ document.addEventListener("DOMContentLoaded", function () {
         const infoTeamName = d3.select("#info-teamName");
         const infoDriverName = d3.select("#info-driverName");
 
+        // --- TOOLTIP CREATION ---
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "viz2-d3-tooltip")
+            .style("position", "absolute")
+            .style("background", "rgba(0, 0, 0, 0.8)") // Semi-transparent black
+            .style("color", "#fff")
+            .style("padding", "6px 10px")
+            .style("border-radius", "4px")
+            .style("font-size", "12px")
+            .style("pointer-events", "none") // Let mouse events pass through
+            .style("display", "none")        // Hidden by default
+            .style("z-index", "9999")
+            .style("font-family", "sans-serif");
+
         // --- State ---
-        let kaggleData = {}; // To store all loaded CSVs
-        let selected = {};   // To store user's dropdown choices (raceId, driverId, etc.)
+        let kaggleData = {};
+        let selected = {};
 
         // --- Initialization ---
         loadData();
@@ -55,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // --- Data Loading Chain ---
         async function loadData() {
             try {
-                // Load all necessary CSVs at once
                 const [races, drivers, constructors, results, pitStops, lapTimes] = await Promise.all([
                     d3.csv(RACES_FILE, d3.autoType),
                     d3.csv(DRIVERS_FILE, d3.autoType),
@@ -65,10 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     d3.csv(LAPTIMES_FILE, d3.autoType)
                 ]);
 
-                // Store data in our state object
                 kaggleData = { races, drivers, constructors, results, pitStops, lapTimes };
 
-                // Manually create full name for drivers for easier matching
                 kaggleData.drivers.forEach(d => {
                     d.fullName = `${d.forename} ${d.surname}`;
                 });
@@ -85,8 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function populateYears() {
             const years = [...new Set(kaggleData.races.map(d => d.year))].sort(d3.descending);
-
-            // Limit to more recent years for performance, e.g., 2000+
             const recentYears = years.filter(y => y >= 2010);
 
             yearSelect.selectAll("option")
@@ -96,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .attr("value", d => d)
                 .text(d => d);
 
-            // Trigger the chain
             handleYearChange();
         }
 
@@ -106,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
             clearInfo();
             teamSelect.append("option").text("Loading teams...");
 
-            // Find the *first* race of that season
             const firstRace = kaggleData.races
                 .filter(d => d.year === year)
                 .sort((a, b) => a.round - b.round)[0];
@@ -116,11 +122,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Store the selected raceId
             selected.raceId = firstRace.raceId;
             console.log(`Selected Race: ${firstRace.name} (raceId: ${selected.raceId})`);
 
-            // Find which teams (constructors) participated in this race
             const resultsForRace = kaggleData.results.filter(d => d.raceId === selected.raceId);
             const constructorIds = [...new Set(resultsForRace.map(d => d.constructorId))];
 
@@ -136,7 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .attr("value", d => d.constructorId)
                 .text(d => d.name);
 
-            // Trigger next step
             handleTeamChange();
         }
 
@@ -144,10 +147,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const constructorId = +teamSelect.property("value");
             clearDropdowns([driverSelect]);
 
-            // Store the selected constructorId
             selected.constructorId = constructorId;
 
-            // Find which drivers drove for this team *in this race*
             const driverIds = kaggleData.results
                 .filter(d => d.raceId === selected.raceId && d.constructorId === selected.constructorId)
                 .map(d => d.driverId);
@@ -172,7 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Store selected driverId
             selected.driverId = driverId;
 
             const driver = kaggleData.drivers.find(d => d.driverId === driverId);
@@ -189,23 +189,55 @@ document.addEventListener("DOMContentLoaded", function () {
             d3.xml("images/f1-car.svg").then(data => {
                 carContainer.html(""); // Clear "Loading Car..."
 
+                // --- FLEXBOX CENTERING ---
+                // Ensure container is a flex column so Title and SVG stack and center
+                carContainer
+                    .style("display", "flex")
+                    .style("flex-direction", "column")
+                    .style("align-items", "center")
+                    .style("justify-content", "start");
+
+                // --- ADD TITLE ABOVE CAR ---
+                carContainer.append("h3")
+                    .text("Click on the car to view more!")
+                    .style("text-align", "center")
+                    .style("margin-bottom", "10px");
+
                 const svgNode = data.documentElement;
                 svgNode.id = "interactive-car-svg";
                 carContainer.node().append(svgNode);
 
                 const svg = d3.select(svgNode);
 
+                // --- LOWER THE CAR ---
+                // Adding margin to the top of the SVG to push it down a bit
+                svg.style("margin-top", "100px");
+
+                // --- D3 TOOLTIP INTERACTION ---
+
+                // 1. Tires -> Pit Stop Data
                 svg.select("#clickable-tires")
                     .classed("interactive-part", true)
-                    .on("click", showPitstopData);
+                    .on("click", showPitstopData)
+                    .on("mouseover", (e) => showTooltip(e, "Click to view Pit Stop vs. Position"))
+                    .on("mousemove", moveTooltip)
+                    .on("mouseout", hideTooltip);
 
+                // 2. Engine -> Lap Time Data
                 svg.select("#clickable-engine")
                     .classed("interactive-part", true)
-                    .on("click", showLapTimeData);
+                    .on("click", showLapTimeData)
+                    .on("mouseover", (e) => showTooltip(e, "Click to view Lap Time Performance"))
+                    .on("mousemove", moveTooltip)
+                    .on("mouseout", hideTooltip);
 
+                // 3. Rear Wing -> Position Data
                 svg.select("#clickable-rear-wing")
                     .classed("interactive-part", true)
-                    .on("click", showPositionData);
+                    .on("click", showPositionData)
+                    .on("mouseover", (e) => showTooltip(e, "Click to view Race Position"))
+                    .on("mousemove", moveTooltip)
+                    .on("mouseout", hideTooltip);
 
             }).catch(err => {
                 console.error("Error loading SVG:", err);
@@ -213,48 +245,54 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
+        // --- Tooltip Helper Functions ---
+        function showTooltip(event, text) {
+            tooltip
+                .text(text)
+                .style("display", "block");
+
+            d3.select(event.currentTarget).style("opacity", "0.8");
+        }
+
+        function moveTooltip(event) {
+            tooltip
+                .style("left", (event.pageX + 15) + "px")
+                .style("top", (event.pageY - 15) + "px");
+        }
+
+        function hideTooltip(event) {
+            tooltip.style("display", "none");
+            d3.select(event.currentTarget).style("opacity", null);
+        }
+
         // --- Click Handlers & Modal Functions ---
 
-        /**
-         * REWRITE 1: Show Pitstop Data
-         */
         function showPitstopData() {
             const { driverId, raceId } = selected;
             if (!driverId) return alert("Please select a driver.");
+
+            tooltip.style("display", "none");
 
             const driver = kaggleData.drivers.find(d => d.driverId === driverId);
             const driverName = driver.fullName;
             openModal(`Pit Stop vs. Position: ${driverName}`);
 
-            // 1. Get all results for the race
-            const raceResults = kaggleData.results.filter(d =>
-                d.raceId === raceId
-            );
+            const raceResults = kaggleData.results.filter(d => d.raceId === raceId);
+            const racePitStops = kaggleData.pitStops.filter(d => d.raceId === raceId);
 
-            // 2. Get all pit stops for the race
-            const racePitStops = kaggleData.pitStops.filter(d =>
-                d.raceId === raceId
-            );
-
-            // 3. Combine the data
             const plotData = raceResults.map(result => {
                 const dId = result.driverId;
                 const finalPosition = result.positionOrder;
-                const cId = result.constructorId; // <-- Get constructorId
+                const cId = result.constructorId;
 
-                // Find this driver's name
                 const driverInfo = kaggleData.drivers.find(d => d.driverId === dId);
                 const name = driverInfo ? driverInfo.fullName : 'Unknown';
 
-                // === FIND TEAM NAME ===
                 const teamInfo = kaggleData.constructors.find(c => c.constructorId === cId);
                 const teamName = teamInfo ? teamInfo.name : 'Unknown';
-                // === END CHANGE ===
 
-                // Find this driver's pit stops
                 const driverPitStops = racePitStops.filter(p => p.driverId === dId);
 
-                // Calculate average pit stop time
                 let avgPitstopTime = 0;
                 if (driverPitStops.length > 0) {
                     avgPitstopTime = d3.mean(driverPitStops, p => p.duration);
@@ -263,12 +301,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return {
                     driverId: dId,
                     driverName: name,
-                    teamName: teamName, // <-- Add team name to plot object
+                    teamName: teamName,
                     finalPosition: finalPosition,
                     avgPitstopTime: avgPitstopTime
                 };
-            }).filter(d => d.avgPitstopTime > 0); // Only plot drivers with at least one pit stop
-
+            }).filter(d => d.avgPitstopTime > 0);
 
             clearModal();
             modalDescription.html(`This scatter plot shows the <strong>Final Race Position</strong> vs. <strong>Average Pit Stop Time (seconds)</strong> 
@@ -279,16 +316,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // 4. Call the drawing function
             drawPitstopScatterPlot(plotData, driverId, driverName);
         }
 
-        /**
-         * REWRITE 2: Show Lap Time Data
-         */
         function showLapTimeData() {
             const { driverId, raceId } = selected;
             if (!driverId) return alert("Please select a driver.");
+
+            tooltip.style("display", "none");
 
             const driver = kaggleData.drivers.find(d => d.driverId === driverId);
             openModal(`Lap Time Performance: ${driver.fullName}`);
@@ -309,12 +344,11 @@ document.addEventListener("DOMContentLoaded", function () {
             drawLapTimeChart(lapTimes);
         }
 
-        /**
-         * REWRITE 3: Show Position Data
-         */
         function showPositionData() {
             const { driverId, raceId } = selected;
             if (!driverId) return alert("Please select a driver.");
+
+            tooltip.style("display", "none");
 
             const driver = kaggleData.drivers.find(d => d.driverId === driverId);
             openModal(`Race Position: ${driver.fullName}`);
@@ -336,9 +370,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // --- Chart Drawing Functions ---
 
-        /**
-         * NEW Scatter Plot Function
-         */
         function drawPitstopScatterPlot(plotData, selectedDriverId, selectedDriverName) {
             const margin = { top: 40, right: 30, bottom: 50, left: 60 };
             const width = 600 - margin.left - margin.right;
@@ -350,20 +381,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            // X-Scale: Average Pit Stop Time
             const x = d3.scaleLinear()
                 .domain([
-                    d3.min(plotData, d => d.avgPitstopTime) * 0.9, // 10% padding
-                    d3.max(plotData, d => d.avgPitstopTime) * 1.1  // 10% padding
+                    d3.min(plotData, d => d.avgPitstopTime) * 0.9,
+                    d3.max(plotData, d => d.avgPitstopTime) * 1.1
                 ])
                 .range([0, width]);
 
-            // Y-Scale: Final Position (Inverted: 1 at top, 20 at bottom)
             const y = d3.scaleLinear()
                 .domain([d3.max(plotData, d => d.finalPosition) + 1, 0])
                 .range([height, 0]);
 
-            // X-Axis
             svg.append("g")
                 .attr("transform", `translate(0,${height})`)
                 .call(d3.axisBottom(x))
@@ -374,9 +402,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 .style("text-anchor", "middle")
                 .text("Average Pit Stop Time (seconds)");
 
-            // Y-Axis
             svg.append("g")
-                .call(d3.axisLeft(y).ticks(10).tickFormat(d3.format("d"))) // Integer format
+                .call(d3.axisLeft(y).ticks(10).tickFormat(d3.format("d")))
                 .append("text")
                 .attr("fill", "#111")
                 .attr("transform", "rotate(-90)")
@@ -385,7 +412,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .style("text-anchor", "middle")
                 .text("Final Race Position");
 
-            // Scatter Plot Circles
             svg.selectAll("circle")
                 .data(plotData)
                 .enter()
@@ -397,25 +423,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 .style("opacity", 0.7)
                 .style("stroke", "#111")
                 .style("stroke-width", 0.5)
-                .append("title") // Add a simple tooltip
-                // === UPDATE TOOLTIP TEXT ===
+                .append("title")
                 .text(d => `${d.driverName} (${d.teamName})\nPosition: ${d.finalPosition}\nAvg Pit Stop: ${d.avgPitstopTime.toFixed(2)}s`);
-            // === END CHANGE ===
 
-            // Legend
             const legend = d3.select(svg.node().parentNode)
                 .append("g")
                 .attr("transform", `translate(${margin.left}, 15)`);
 
-            // Selected Driver
             legend.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).style("fill", "var(--red, #D40000)");
             legend.append("text").attr("x", 10).attr("y", 0).text(selectedDriverName).style("font-size", "12px").attr("alignment-baseline", "middle");
 
-            // Other Drivers
             legend.append("circle").attr("cx", 180).attr("cy", 0).attr("r", 5).style("fill", "#888");
             legend.append("text").attr("x", 190).attr("y", 0).text("Other Drivers").style("font-size", "12px").attr("alignment-baseline", "middle");
         }
-
 
         function drawLapTimeChart(lapData) {
             const margin = { top: 20, right: 30, bottom: 40, left: 60 };
@@ -515,8 +535,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
         }
 
-
-        // --- Utility Functions (Mostly Unchanged) ---
+        // --- Utility Functions ---
 
         function openModal(title) {
             modalTitle.text(title);
@@ -524,7 +543,7 @@ document.addEventListener("DOMContentLoaded", function () {
             clearModal();
             modalChart.html("<p>Loading data...</p>");
             modalDescription.html("");
-            modalOvertakes.html(""); // Clear this as it's no longer used
+            modalOvertakes.html("");
         }
 
         function closeModal() {

@@ -153,15 +153,18 @@
                             </div>
                         </div>
 
-                        <!-- PLAY / PAUSE -->
-                        <div id="playControls">
-                            <button id="playBtn">▶ Play</button>
-                            <button id="pauseBtn">⏸ Pause</button>
+                    <!-- DRIVER STATS BOX -->
+                    <div id="driverStatsBox" class="clickable-stats">
+
+                        <h3>Driver Stats <img src="images/info.svg" class="click-icon"></h3>
+
+                        <!-- Placeholder message BEFORE a driver is selected -->
+                        <div id="driverPlaceholder" class="placeholder-msg">
+                            Pause and click a driver on the track to view stats
                         </div>
 
-                        <!-- DRIVER STATS BOX -->
-                        <div id="driverStatsBox">
-                            <h3>Driver Stats</h3>
+                        <!-- Real stats (hidden until a driver is selected) -->
+                        <div id="driverStatsContent" style="display:none;">
                             <div class="stat-line">
                                 <span class="label">Driver:</span>
                                 <span id="driverName">–</span>
@@ -171,6 +174,12 @@
                                 <span id="speed">–</span>
                             </div>
                         </div>
+
+                    </div>
+                    <!-- Leader board-->
+                    <div id="leaderboardBox" class="stats-box">
+                        <h3>Leaderboard</h3>
+                        <ol id="leaderboardList"></ol>
                     </div>
 
                     <!-- === RIGHT SIDE: CIRCUIT VISUALIZATION === -->
@@ -253,6 +262,40 @@
                 </div>
             </div>
 
+        <div id="viz3" class="viz-card">Viz 3 · Awaiting Data</div>
+    </div>
+</section>
+
+<!-- Vis 1 Modal-->
+<div id="driverModal" class="viz-modal">
+    <div class="modal-content driver-modal">
+        <span class="close-btn" id="driverModalClose">&times;</span>
+
+        <div class="driver-header">
+            <img id="driverModalImg"/>
+            <h3 id="driverModalName"></h3>
+            <p id="driverModalTeam"></p>
+        </div>
+
+        <div class="driver-tabs">
+            <button class="tab active" data-tab="speed">Speed</button>
+            <button class="tab" data-tab="championships">Championships</button>
+            <button class="tab" data-tab="crashes">Crashes</button>
+            <button class="tab" data-tab="podiums">Podiums</button>
+        </div>
+
+        <div id="driverGraphArea"></div>
+
+        <div id="driverSummary"></div>
+    </div>
+</div>
+
+<div id="viz2-modal" class="viz-modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 id="modal-title">Modal Title</h3>
+        <p id="modal-description"></p>
+        <div id="modal-chart">
         </div>
     </section>
 
