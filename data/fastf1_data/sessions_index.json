@@ -1,0 +1,1022 @@
+[
+  {
+    "year": 2018,
+    "gp": "Abu Dhabi Grand Prix",
+    "label": "2018 Abu Dhabi Grand Prix – Race",
+    "file": "data/fastf1_data/2018_abu_dhabi_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Australian Grand Prix",
+    "label": "2018 Australian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_australian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Austrian Grand Prix",
+    "label": "2018 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Azerbaijan Grand Prix",
+    "label": "2018 Azerbaijan Grand Prix – Race",
+    "file": "data/fastf1_data/2018_azerbaijan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Bahrain Grand Prix",
+    "label": "2018 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2018_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Belgian Grand Prix",
+    "label": "2018 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Brazilian Grand Prix",
+    "label": "2018 Brazilian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_brazilian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "British Grand Prix",
+    "label": "2018 British Grand Prix – Race",
+    "file": "data/fastf1_data/2018_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Canadian Grand Prix",
+    "label": "2018 Canadian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_canadian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Chinese Grand Prix",
+    "label": "2018 Chinese Grand Prix – Race",
+    "file": "data/fastf1_data/2018_chinese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "French Grand Prix",
+    "label": "2018 French Grand Prix – Race",
+    "file": "data/fastf1_data/2018_french_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "German Grand Prix",
+    "label": "2018 German Grand Prix – Race",
+    "file": "data/fastf1_data/2018_german_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Hungarian Grand Prix",
+    "label": "2018 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Italian Grand Prix",
+    "label": "2018 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Japanese Grand Prix",
+    "label": "2018 Japanese Grand Prix – Race",
+    "file": "data/fastf1_data/2018_japanese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Mexican Grand Prix",
+    "label": "2018 Mexican Grand Prix – Race",
+    "file": "data/fastf1_data/2018_mexican_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Monaco Grand Prix",
+    "label": "2018 Monaco Grand Prix – Race",
+    "file": "data/fastf1_data/2018_monaco_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Russian Grand Prix",
+    "label": "2018 Russian Grand Prix – Race",
+    "file": "data/fastf1_data/2018_russian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Singapore Grand Prix",
+    "label": "2018 Singapore Grand Prix – Race",
+    "file": "data/fastf1_data/2018_singapore_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "Spanish Grand Prix",
+    "label": "2018 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2018_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2018,
+    "gp": "United States Grand Prix",
+    "label": "2018 United States Grand Prix – Race",
+    "file": "data/fastf1_data/2018_united_states_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Abu Dhabi Grand Prix",
+    "label": "2019 Abu Dhabi Grand Prix – Race",
+    "file": "data/fastf1_data/2019_abu_dhabi_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Australian Grand Prix",
+    "label": "2019 Australian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_australian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Austrian Grand Prix",
+    "label": "2019 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Azerbaijan Grand Prix",
+    "label": "2019 Azerbaijan Grand Prix – Race",
+    "file": "data/fastf1_data/2019_azerbaijan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Bahrain Grand Prix",
+    "label": "2019 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2019_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Belgian Grand Prix",
+    "label": "2019 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Brazilian Grand Prix",
+    "label": "2019 Brazilian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_brazilian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "British Grand Prix",
+    "label": "2019 British Grand Prix – Race",
+    "file": "data/fastf1_data/2019_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Canadian Grand Prix",
+    "label": "2019 Canadian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_canadian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Chinese Grand Prix",
+    "label": "2019 Chinese Grand Prix – Race",
+    "file": "data/fastf1_data/2019_chinese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "French Grand Prix",
+    "label": "2019 French Grand Prix – Race",
+    "file": "data/fastf1_data/2019_french_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "German Grand Prix",
+    "label": "2019 German Grand Prix – Race",
+    "file": "data/fastf1_data/2019_german_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Hungarian Grand Prix",
+    "label": "2019 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Italian Grand Prix",
+    "label": "2019 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Japanese Grand Prix",
+    "label": "2019 Japanese Grand Prix – Race",
+    "file": "data/fastf1_data/2019_japanese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Mexican Grand Prix",
+    "label": "2019 Mexican Grand Prix – Race",
+    "file": "data/fastf1_data/2019_mexican_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Monaco Grand Prix",
+    "label": "2019 Monaco Grand Prix – Race",
+    "file": "data/fastf1_data/2019_monaco_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Russian Grand Prix",
+    "label": "2019 Russian Grand Prix – Race",
+    "file": "data/fastf1_data/2019_russian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Singapore Grand Prix",
+    "label": "2019 Singapore Grand Prix – Race",
+    "file": "data/fastf1_data/2019_singapore_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "Spanish Grand Prix",
+    "label": "2019 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2019_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2019,
+    "gp": "United States Grand Prix",
+    "label": "2019 United States Grand Prix – Race",
+    "file": "data/fastf1_data/2019_united_states_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "70Th Anniversary Grand Prix",
+    "label": "2020 70Th Anniversary Grand Prix – Race",
+    "file": "data/fastf1_data/2020_70th_anniversary_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Abu Dhabi Grand Prix",
+    "label": "2020 Abu Dhabi Grand Prix – Race",
+    "file": "data/fastf1_data/2020_abu_dhabi_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Austrian Grand Prix",
+    "label": "2020 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2020_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Bahrain Grand Prix",
+    "label": "2020 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2020_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Belgian Grand Prix",
+    "label": "2020 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2020_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "British Grand Prix",
+    "label": "2020 British Grand Prix – Race",
+    "file": "data/fastf1_data/2020_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Eifel Grand Prix",
+    "label": "2020 Eifel Grand Prix – Race",
+    "file": "data/fastf1_data/2020_eifel_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Emilia Romagna Grand Prix",
+    "label": "2020 Emilia Romagna Grand Prix – Race",
+    "file": "data/fastf1_data/2020_emilia_romagna_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Hungarian Grand Prix",
+    "label": "2020 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2020_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Italian Grand Prix",
+    "label": "2020 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2020_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Portuguese Grand Prix",
+    "label": "2020 Portuguese Grand Prix – Race",
+    "file": "data/fastf1_data/2020_portuguese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Russian Grand Prix",
+    "label": "2020 Russian Grand Prix – Race",
+    "file": "data/fastf1_data/2020_russian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Sakhir Grand Prix",
+    "label": "2020 Sakhir Grand Prix – Race",
+    "file": "data/fastf1_data/2020_sakhir_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Spanish Grand Prix",
+    "label": "2020 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2020_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Styrian Grand Prix",
+    "label": "2020 Styrian Grand Prix – Race",
+    "file": "data/fastf1_data/2020_styrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Turkish Grand Prix",
+    "label": "2020 Turkish Grand Prix – Race",
+    "file": "data/fastf1_data/2020_turkish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2020,
+    "gp": "Tuscan Grand Prix",
+    "label": "2020 Tuscan Grand Prix – Race",
+    "file": "data/fastf1_data/2020_tuscan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Abu Dhabi Grand Prix",
+    "label": "2021 Abu Dhabi Grand Prix – Race",
+    "file": "data/fastf1_data/2021_abu_dhabi_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Austrian Grand Prix",
+    "label": "2021 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2021_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Azerbaijan Grand Prix",
+    "label": "2021 Azerbaijan Grand Prix – Race",
+    "file": "data/fastf1_data/2021_azerbaijan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Bahrain Grand Prix",
+    "label": "2021 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2021_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Belgian Grand Prix",
+    "label": "2021 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2021_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "British Grand Prix",
+    "label": "2021 British Grand Prix – Race",
+    "file": "data/fastf1_data/2021_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Dutch Grand Prix",
+    "label": "2021 Dutch Grand Prix – Race",
+    "file": "data/fastf1_data/2021_dutch_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Emilia Romagna Grand Prix",
+    "label": "2021 Emilia Romagna Grand Prix – Race",
+    "file": "data/fastf1_data/2021_emilia_romagna_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "French Grand Prix",
+    "label": "2021 French Grand Prix – Race",
+    "file": "data/fastf1_data/2021_french_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Hungarian Grand Prix",
+    "label": "2021 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2021_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Italian Grand Prix",
+    "label": "2021 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2021_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Mexico City Grand Prix",
+    "label": "2021 Mexico City Grand Prix – Race",
+    "file": "data/fastf1_data/2021_mexico_city_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Monaco Grand Prix",
+    "label": "2021 Monaco Grand Prix – Race",
+    "file": "data/fastf1_data/2021_monaco_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Portuguese Grand Prix",
+    "label": "2021 Portuguese Grand Prix – Race",
+    "file": "data/fastf1_data/2021_portuguese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Qatar Grand Prix",
+    "label": "2021 Qatar Grand Prix – Race",
+    "file": "data/fastf1_data/2021_qatar_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Russian Grand Prix",
+    "label": "2021 Russian Grand Prix – Race",
+    "file": "data/fastf1_data/2021_russian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Saudi Arabian Grand Prix",
+    "label": "2021 Saudi Arabian Grand Prix – Race",
+    "file": "data/fastf1_data/2021_saudi_arabian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Spanish Grand Prix",
+    "label": "2021 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2021_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Styrian Grand Prix",
+    "label": "2021 Styrian Grand Prix – Race",
+    "file": "data/fastf1_data/2021_styrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "São Paulo Grand Prix",
+    "label": "2021 São Paulo Grand Prix – Race",
+    "file": "data/fastf1_data/2021_são_paulo_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "Turkish Grand Prix",
+    "label": "2021 Turkish Grand Prix – Race",
+    "file": "data/fastf1_data/2021_turkish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2021,
+    "gp": "United States Grand Prix",
+    "label": "2021 United States Grand Prix – Race",
+    "file": "data/fastf1_data/2021_united_states_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Abu Dhabi Grand Prix",
+    "label": "2022 Abu Dhabi Grand Prix – Race",
+    "file": "data/fastf1_data/2022_abu_dhabi_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Australian Grand Prix",
+    "label": "2022 Australian Grand Prix – Race",
+    "file": "data/fastf1_data/2022_australian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Austrian Grand Prix",
+    "label": "2022 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2022_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Azerbaijan Grand Prix",
+    "label": "2022 Azerbaijan Grand Prix – Race",
+    "file": "data/fastf1_data/2022_azerbaijan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Bahrain Grand Prix",
+    "label": "2022 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2022_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Belgian Grand Prix",
+    "label": "2022 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2022_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "British Grand Prix",
+    "label": "2022 British Grand Prix – Race",
+    "file": "data/fastf1_data/2022_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Canadian Grand Prix",
+    "label": "2022 Canadian Grand Prix – Race",
+    "file": "data/fastf1_data/2022_canadian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Dutch Grand Prix",
+    "label": "2022 Dutch Grand Prix – Race",
+    "file": "data/fastf1_data/2022_dutch_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Emilia Romagna Grand Prix",
+    "label": "2022 Emilia Romagna Grand Prix – Race",
+    "file": "data/fastf1_data/2022_emilia_romagna_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "French Grand Prix",
+    "label": "2022 French Grand Prix – Race",
+    "file": "data/fastf1_data/2022_french_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Hungarian Grand Prix",
+    "label": "2022 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2022_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Italian Grand Prix",
+    "label": "2022 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2022_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Japanese Grand Prix",
+    "label": "2022 Japanese Grand Prix – Race",
+    "file": "data/fastf1_data/2022_japanese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Mexico City Grand Prix",
+    "label": "2022 Mexico City Grand Prix – Race",
+    "file": "data/fastf1_data/2022_mexico_city_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Miami Grand Prix",
+    "label": "2022 Miami Grand Prix – Race",
+    "file": "data/fastf1_data/2022_miami_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Monaco Grand Prix",
+    "label": "2022 Monaco Grand Prix – Race",
+    "file": "data/fastf1_data/2022_monaco_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Saudi Arabian Grand Prix",
+    "label": "2022 Saudi Arabian Grand Prix – Race",
+    "file": "data/fastf1_data/2022_saudi_arabian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Singapore Grand Prix",
+    "label": "2022 Singapore Grand Prix – Race",
+    "file": "data/fastf1_data/2022_singapore_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "Spanish Grand Prix",
+    "label": "2022 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2022_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "São Paulo Grand Prix",
+    "label": "2022 São Paulo Grand Prix – Race",
+    "file": "data/fastf1_data/2022_são_paulo_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2022,
+    "gp": "United States Grand Prix",
+    "label": "2022 United States Grand Prix – Race",
+    "file": "data/fastf1_data/2022_united_states_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Abu Dhabi Grand Prix",
+    "label": "2023 Abu Dhabi Grand Prix – Race",
+    "file": "data/fastf1_data/2023_abu_dhabi_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Australian Grand Prix",
+    "label": "2023 Australian Grand Prix – Race",
+    "file": "data/fastf1_data/2023_australian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Austrian Grand Prix",
+    "label": "2023 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2023_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Azerbaijan Grand Prix",
+    "label": "2023 Azerbaijan Grand Prix – Race",
+    "file": "data/fastf1_data/2023_azerbaijan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Bahrain Grand Prix",
+    "label": "2023 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2023_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Belgian Grand Prix",
+    "label": "2023 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2023_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "British Grand Prix",
+    "label": "2023 British Grand Prix – Race",
+    "file": "data/fastf1_data/2023_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Canadian Grand Prix",
+    "label": "2023 Canadian Grand Prix – Race",
+    "file": "data/fastf1_data/2023_canadian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Dutch Grand Prix",
+    "label": "2023 Dutch Grand Prix – Race",
+    "file": "data/fastf1_data/2023_dutch_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Hungarian Grand Prix",
+    "label": "2023 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2023_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Italian Grand Prix",
+    "label": "2023 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2023_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Japanese Grand Prix",
+    "label": "2023 Japanese Grand Prix – Race",
+    "file": "data/fastf1_data/2023_japanese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Las Vegas Grand Prix",
+    "label": "2023 Las Vegas Grand Prix – Race",
+    "file": "data/fastf1_data/2023_las_vegas_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Mexico City Grand Prix",
+    "label": "2023 Mexico City Grand Prix – Race",
+    "file": "data/fastf1_data/2023_mexico_city_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Miami Grand Prix",
+    "label": "2023 Miami Grand Prix – Race",
+    "file": "data/fastf1_data/2023_miami_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Monaco Grand Prix",
+    "label": "2023 Monaco Grand Prix – Race",
+    "file": "data/fastf1_data/2023_monaco_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Qatar Grand Prix",
+    "label": "2023 Qatar Grand Prix – Race",
+    "file": "data/fastf1_data/2023_qatar_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Saudi Arabian Grand Prix",
+    "label": "2023 Saudi Arabian Grand Prix – Race",
+    "file": "data/fastf1_data/2023_saudi_arabian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Singapore Grand Prix",
+    "label": "2023 Singapore Grand Prix – Race",
+    "file": "data/fastf1_data/2023_singapore_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "Spanish Grand Prix",
+    "label": "2023 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2023_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "São Paulo Grand Prix",
+    "label": "2023 São Paulo Grand Prix – Race",
+    "file": "data/fastf1_data/2023_são_paulo_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2023,
+    "gp": "United States Grand Prix",
+    "label": "2023 United States Grand Prix – Race",
+    "file": "data/fastf1_data/2023_united_states_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Abu Dhabi Grand Prix",
+    "label": "2024 Abu Dhabi Grand Prix – Race",
+    "file": "data/fastf1_data/2024_abu_dhabi_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Australian Grand Prix",
+    "label": "2024 Australian Grand Prix – Race",
+    "file": "data/fastf1_data/2024_australian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Austrian Grand Prix",
+    "label": "2024 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2024_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Azerbaijan Grand Prix",
+    "label": "2024 Azerbaijan Grand Prix – Race",
+    "file": "data/fastf1_data/2024_azerbaijan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Bahrain Grand Prix",
+    "label": "2024 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2024_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Belgian Grand Prix",
+    "label": "2024 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2024_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "British Grand Prix",
+    "label": "2024 British Grand Prix – Race",
+    "file": "data/fastf1_data/2024_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Canadian Grand Prix",
+    "label": "2024 Canadian Grand Prix – Race",
+    "file": "data/fastf1_data/2024_canadian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Chinese Grand Prix",
+    "label": "2024 Chinese Grand Prix – Race",
+    "file": "data/fastf1_data/2024_chinese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Dutch Grand Prix",
+    "label": "2024 Dutch Grand Prix – Race",
+    "file": "data/fastf1_data/2024_dutch_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Emilia Romagna Grand Prix",
+    "label": "2024 Emilia Romagna Grand Prix – Race",
+    "file": "data/fastf1_data/2024_emilia_romagna_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Hungarian Grand Prix",
+    "label": "2024 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2024_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Italian Grand Prix",
+    "label": "2024 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2024_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Japanese Grand Prix",
+    "label": "2024 Japanese Grand Prix – Race",
+    "file": "data/fastf1_data/2024_japanese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Las Vegas Grand Prix",
+    "label": "2024 Las Vegas Grand Prix – Race",
+    "file": "data/fastf1_data/2024_las_vegas_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Mexico City Grand Prix",
+    "label": "2024 Mexico City Grand Prix – Race",
+    "file": "data/fastf1_data/2024_mexico_city_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Miami Grand Prix",
+    "label": "2024 Miami Grand Prix – Race",
+    "file": "data/fastf1_data/2024_miami_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Monaco Grand Prix",
+    "label": "2024 Monaco Grand Prix – Race",
+    "file": "data/fastf1_data/2024_monaco_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Qatar Grand Prix",
+    "label": "2024 Qatar Grand Prix – Race",
+    "file": "data/fastf1_data/2024_qatar_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Saudi Arabian Grand Prix",
+    "label": "2024 Saudi Arabian Grand Prix – Race",
+    "file": "data/fastf1_data/2024_saudi_arabian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Singapore Grand Prix",
+    "label": "2024 Singapore Grand Prix – Race",
+    "file": "data/fastf1_data/2024_singapore_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "Spanish Grand Prix",
+    "label": "2024 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2024_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "São Paulo Grand Prix",
+    "label": "2024 São Paulo Grand Prix – Race",
+    "file": "data/fastf1_data/2024_são_paulo_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2024,
+    "gp": "United States Grand Prix",
+    "label": "2024 United States Grand Prix – Race",
+    "file": "data/fastf1_data/2024_united_states_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Australian Grand Prix",
+    "label": "2025 Australian Grand Prix – Race",
+    "file": "data/fastf1_data/2025_australian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Austrian Grand Prix",
+    "label": "2025 Austrian Grand Prix – Race",
+    "file": "data/fastf1_data/2025_austrian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Azerbaijan Grand Prix",
+    "label": "2025 Azerbaijan Grand Prix – Race",
+    "file": "data/fastf1_data/2025_azerbaijan_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Bahrain Grand Prix",
+    "label": "2025 Bahrain Grand Prix – Race",
+    "file": "data/fastf1_data/2025_bahrain_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Belgian Grand Prix",
+    "label": "2025 Belgian Grand Prix – Race",
+    "file": "data/fastf1_data/2025_belgian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "British Grand Prix",
+    "label": "2025 British Grand Prix – Race",
+    "file": "data/fastf1_data/2025_british_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Canadian Grand Prix",
+    "label": "2025 Canadian Grand Prix – Race",
+    "file": "data/fastf1_data/2025_canadian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Chinese Grand Prix",
+    "label": "2025 Chinese Grand Prix – Race",
+    "file": "data/fastf1_data/2025_chinese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Dutch Grand Prix",
+    "label": "2025 Dutch Grand Prix – Race",
+    "file": "data/fastf1_data/2025_dutch_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Emilia Romagna Grand Prix",
+    "label": "2025 Emilia Romagna Grand Prix – Race",
+    "file": "data/fastf1_data/2025_emilia_romagna_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Hungarian Grand Prix",
+    "label": "2025 Hungarian Grand Prix – Race",
+    "file": "data/fastf1_data/2025_hungarian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Italian Grand Prix",
+    "label": "2025 Italian Grand Prix – Race",
+    "file": "data/fastf1_data/2025_italian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Japanese Grand Prix",
+    "label": "2025 Japanese Grand Prix – Race",
+    "file": "data/fastf1_data/2025_japanese_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Mexico City Grand Prix",
+    "label": "2025 Mexico City Grand Prix – Race",
+    "file": "data/fastf1_data/2025_mexico_city_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Miami Grand Prix",
+    "label": "2025 Miami Grand Prix – Race",
+    "file": "data/fastf1_data/2025_miami_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Monaco Grand Prix",
+    "label": "2025 Monaco Grand Prix – Race",
+    "file": "data/fastf1_data/2025_monaco_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Saudi Arabian Grand Prix",
+    "label": "2025 Saudi Arabian Grand Prix – Race",
+    "file": "data/fastf1_data/2025_saudi_arabian_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Singapore Grand Prix",
+    "label": "2025 Singapore Grand Prix – Race",
+    "file": "data/fastf1_data/2025_singapore_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "Spanish Grand Prix",
+    "label": "2025 Spanish Grand Prix – Race",
+    "file": "data/fastf1_data/2025_spanish_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "São Paulo Grand Prix",
+    "label": "2025 São Paulo Grand Prix – Race",
+    "file": "data/fastf1_data/2025_são_paulo_grand_prix_r_grid_finish.json"
+  },
+  {
+    "year": 2025,
+    "gp": "United States Grand Prix",
+    "label": "2025 United States Grand Prix – Race",
+    "file": "data/fastf1_data/2025_united_states_grand_prix_r_grid_finish.json"
+  }
+]

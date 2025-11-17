@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00D2BE,2.0,1.0,Finished,0 days 01:43:44.291000,25.0,,2018,Azerbaijan Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,6.0,2.0,Finished,0 days 00:00:02.460000,18.0,,2018,Azerbaijan Grand Prix,R
+PER,Sergio Perez,Force India,F596C8,8.0,3.0,Finished,0 days 00:00:04.024000,15.0,,2018,Azerbaijan Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,1.0,4.0,Finished,0 days 00:00:05.329000,12.0,,2018,Azerbaijan Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,9.0,5.0,Finished,0 days 00:00:07.515000,10.0,,2018,Azerbaijan Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,13.0,6.0,Finished,0 days 00:00:09.158000,8.0,,2018,Azerbaijan Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,12.0,7.0,Finished,0 days 00:00:10.931000,6.0,,2018,Azerbaijan Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,10.0,8.0,Finished,0 days 00:00:12.546000,4.0,,2018,Azerbaijan Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,16.0,9.0,Finished,0 days 00:00:14.152000,2.0,,2018,Azerbaijan Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,19.0,10.0,Finished,0 days 00:00:18.030000,1.0,,2018,Azerbaijan Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,18.0,11.0,Finished,0 days 00:00:18.512000,0.0,,2018,Azerbaijan Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,17.0,12.0,Finished,0 days 00:00:24.720000,0.0,,2018,Azerbaijan Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,15.0,13.0,Finished,0 days 00:00:40.663000,0.0,,2018,Azerbaijan Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,3.0,14.0,Puncture,,0.0,,2018,Azerbaijan Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,20.0,15.0,Accident,,0.0,,2018,Azerbaijan Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1E41FF,5.0,16.0,Collision,,0.0,,2018,Azerbaijan Grand Prix,R
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,4.0,17.0,Collision,,0.0,,2018,Azerbaijan Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,14.0,18.0,Accident,,0.0,,2018,Azerbaijan Grand Prix,R
+OCO,Esteban Ocon,Force India,F596C8,7.0,19.0,Collision,,0.0,,2018,Azerbaijan Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,11.0,20.0,Collision,,0.0,,2018,Azerbaijan Grand Prix,R

@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00d2be,1.0,1.0,Finished,0 days 01:43:28.437000,25.0,,2019,Monaco Grand Prix,R
+VET,Sebastian Vettel,Ferrari,dc0000,4.0,2.0,Finished,0 days 00:00:02.602000,18.0,,2019,Monaco Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00d2be,2.0,3.0,Finished,0 days 00:00:03.162000,15.0,,2019,Monaco Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1e41ff,3.0,4.0,Finished,0 days 00:00:05.537000,12.0,,2019,Monaco Grand Prix,R
+GAS,Pierre Gasly,Red Bull Racing,1e41ff,8.0,5.0,Finished,0 days 00:00:09.946000,11.0,,2019,Monaco Grand Prix,R
+SAI,Carlos Sainz,McLaren,ff8700,9.0,6.0,Finished,0 days 00:00:53.454000,8.0,,2019,Monaco Grand Prix,R
+KVY,Daniil Kvyat,Toro Rosso,469bff,7.0,7.0,Finished,0 days 00:00:54.574000,6.0,,2019,Monaco Grand Prix,R
+ALB,Alexander Albon,Toro Rosso,469bff,10.0,8.0,Finished,0 days 00:00:55.200000,4.0,,2019,Monaco Grand Prix,R
+RIC,Daniel Ricciardo,Renault,fff500,6.0,9.0,Finished,0 days 00:01:00.894000,2.0,,2019,Monaco Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,bd9e57,13.0,10.0,Finished,0 days 00:01:01.034000,1.0,,2019,Monaco Grand Prix,R
+NOR,Lando Norris,McLaren,ff8700,12.0,11.0,Finished,0 days 00:01:06.801000,0.0,,2019,Monaco Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,16.0,12.0,+1 Lap,,0.0,,2019,Monaco Grand Prix,R
+HUL,Nico Hulkenberg,Renault,fff500,11.0,13.0,+1 Lap,,0.0,,2019,Monaco Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,bd9e57,5.0,14.0,+1 Lap,,0.0,,2019,Monaco Grand Prix,R
+RUS,George Russell,Williams,ffffff,19.0,15.0,+1 Lap,,0.0,,2019,Monaco Grand Prix,R
+STR,Lance Stroll,Racing Point,f596c8,17.0,16.0,+1 Lap,,0.0,,2019,Monaco Grand Prix,R
+RAI,Kimi Räikkönen,Alfa Romeo Racing,9b0000,14.0,17.0,+1 Lap,,0.0,,2019,Monaco Grand Prix,R
+KUB,Robert Kubica,Williams,ffffff,20.0,18.0,+1 Lap,,0.0,,2019,Monaco Grand Prix,R
+GIO,Antonio Giovinazzi,Alfa Romeo Racing,9b0000,18.0,19.0,+2 Laps,,0.0,,2019,Monaco Grand Prix,R
+LEC,Charles Leclerc,Ferrari,dc0000,15.0,20.0,Collision,,0.0,,2019,Monaco Grand Prix,R

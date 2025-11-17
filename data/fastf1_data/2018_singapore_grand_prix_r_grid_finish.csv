@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00D2BE,1.0,1.0,Finished,0 days 01:51:11.611000,25.0,,2018,Singapore Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1E41FF,2.0,2.0,Finished,0 days 00:00:08.961000,18.0,,2018,Singapore Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,3.0,3.0,Finished,0 days 00:00:39.984000,15.0,,2018,Singapore Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,4.0,4.0,Finished,0 days 00:00:51.930000,12.0,,2018,Singapore Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,5.0,5.0,Finished,0 days 00:00:53.001000,10.0,,2018,Singapore Grand Prix,R
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,6.0,6.0,Finished,0 days 00:00:53.982000,8.0,,2018,Singapore Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,11.0,7.0,Finished,0 days 00:01:43.001000,6.0,,2018,Singapore Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,12.0,8.0,+1 Lap,,4.0,,2018,Singapore Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,13.0,9.0,+1 Lap,,2.0,,2018,Singapore Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,10.0,10.0,+1 Lap,,1.0,,2018,Singapore Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,14.0,11.0,+1 Lap,,0.0,,2018,Singapore Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,18.0,12.0,+1 Lap,,0.0,,2018,Singapore Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,15.0,13.0,+1 Lap,,0.0,,2018,Singapore Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,20.0,14.0,+1 Lap,,0.0,,2018,Singapore Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,8.0,15.0,+1 Lap,,0.0,,2018,Singapore Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,7.0,16.0,+1 Lap,,0.0,,2018,Singapore Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,17.0,17.0,+1 Lap,,0.0,,2018,Singapore Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,16.0,18.0,+2 Laps,,0.0,,2018,Singapore Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,19.0,19.0,+2 Laps,,0.0,,2018,Singapore Grand Prix,R
+OCO,Esteban Ocon,Racing Point,f596c8,9.0,20.0,Collision,,0.0,,2018,Singapore Grand Prix,R

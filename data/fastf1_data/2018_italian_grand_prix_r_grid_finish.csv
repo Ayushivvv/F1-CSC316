@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00D2BE,3.0,1.0,Finished,0 days 01:16:54.484000,25.0,,2018,Italian Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,1.0,2.0,Finished,0 days 00:00:08.705000,18.0,,2018,Italian Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,4.0,3.0,Finished,0 days 00:00:14.066000,15.0,,2018,Italian Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,2.0,4.0,Finished,0 days 00:00:16.151000,12.0,,2018,Italian Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1E41FF,5.0,5.0,Finished,0 days 00:00:18.208000,10.0,,2018,Italian Grand Prix,R
+OCO,Esteban Ocon,Racing Point,f596c8,8.0,6.0,Finished,0 days 00:00:57.761000,8.0,,2018,Italian Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,14.0,7.0,Finished,0 days 00:00:58.678000,6.0,,2018,Italian Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,7.0,8.0,Finished,0 days 00:01:18.140000,4.0,,2018,Italian Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,10.0,9.0,+1 Lap,,2.0,,2018,Italian Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,12.0,10.0,+1 Lap,,1.0,,2018,Italian Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,15.0,11.0,+1 Lap,,0.0,,2018,Italian Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,17.0,12.0,+1 Lap,,0.0,,2018,Italian Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,20.0,13.0,+1 Lap,,0.0,,2018,Italian Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,9.0,14.0,+1 Lap,,0.0,,2018,Italian Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,18.0,15.0,+1 Lap,,0.0,,2018,Italian Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,11.0,16.0,+1 Lap,,0.0,,2018,Italian Grand Prix,R
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,19.0,17.0,Engine,,0.0,,2018,Italian Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,13.0,18.0,Engine,,0.0,,2018,Italian Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,16.0,19.0,Brakes,,0.0,,2018,Italian Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,6.0,20.0,Disqualified,,0.0,,2018,Italian Grand Prix,R

@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00d2be,2.0,1.0,Finished,0 days 01:35:50.443000,26.0,,2019,Spanish Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00d2be,1.0,2.0,Finished,0 days 00:00:04.074000,18.0,,2019,Spanish Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1e41ff,4.0,3.0,Finished,0 days 00:00:07.679000,15.0,,2019,Spanish Grand Prix,R
+VET,Sebastian Vettel,Ferrari,dc0000,3.0,4.0,Finished,0 days 00:00:09.167000,12.0,,2019,Spanish Grand Prix,R
+LEC,Charles Leclerc,Ferrari,dc0000,5.0,5.0,Finished,0 days 00:00:13.361000,10.0,,2019,Spanish Grand Prix,R
+GAS,Pierre Gasly,Red Bull Racing,1e41ff,6.0,6.0,Finished,0 days 00:00:19.576000,8.0,,2019,Spanish Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,bd9e57,8.0,7.0,Finished,0 days 00:00:28.159000,6.0,,2019,Spanish Grand Prix,R
+SAI,Carlos Sainz,McLaren,ff8700,12.0,8.0,Finished,0 days 00:00:32.342000,4.0,,2019,Spanish Grand Prix,R
+KVY,Daniil Kvyat,Toro Rosso,469bff,9.0,9.0,Finished,0 days 00:00:33.056000,2.0,,2019,Spanish Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,bd9e57,7.0,10.0,Finished,0 days 00:00:34.641000,1.0,,2019,Spanish Grand Prix,R
+ALB,Alexander Albon,Toro Rosso,469bff,11.0,11.0,Finished,0 days 00:00:35.445000,0.0,,2019,Spanish Grand Prix,R
+RIC,Daniel Ricciardo,Renault,fff500,13.0,12.0,Finished,0 days 00:00:36.758000,0.0,,2019,Spanish Grand Prix,R
+HUL,Nico Hulkenberg,Renault,fff500,0.0,13.0,Finished,0 days 00:00:39.241000,0.0,,2019,Spanish Grand Prix,R
+RAI,Kimi Räikkönen,Alfa Romeo Racing,9b0000,14.0,14.0,Finished,0 days 00:00:41.803000,0.0,,2019,Spanish Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,15.0,15.0,Finished,0 days 00:00:46.877000,0.0,,2019,Spanish Grand Prix,R
+GIO,Antonio Giovinazzi,Alfa Romeo Racing,9b0000,18.0,16.0,Finished,0 days 00:00:47.691000,0.0,,2019,Spanish Grand Prix,R
+RUS,George Russell,Williams,ffffff,19.0,17.0,+1 Lap,,0.0,,2019,Spanish Grand Prix,R
+KUB,Robert Kubica,Williams,ffffff,17.0,18.0,+1 Lap,,0.0,,2019,Spanish Grand Prix,R
+STR,Lance Stroll,Racing Point,f596c8,16.0,19.0,Collision,,0.0,,2019,Spanish Grand Prix,R
+NOR,Lando Norris,McLaren,ff8700,10.0,20.0,Collision,,0.0,,2019,Spanish Grand Prix,R
