@@ -703,7 +703,7 @@ body {
     transition: opacity 0.1s ease;
 }
 
-/* --- Visualization 3 Layout --- */
+/* --- Visualization 4 Layout (yes called vis3 though)--- */
 .viz3-container {
     display: flex;
     justify-content: space-between;
