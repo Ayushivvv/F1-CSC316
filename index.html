@@ -30,7 +30,7 @@
         <li>Alisa Iskakova</li>
         <li>Banke Akande</li>
         <li>Jonathan Qiao</li>
-        <li>Ayusha Verma</li>
+        <li>Ayushi Verma</li>
     </ul>
 </header>
 
@@ -124,11 +124,15 @@
                         <button id="pauseBtn">⏸ Pause</button>
                     </div>
 
+                    <div id="lapCounter" class="lap-counter">
+                        Lap 0 / –
+                    </div>
+
                     <div id="driverStatsBox" class="clickable-stats">
                         <h3>Driver Stats <img src="images/info.svg" class="click-icon"></h3>
 
                         <div id="driverPlaceholder" class="placeholder-msg">
-                            Click a driver on the track to view stats
+                            Pause and click a driver on the track to view stats
                         </div>
 
                         <div id="driverStatsContent" style="display:none;">
@@ -207,21 +211,19 @@
             </div>
         </div>
 
-        <div id="viz-weather-container" class="viz-card" style="transform: none; background: var(--card); color: var(--black); cursor: default;">
-            <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                <div class="selectWeather">
-                    <label for="weather-select"></label>
-                    <select id="weather-select" class="weather-select">
-                        <option value="hot">Hot</option>
-                        <option value="cold">Cold</option>
-                        <option value="rain">Rain</option>
-                        <option value="windy">Windy</option>
-                    </select>
-                </div>
+        <div id="viz-weather-container" class="viz-card">
+            <div class="selectWeather">
+                <label for="weather-select"></label>
+                <select id="weather-select" class="weather-select">
+                    <option value="hot">Hot</option>
+                    <option value="cold">Cold</option>
+                    <option value="rain">Rain</option>
+                    <option value="windy">Windy</option>
+                </select>
+            </div>
 
-                <div id="viz3-main">
-                    <p class="awaitingText">Loading Weather Data...</p>
-                </div>
+            <div id="viz3-main">
+                <p class="awaitingText">Loading Weather Data...</p>
             </div>
         </div>
 
@@ -242,10 +244,10 @@
         </div>
 
         <div class="driver-tabs">
-            <button class="tab active" data-tab="speed">Speed</button>
-            <button class="tab" data-tab="championships">Championships</button>
-            <button class="tab" data-tab="crashes">Crashes</button>
+            <button class="tab active" data-tab="points">Points</button>
+            <button class="tab" data-tab="wins">Wins</button>
             <button class="tab" data-tab="podiums">Podiums</button>
+            <button class="tab" data-tab="races">Race Starts</button>
         </div>
 
         <div id="driverGraphArea"></div>
@@ -270,7 +272,7 @@
             <div class="racer-img">
                 <img src="images/leclerc.png" alt="Ayusha Verma" />
             </div>
-            <p>Ayusha Verma</p>
+            <p>Ayushi Verma</p>
         </div>
         <div class="racer">
             <div class="racer-img">

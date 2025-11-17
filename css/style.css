@@ -305,10 +305,12 @@ body {
 /* ---- stop visualization cards from turning red ---- */
 .viz-card#viz1:hover,
 .viz-card#viz2:hover,
-.viz-card#viz3:hover {
+.viz-card#viz3:hover,
+.viz-card#viz-weather-container:hover {
     background: var(--card);
     color: var(--black);
     transform: none;
+    cursor: default;
 }
 
 
