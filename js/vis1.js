@@ -622,6 +622,7 @@ class novelTrackVis {
                     const lapNumber = (d.currentLapIndex || 0) + 1;
                     tooltip
                         .style("display", "block")
+                        .style("opacity", 1)
                         .html(`<strong>${d.driver}</strong><br>${d.team || "–"}<br>Lap ${lapNumber} of ${vis.totalLaps || "?"}`);
 
                     if (driverNameEl) {
