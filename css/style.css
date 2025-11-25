@@ -859,11 +859,10 @@ body {
 }
 
 /* ===== Floating Audio Player ===== */
-
 .audio-player {
     position: fixed;
     top: 50%;
-    right: 1.5rem;
+    right: 3.2rem; /* moved inward from edge */
     transform: translateY(-50%);
     z-index: 1000;
 }
@@ -871,25 +870,34 @@ body {
 .audio-player button {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
+
     background: var(--card);
     border: 2px solid var(--red);
     border-radius: 999px;
-    padding: 0.45rem 0.9rem;
+
+    /* slightly smaller, not tiny */
+    padding: 0.38rem 0.75rem;
+
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
+
     color: var(--red);
     cursor: pointer;
+
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    transition: background 0.25s ease, color 0.25s ease,
-    transform 0.25s ease, box-shadow 0.25s ease;
+    transition:
+            background 0.25s ease,
+            color 0.25s ease,
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
 }
 
 .audio-player button:hover {
     background: var(--red);
-    color: #fff;
+    color: white;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 }
@@ -898,33 +906,16 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+
+    width: 19px;  /* reduced a tiny bit */
+    height: 19px;
     border-radius: 999px;
     border: 2px solid currentColor;
-    font-size: 0.75rem;
+
+    font-size: 0.72rem;
     line-height: 1;
 }
 
 .audio-label {
     white-space: nowrap;
-}
-
-/* Make it less intrusive on smaller screens */
-@media (max-width: 768px) {
-    .audio-player {
-        top: auto;
-        bottom: 1rem;
-        right: 1rem;
-        transform: none;
-    }
-
-    .audio-player button {
-        font-size: 0.7rem;
-        padding: 0.35rem 0.75rem;
-    }
-
-    .audio-label {
-        display: none;
-    }
 }
