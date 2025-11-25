@@ -6,11 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>The Furious Five: F1</title>
 
-    <link
-            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Playfair+Display:wght@500;700&display=swap"
-            rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600&display=swap"
-          rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="css/style.css" />
 
@@ -54,28 +51,23 @@
 
     <section class="intro card">
         <p>
-            Our project explores the world of
-            <strong>Formula One (F1)</strong> through the lens of data. Since its
-            inception in 1950, F1 has hosted over
-            <strong>1,142 World Championship events</strong> across 76 seasons, 34
-            countries, and 77 circuits. Each event generates a wealth of
-            information — from categorical data like
+            Our project explores the world of <strong>Formula One (F1)</strong> through the lens of data. Since its
+            inception in 1950, F1 has hosted over <strong>1,142 World Championship events</strong> across 76 seasons, 34
+            countries, and 77 circuits. Each event generates a wealth of information — from categorical data like
             <em>drivers, teams, and locations</em> to quantitative measures like
             <em>lap times, points earned, and pit stop counts</em>.
         </p>
 
         <p>
             Leveraging these datasets, we aim to answer the central question:
-            <strong>What Makes an F1 Champion?</strong> By analyzing differences
-            between teams and drivers, as well as race conditions and strategies,
-            we uncover the factors that define success.
+            <strong>What Makes an F1 Champion?</strong> By analyzing differences between teams and drivers,
+            as well as race conditions and strategies, we uncover the factors that define success.
         </p>
     </section>
 </section>
 
 <div class="marquee">
-        <span>★ What Makes an F1 Champion? ★ A Data Drive Exploration ★ By: The
-            Furious Five ★</span>
+    <span>★ What Makes an F1 Champion? ★ A Data Driven Exploration ★ By: The Furious Five ★</span>
 </div>
 
 <section class="data-section">
@@ -86,10 +78,7 @@
                 <img src="images/fastf1logo.png" alt="FastF1 Logo" />
             </div>
             <h3>FastF1</h3>
-            <p>
-                A Python API for accessing detailed Formula 1 telemetry, timing, and
-                session data.
-            </p>
+            <p>A Python API for accessing detailed Formula 1 telemetry, timing, and session data.</p>
             <a href="https://docs.fastf1.dev/" target="_blank">Learn more</a>
         </div>
 
@@ -98,10 +87,7 @@
                 <img src="images/openf1logo.png" alt="OpenF1 Logo" />
             </div>
             <h3>OpenF1</h3>
-            <p>
-                An open API providing historical and real-time F1 race data such as
-                weather, radio, and results.
-            </p>
+            <p>An open API providing historical and real-time F1 race data such as weather, radio, and results.</p>
             <a href="https://openf1.org/#introduction" target="_blank">Learn more</a>
         </div>
 
@@ -110,37 +96,28 @@
                 <img src="images/kagglelogo.png" alt="Kaggle Logo" />
             </div>
             <h3>Kaggle</h3>
-            <p>
-                Comprehensive F1 dataset with races, drivers, constructors,
-                circuits, and championship history.
-            </p>
-            <a href="https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020"
-               target="_blank">Learn more</a>
+            <p>Comprehensive F1 dataset with races, drivers, constructors, circuits, and championship history.</p>
+            <a href="https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020" target="_blank">Learn more</a>
         </div>
     </div>
 </section>
 
 <div class="marquee">
-        <span>★ What Makes an F1 Champion? ★ A Data Drive Exploration ★ By: The
-            Furious Five ★</span>
+    <span>★ What Makes an F1 Champion? ★ A Data Driven Exploration ★ By: The Furious Five ★</span>
 </div>
 
 <section class="viz-section">
     <h2>Visualizations</h2>
     <section class="intro card">
         <p>
-            Where can we start to explore what makes an F1 champion? Obviously
-            their race performance! Use this visualization to explore how the
-            performance of different drivers changes throughout various circuits
-            and seasons. Discover which teams and drivers tend to come out on top
-            at specific tracks and compare their speeds throughout each race. You
-            can also spot patterns in consistency, race strategy, and how drivers
-            adapt to different layouts, from high-speed straights to technical
-            corner-heavy circuits. As you move through the seasons, see how
-            drivers evolve, how teams improve, and what separates good drivers
-            from the truly elite.
+            Where can we start to explore what makes an F1 champion? Obviously their race performance! Use this visualization to explore how the
+            performance of different drivers changes throughout various circuits and seasons. Discover which teams and drivers tend to come out on top
+            at specific tracks and compare their speeds throughout each race. You can also spot patterns in consistency, race strategy, and how drivers
+            adapt to different layouts, from high-speed straights to technical corner-heavy circuits. As you move through the seasons, see how
+            drivers evolve, how teams improve, and what separates good drivers from the truly elite.
         </p>
     </section>
+
     <div class="viz-grid">
         <div id="viz1" class="viz-card">
             <div class="viz1-container">
@@ -152,6 +129,15 @@
                                 <option>Select a circuit</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div id="playControls">
+                        <button id="playBtn">▶ Play</button>
+                        <button id="pauseBtn">⏸ Pause</button>
+                    </div>
+
+                    <div id="lapCounter" class="lap-counter">
+                        Lap 0 / –
                     </div>
 
                     <div id="driverStatsBox" class="clickable-stats">
@@ -188,16 +174,11 @@
 
         <section class="intro card">
             <p>
-                The next piece of the puzzle is the car itself! In Formula One, even
-                the most talented drivers depend on the engineering beneath them.
-                This visualization lets you dive into how each team’s car evolves
-                year by year and how those changes shape a driver’s performance.
-                Select a season, choose a team, and explore the car your chosen
-                driver took to the track. By clicking different parts of the car,
-                you can reveal deeper stats like pit stop times, finishing
-                positions, and lap-time trends. Together, these details help
-                highlight just how much the car contributes to a driver’s success,
-                and where the line between machinery and mastery begins to blur.
+                The next piece of the puzzle is the car itself! In Formula One, even the most talented drivers depend on the engineering beneath them.
+                This visualization lets you dive into how each team’s car evolves year by year and how those changes shape a driver’s performance.
+                Select a season, choose a team, and explore the car your chosen driver took to the track. By clicking different parts of the car,
+                you can reveal deeper stats like pit stop times, finishing positions, and lap-time trends. Together, these details help
+                highlight just how much the car contributes to a driver’s success, and where the line between machinery and mastery begins to blur.
             </p>
         </section>
 
@@ -242,7 +223,7 @@
             </div>
         </div>
 
-        <div id="viz3" class="viz-card">
+        <div id="viz-weather-container" class="viz-card">
             <div class="selectWeather">
                 <label for="weather-select"></label>
                 <select id="weather-select" class="weather-select">
@@ -254,8 +235,12 @@
             </div>
 
             <div id="viz3-main">
-                <p class="awaitingText">Loading Viz...</p>
+                <p class="awaitingText">Loading Weather Data...</p>
             </div>
+        </div>
+
+        <div id="viz3" class="viz-card">
+            <p class="awaitingText">Loading Grid Viz...</p>
         </div>
     </div>
 </section>
@@ -271,10 +256,10 @@
         </div>
 
         <div class="driver-tabs">
-            <button class="tab active" data-tab="speed">Speed</button>
-            <button class="tab" data-tab="championships">Championships</button>
-            <button class="tab" data-tab="crashes">Crashes</button>
+            <button class="tab active" data-tab="points">Points</button>
+            <button class="tab" data-tab="wins">Wins</button>
             <button class="tab" data-tab="podiums">Podiums</button>
+            <button class="tab" data-tab="races">Race Starts</button>
         </div>
 
         <div id="driverGraphArea"></div>
@@ -330,11 +315,9 @@
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="js/vis1.js"></script>
-<script src="js/vis2.js"></script>
+<script type="module" src="js/vis2.js"></script>
 <script src="js/vis3.js"></script>
 <script src="js/vis4.js"></script>
-<script type="module" src="js/vis2.js"></script>
-
 <!-- New audio controller script -->
 <script src="js/audio.js"></script>
 </body>
