@@ -857,3 +857,74 @@ body {
     text-align: center;
     white-space: nowrap;
 }
+
+/* ===== Floating Audio Player ===== */
+
+.audio-player {
+    position: fixed;
+    top: 50%;
+    right: 1.5rem;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+.audio-player button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--card);
+    border: 2px solid var(--red);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: background 0.25s ease, color 0.25s ease,
+    transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.audio-player button:hover {
+    background: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.audio-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 2px solid currentColor;
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+.audio-label {
+    white-space: nowrap;
+}
+
+/* Make it less intrusive on smaller screens */
+@media (max-width: 768px) {
+    .audio-player {
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+        transform: none;
+    }
+
+    .audio-player button {
+        font-size: 0.7rem;
+        padding: 0.35rem 0.75rem;
+    }
+
+    .audio-label {
+        display: none;
+    }
+}
