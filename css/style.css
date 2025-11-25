@@ -862,7 +862,7 @@ body {
 .audio-player {
     position: fixed;
     top: 50%;
-    right: 2.6rem; /* moved inward from edge */
+    right: 1.2rem; /* FINAL: perfect for GitHub Pages to avoid overlap */
     transform: translateY(-50%);
     z-index: 1000;
 }
@@ -870,24 +870,24 @@ body {
 .audio-player button {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.40rem;
 
     background: var(--card);
     border: 2px solid var(--red);
     border-radius: 999px;
 
-    /* slightly smaller, not tiny */
-    padding: 0.38rem 0.75rem;
+    /* slightly smaller but same feel */
+    padding: 0.32rem 0.65rem;
 
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.72rem;  /* slightly smaller */
     text-transform: uppercase;
     letter-spacing: 0.07em;
 
     color: var(--red);
     cursor: pointer;
 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     transition:
             background 0.25s ease,
             color 0.25s ease,
@@ -907,12 +907,12 @@ body {
     align-items: center;
     justify-content: center;
 
-    width: 19px;  /* reduced a tiny bit */
-    height: 19px;
+    width: 17px;   /* slightly smaller */
+    height: 17px;
     border-radius: 999px;
     border: 2px solid currentColor;
 
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     line-height: 1;
 }
 
