@@ -862,7 +862,7 @@ body {
 .audio-player {
     position: fixed;
     top: 50%;
-    right: 3.2rem; /* moved inward from edge */
+    right: 2.6rem; /* moved inward from edge */
     transform: translateY(-50%);
     z-index: 1000;
 }
