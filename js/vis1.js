@@ -394,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const placeholder = document.createElement("option");
     placeholder.value = "";
-    placeholder.textContent = "Pick a track";
+    placeholder.textContent = "- Select -";
     placeholder.disabled = true;
     placeholder.selected = true;
     circuitSelect.appendChild(placeholder);
