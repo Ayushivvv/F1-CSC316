@@ -765,6 +765,12 @@ class novelTrackVis {
                     d.y = point.y;
                 });
 
+                // Calculate positions
+                const sorted = dots.slice().sort((a, b) => b.distance - a.distance);
+                dots.forEach(d => {
+                    d.currentPosition = sorted.indexOf(d) + 1;
+                });
+
                 circles
                     .attr("cx", d => d.x)
                     .attr("cy", d => d.y);
