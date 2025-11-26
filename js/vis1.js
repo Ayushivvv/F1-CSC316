@@ -677,7 +677,7 @@ class novelTrackVis {
                 const driverInfo = vis.driverStats.get(d.driverId);
                 const headshotUrl = vis.driverHeadshots.get(driverInfo?.code);
                 const imgHtml = headshotUrl
-                    ? `<img src="${headshotUrl}" alt="${d.driver}" style="width: 60px; height: 60px; border-radius: 4px; margin-bottom: 8px;"/>`
+                    ? `<img src="${headshotUrl}" alt="${d.driver}" style="width: 60px; height: 60px; border-radius: 50%; margin-bottom: 8px;"/>`
                     : "";
 
                 tooltip
