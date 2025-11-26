@@ -1,7 +1,7 @@
 :root {
     --cream: #f9f5f0;
     --red: #d40000;
-    --black: #111;
+    --black: #857d7d;
     --gray: #000000;
     --card: #ffffff;
 }
@@ -748,6 +748,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem 0.8rem;
+    justify-content: center;
 }
 
 .team-legend-item {

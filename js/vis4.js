@@ -162,6 +162,14 @@ function viz4() {
         return L > 0.6 ? "#000000" : "#ffffff";
     }
 
+    // choose color for the change-in-position label
+    function changeLabelColor(d) {
+        if (d.delta == null) return "#f9f5f0"; // effectively hidden for DNFs/RET
+        if (d.delta > 0) return "#3fd35a";     // green for positive gain
+        if (d.delta < 0) return "#d40000";     // red for loss
+        return "#ffffff";                      // white for no change
+    }
+
     // ==========================================
     // Load sessions index
     // ==========================================
@@ -523,6 +531,21 @@ function viz4() {
             .style("font-size", "10px")
             .text(d => d.Abbreviation);
 
+        // --- change-in-position label that will sit above the car on the finish row ---
+        cars.append("text")
+            .attr("class", "change-label")
+            .attr("text-anchor", "middle")
+            .attr("y", -carHeight / 2 - 6)   // just above the car body
+            .attr("fill", d => changeLabelColor(d))
+            .style("font-family", "Orbitron, sans-serif")
+            .style("font-size", "11px")
+            .text(d => {
+                // we only show numeric position changes; DNFs/RET get no label
+                if (d.delta == null) return "";
+                return d.changeLabel;
+            })
+            .style("opacity", 0);
+
         // Tooltip
         cars.on("mouseover", function (event, d) {
             tooltip.html(buildTooltipHTML(d))
@@ -614,15 +637,27 @@ function viz4() {
         const cars = svg.selectAll(".driver-car");
         if (cars.empty()) return;
 
-        // reset cars to starting grid
+        const moveDuration = 2300;
+        const moveDelay    = 300;
+
+        // reset cars to starting grid and hide labels
         cars.interrupt()
             .attr("transform", d => `translate(${d.startX}, ${d.startY})`);
+        cars.select(".change-label")
+            .style("opacity", 0);
 
         // animate cars to final positions
         cars.transition()
-            .duration(2300)
-            .delay(300)
+            .duration(moveDuration)
+            .delay(moveDelay)
             .ease(d3.easeCubicInOut)
             .attr("transform", d => `translate(${d.finalX}, ${d.finalY})`);
+
+        // AFTER the cars have arrived, fade in the labels
+        cars.select(".change-label")
+            .transition()
+            .delay(moveDuration + moveDelay) // wait until movement is done
+            .duration(300)
+            .style("opacity", d => d.delta != null ? 1 : 0); // only show where we have a change
     }
-}
+    }
