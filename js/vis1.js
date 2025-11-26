@@ -342,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const circuitSelect = document.getElementById("circuitSelect");
     const playBtn = document.getElementById("playBtn");
     const pauseBtn = document.getElementById("pauseBtn");
+    const replayBtn = document.getElementById("replayBtn");
 
     playBtn.addEventListener("click", () => {
         if (raceVis) raceVis.startAnimation();
@@ -349,6 +350,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     pauseBtn.addEventListener("click", () => {
         if (raceVis) raceVis.stopAnimation();
+    });
+
+    replayBtn.addEventListener("click", () => {
+        if (raceVis) {
+            raceVis.currentRaceTime = 0;
+            raceVis.completedLaps = 0;
+
+            // Reset all dots
+            const dots = raceVis.dots;
+            if (dots) {
+                dots.forEach(d => {
+                    d.lapElapsed = 0;
+                    d.completedLaps = 0;
+                    d.currentLapIndex = 0;
+                    d.currentLap = d.laps[0];
+                });
+            }
+
+            // Reset slider
+            const sliderEl = document.getElementById("raceProgress");
+            if (sliderEl) sliderEl.value = 0;
+
+            raceVis.isPaused = false;
+        }
     });
 
     function loadTrack() {
@@ -434,6 +459,8 @@ class novelTrackVis {
         this.totalLaps = 0;
         this.completedLaps = 0;
         this.lapCounterEl = document.getElementById("lapCounter");
+        this.totalRaceTime = 0;
+        this.currentRaceTime = 0;
         if (this.lapCounterEl) {
             this.lapCounterEl.textContent = "Lap 0 / –";
         }
@@ -569,6 +596,9 @@ class novelTrackVis {
             });
         });
 
+        const maxLapTime = d3.max(dots, d => d.currentLap.milliseconds) || 0;
+        vis.totalRaceTime = maxLapTime * vis.totalLaps;
+
         return dots;
     }    
 
@@ -610,6 +640,7 @@ class novelTrackVis {
             vis.pathLength = vis.trackPath.node().getTotalLength();
 
             const dots = await vis.loadRaceData();
+            vis.dots = dots;
 
             if (!dots || dots.length === 0) {
                 console.warn("No dots (drivers) created for this track.");
@@ -741,6 +772,75 @@ class novelTrackVis {
 
             vis.lastElapsed = 0;
 
+
+            /*OPTION 1: YOU SLIDE THROUGH THE ENTIRE THING. IT IS FAST BUT TAKES TO LONG*/
+
+        // const sliderEl = document.getElementById("raceProgress");
+        // if (sliderEl) {
+        //     let isSliding = false;
+        //
+        //     sliderEl.addEventListener("mousedown", () => {
+        //         isSliding = true;
+        //         vis.isPaused = false;
+        //     });
+        //
+        //     sliderEl.addEventListener("input", (e) => {
+        //         if (isSliding) {
+        //             // Speed up while dragging
+        //             vis.speedFactor = 100.0;
+        //         }
+        //     });
+        //
+        //     sliderEl.addEventListener("mouseup", () => {
+        //         isSliding = false;
+        //         // Return to normal speed
+        //         vis.speedFactor = 10.0;
+        //     });
+        // }
+
+        /*OPTION 2: YOU PAUSE AND YOU END UP IN A NEW POSITION YOU HAVE TO CLICK PLAY AGAIN*/
+        const sliderEl = document.getElementById("raceProgress");
+        if (sliderEl) {
+            sliderEl.addEventListener("input", (e) => {
+                const progress = parseFloat(e.target.value) / 100;
+                vis.currentRaceTime = progress * vis.totalRaceTime;
+
+                // Pause while scrubbing
+                vis.isPaused = true;
+
+                // Update all dots to this time instantly
+                dots.forEach(d => {
+                    if (!d.laps || d.laps.length === 0) return;
+
+                    const totalMs = d.laps.reduce((sum, lap) => sum + lap.milliseconds, 0);
+                    const targetTime = progress * totalMs;
+
+                    let elapsed = 0;
+                    d.completedLaps = 0;
+                    d.currentLapIndex = 0;
+
+                    for (let i = 0; i < d.laps.length; i++) {
+                        if (elapsed + d.laps[i].milliseconds > targetTime) {
+                            d.currentLapIndex = i;
+                            d.lapElapsed = targetTime - elapsed;
+                            d.currentLap = d.laps[i];
+                            break;
+                        }
+                        elapsed += d.laps[i].milliseconds;
+                        d.completedLaps++;
+                    }
+                });
+            });
+
+            sliderEl.addEventListener("mouseup", () => {
+                vis.isPaused = false;
+            });
+
+            sliderEl.addEventListener("touchend", () => {
+                vis.isPaused = false;
+            });
+        }
+
             d3.timer((elapsed) => {
                 if (vis.isPaused) {
                     // keep timer running but do not advance laps while paused
@@ -749,6 +849,7 @@ class novelTrackVis {
                 }
 
                 const delta = (elapsed - vis.lastElapsed) * vis.speedFactor;
+                vis.currentRaceTime += delta;
                 vis.lastElapsed = elapsed;
 
                 dots.forEach(d => {
@@ -813,6 +914,19 @@ class novelTrackVis {
                     leaderboardList.appendChild(li);
                 });
             }
+
+                // Update slider
+                const sliderEl = document.getElementById("raceProgress");
+                const sliderTimeEl = document.getElementById("sliderTime");
+                if (sliderEl && vis.totalRaceTime > 0) {
+                    const progress = (vis.currentRaceTime / vis.totalRaceTime) * 100;
+                    sliderEl.value = progress;
+
+                    const seconds = Math.floor(vis.currentRaceTime / 1000);
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    sliderTimeEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                }
         });
     }
 }
