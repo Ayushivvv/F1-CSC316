@@ -335,10 +335,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     window.showDriverModal = showDriverModal;
 
-    document
-        .getElementById("driverStatsBox")
-        .addEventListener("click", showDriverModal);
-
     const circuitSelect = document.getElementById("circuitSelect");
     const playBtn = document.getElementById("playBtn");
     const pauseBtn = document.getElementById("pauseBtn");
