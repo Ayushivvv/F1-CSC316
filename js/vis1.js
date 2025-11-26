@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const driverModalClose = document.getElementById("driverModalClose");
     const DATA_PATH = "data/kaggle/";
     const driverStats = new Map();
+    const driverHeadshots = new Map();
     const driverStatsReady = loadDriverStats();
 
     // close modal
@@ -34,14 +35,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function loadDriverStats() {
-        const [drivers, results, races, constructors] = await Promise.all([
+        const [drivers, results, races, constructors, headshots] = await Promise.all([
             d3.csv(DATA_PATH + "drivers.csv", d3.autoType),
             d3.csv(DATA_PATH + "results.csv", d3.autoType),
             d3.csv(DATA_PATH + "races.csv", d3.autoType),
             d3.csv(DATA_PATH + "constructors.csv", d3.autoType),
+            d3.csv("data/driver_headshots_combined.csv", d3.autoType),
         ]);
 
         const constructorById = new Map(constructors.map((c) => [c.constructorId, c]));
+
+        // Build headshots map
+        if (headshots) {
+            headshots.forEach((row) => {
+                if (row.Abbreviation && row.HeadshotUrl) {
+                    driverHeadshots.set(row.Abbreviation, row.HeadshotUrl);
+                }
+            });
+        }
         const raceOrderById = new Map(
             races.map((race) => [
                 race.raceId,
@@ -55,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 driverId: driver.driverId,
                 name: `${driver.forename} ${driver.surname}`,
                 surname: driver.surname,
+                code: driver.code,
                 nationality: driver.nationality,
                 dob: driver.dob,
                 totalRaces: 0,
@@ -260,8 +272,28 @@ document.addEventListener("DOMContentLoaded", function () {
         const modalTeam = document.getElementById("driverModalTeam");
         const driverSummary = document.getElementById("driverSummary");
 
+        // modalName.textContent = info.name || window.currentDriverName || "Driver";
+        // // modalImg.src = "images/default_driver.png";
+        // modalName.textContent = info.name || window.currentDriverName || "Driver";
+        //
+        // // Get the headshot URL from the drivers_photos map
+        // if (headshots) {
+        //     headshots.forEach((row) => {
+        //         if (row.Abbreviation && row.HeadshotUrl) {
+        //             driverHeadshots.set(row.Abbreviation, row.HeadshotUrl);
+        //         }
+        //     });
+        // }
+
         modalName.textContent = info.name || window.currentDriverName || "Driver";
-        modalImg.src = "images/default_driver.png";
+
+        // Set headshot image
+        const headshotUrl = driverHeadshots.get(info.code);
+        if (headshotUrl) {
+            modalImg.src = headshotUrl;
+        } else {
+            modalImg.src = "images/default_driver.png";
+        }
 
         if (driverTabs) {
             driverTabs.style.display = "flex";
@@ -329,7 +361,8 @@ document.addEventListener("DOMContentLoaded", function () {
             d3.select("#circuitContainer").selectAll("svg").remove();
         }
 
-        raceVis = new novelTrackVis("#circuitContainer", circuit, {}, []);
+        // raceVis = new novelTrackVis("#circuitContainer", circuit, {}, []);
+        raceVis = new novelTrackVis("#circuitContainer", circuit, {}, [], driverStats, driverHeadshots);
     }
 
     Promise.all([
@@ -385,11 +418,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 class novelTrackVis {
 
-    constructor(parentElement, trackName, lapData, driverList) {
+    constructor(parentElement, trackName, lapData, driverList, stats, headshots) {
         this.parentElement = parentElement;
         this.trackName = trackName;
         this.lapData = lapData;
         this.driverList = driverList;
+        this.driverStats = stats;
+        this.driverHeadshots = headshots;
         this.selectedDrivers = [];
         this.isPaused = true;
         this.currentTime = 0;
@@ -616,14 +651,25 @@ class novelTrackVis {
                 .style("pointer-events", "none")
                 .style("display", "none");
 
+        circles
+            .on("mouseover", (event, d) => {
+                const lapNumber = (d.currentLapIndex || 0) + 1;
 
-            circles
-                .on("mouseover", (event, d) => {
-                    const lapNumber = (d.currentLapIndex || 0) + 1;
-                    tooltip
-                        .style("display", "block")
-                        .style("opacity", 1)
-                        .html(`<strong>${d.driver}</strong><br>${d.team || "–"}<br>Lap ${lapNumber} of ${vis.totalLaps || "?"}`);
+                const driverInfo = vis.driverStats.get(d.driverId);
+                const headshotUrl = vis.driverHeadshots.get(driverInfo?.code);
+                const imgHtml = headshotUrl
+                    ? `<img src="${headshotUrl}" alt="${d.driver}" style="width: 60px; height: 60px; border-radius: 4px; margin-bottom: 8px;"/>`
+                    : "";
+
+                tooltip
+                    .style("display", "block")
+                    .style("opacity", 1)
+                    .html(`
+                ${imgHtml}
+                <div><strong>${d.driver}</strong></div>
+                <div style="font-size: 0.85rem;">${d.team || "–"}</div>
+                <div style="font-size: 0.85rem;">P${d.currentPosition || "–"}</div>
+            `);
 
                     if (driverNameEl) {
                         driverNameEl.textContent = d.driver || "Unknown";
@@ -727,19 +773,19 @@ class novelTrackVis {
             const leaderboardList = document.getElementById("leaderboardList");
             if (leaderboardList) {
                 dots.forEach(d => {
-                    d.distance = (d.currentLapIndex * vis.pathLength) + 
+                    d.distance = (d.currentLapIndex * vis.pathLength) +
                                  (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
                 });
 
                 const ranking = dots
                     .slice()
                     .sort((a, b) => b.distance - a.distance)
-                    .slice(0, 5); 
-                
+                    .slice(0, 5);
+
                 leaderboardList.innerHTML = "";
                 ranking.forEach((d, idx) => {
                     const li = document.createElement("li");
-                    li.textContent = d.driver;  
+                    li.textContent = d.driver;
                     leaderboardList.appendChild(li);
                 });
             }
