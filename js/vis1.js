@@ -616,13 +616,32 @@ class novelTrackVis {
                 return;
             }
 
-            const circles = vis.svg.selectAll(".race-dot")
-                .data(dots)
-                .enter()
-                .append("circle")
-                .attr("class", "race-dot")
-                .attr("r", 8)
-                .attr("fill", d => d.color);
+        const circles = vis.svg.selectAll(".race-dot")
+            .data(dots)
+            .enter()
+            .append("g")
+            .attr("class", "race-dot");
+
+        circles.append("circle")
+            .attr("r", 12)
+            .attr("fill", d => d.color)
+            .attr("stroke", "black")
+            .attr("stroke-width", 1);
+
+        circles.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dy", "0.3em")
+            .attr("fill", "#fff")
+            .attr("stroke", "#000")
+            .attr("stroke-width", 0.2)
+            .style("font-family", "Orbitron, sans-serif")
+            .style("font-size", "8px")
+            .style("font-weight", "bold")
+            .style("pointer-events", "none")
+            .text(d => {
+                const driverInfo = vis.driverStats.get(d.driverId);
+                return driverInfo?.code || "??";
+            });
 
             dots.forEach(d => {
                 const point = vis.trackPath.node().getPointAtLength(0);
@@ -630,9 +649,9 @@ class novelTrackVis {
                 d.y = point.y;
             });
 
-            circles
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y);
+        circles
+            .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
 
             const driverNameEl = document.getElementById("driverName");
             const speedEl = document.getElementById("speed");
@@ -772,8 +791,7 @@ class novelTrackVis {
                 });
 
                 circles
-                    .attr("cx", d => d.x)
-                    .attr("cy", d => d.y);
+                    .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
             // Update leaderboard
             const leaderboardList = document.getElementById("leaderboardList");
