@@ -1,10 +1,9 @@
-// === viz3.js - FINAL STABILIZED VERSION (Temp Slider + Contextual Averages) ===
+// === viz3.js - FINAL STABLE VERSION (Initialization Fix) ===
 
 let viz3HasRun = false;
 
 console.log("viz3.js loaded");
 
-// Function to limit how often an event handler runs (Debouncing)
 function debounce(func, timeout = 50){ 
     let timer;
     return (...args) => {
@@ -13,13 +12,10 @@ function debounce(func, timeout = 50){
     };
 }
 
-// Global abort controller for cleanup
 let viz3AbortController = null;
-
-// Global variable for the current state (Min Temperature Threshold)
-let currentTempThreshold = 25; // Default: 25°C
-
-let weather_dataset_global = []; // To store the parsed data
+let currentTempSetting = 25; // Controls the slider value (C)
+let currentWeatherMode = 'hot'; // Controls the filter mode ('hot' or 'cold')
+let weather_dataset_global = []; 
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOMContentLoaded fired");
@@ -75,61 +71,122 @@ function viz3() {
     viz3AbortController = new AbortController();
     const signal = viz3AbortController.signal;
 
-    const weather_csv = "data/kaggle/weather/f1_weather_2018_2023.csv";
-    const weather_container = d3.select("#viz3-main");
+    // **FIX: Ensure correct path**
+    const weather_csv = "data/f1_weather_2018_2023.csv"; // Using the original path which had a folder structure
+    const viz3MainEl = document.getElementById("viz3-main");
+    
+    // **FIX: Initialize select element and mode robustly**
+    const selectEl = document.getElementById("weather-select"); 
+    if (selectEl) {
+        currentWeatherMode = selectEl.value; 
+    }
 
-    // --- Safe UI injection: Create ONLY the Temperature Slider ---
+    // === FORCE FLEXBOX ON #viz3-main (Ensure vertical flow for slider/chart blocks) ===
+    if (viz3MainEl) {
+        viz3MainEl.style.display = 'flex';
+        viz3MainEl.style.flexDirection = 'column';
+        viz3MainEl.style.alignItems = 'center';
+    }
+    // ===============================================
+
+    let tempSlider;
+    let tempLabel;
+    let weather_svgHost;
+
+    // --- Safe UI injection: Creates the Flex layout and replaces 'Loading Weather Data...' ---
     (function safeUIInjection() {
-        const selectEl = document.getElementById("weather-select");
-        if (!selectEl) return;
-
-        const existingWrapper = document.querySelector(".weather-slider-wrapper");
-        if (existingWrapper) {
-            existingWrapper.remove();
-        }
-
+        if (!viz3MainEl) return;
+        
+        // 1. Clear all existing content inside viz3-main
+        viz3MainEl.innerHTML = ''; 
+        
+        // 2. Create the top wrapper (holds the slider and the main flex container)
         const wrapper = document.createElement("div");
         wrapper.className = "weather-slider-wrapper";
         wrapper.style.width = "100%";
-        wrapper.style.maxWidth = "700px";
+        wrapper.style.maxWidth = "850px"; 
         wrapper.style.paddingBottom = "20px";
         wrapper.style.margin = '0 auto';
         
+        // 3. Slider Control Container
         const controlsContainer = document.createElement("div");
         controlsContainer.style.display = 'flex';
         controlsContainer.style.flexDirection = 'column';
         controlsContainer.style.alignItems = 'center';
         controlsContainer.style.padding = '10px 0';
 
-        // --- 1. Temperature Min Threshold (Horizontal) ---
+        // --- Temperature Threshold Control (Horizontal) ---
         const tempControl = document.createElement("div");
         tempControl.style.textAlign = 'center';
         tempControl.style.width = '100%';
         tempControl.style.maxWidth = '400px';
         tempControl.innerHTML = `
-            <h4>Air Temperature: <span id="temp-current">${currentTempThreshold.toFixed(1)}°C</span></h4>
-            <input id="temp-slider" type="range" min="5" max="45" step="0.5" value="${currentTempThreshold.toString()}" style="width: 100%;">
+            <h4 style="color: #111; font-family: sans-serif; font-weight: bold;"><span id="mode-text">Minimum Air Temperature</span>: <span id="temp-current">${currentTempSetting.toFixed(1)}°C</span></h4>
+            <input id="temp-slider" type="range" min="5" max="39.5" step="0.5" value="${currentTempSetting.toString()}" style="width: 100%;">
         `;
         controlsContainer.appendChild(tempControl);
         
-        // --- 2. Contextual Averages Display (Will be updated by JS) ---
-        // const averagesText = document.createElement("div");
-        // averagesText.id = "averages-text";
-        // averagesText.style.marginTop = "15px";
-        // averagesText.style.fontSize = "1.1em";
-        // averagesText.style.textAlign = "center";
-        // controlsContainer.appendChild(averagesText);
+        // --- 4. Container for Component and Chart (Crucial Flex row for side-by-side) ---
+        const chartAndComponentContainer = document.createElement("div");
+        chartAndComponentContainer.id = 'chart-component-container';
+        
+        // *** EXTREME FLEXBOX OVERRIDE ***
+        chartAndComponentContainer.style.cssText = `
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-start !important; 
+            width: 100% !important;
+            gap: 20px !important;
+            margin-top: 20px !important;
+            flex-wrap: wrap; /* Allows wrapping on small screens */
+        `;
 
-        const averagesBox = document.createElement("div");
-        averagesBox.className = "averages-box";
-        averagesBox.innerHTML = `<div id="averages-text"></div>`;
-        controlsContainer.appendChild(averagesBox);
+        // --- 5. Contextual Averages Component (LEFT) ---
+        const averagesComponent = document.createElement("div");
+        averagesComponent.id = "averages-component";
+        averagesComponent.style.flexShrink = 0; 
+        averagesComponent.style.width = '200px'; 
+        averagesComponent.style.padding = '15px';
+        averagesComponent.style.border = '1px solid #ccc';
+        averagesComponent.style.borderRadius = '4px'; 
+        averagesComponent.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.2)'; 
+        averagesComponent.style.backgroundColor = '#fff'; 
+        averagesComponent.style.fontFamily = 'sans-serif';
+        chartAndComponentContainer.appendChild(averagesComponent);
+
+        // --- 6. Chart Placeholder (RIGHT) ---
+        const chartPlaceholder = document.createElement("div");
+        chartPlaceholder.id = "chart-placeholder"; 
+        chartPlaceholder.style.flexGrow = 1;
+        chartPlaceholder.style.minWidth = '350px'; 
+        chartAndComponentContainer.appendChild(chartPlaceholder);
 
 
         wrapper.appendChild(controlsContainer);
-        selectEl.parentNode.insertBefore(wrapper, selectEl);
-        selectEl.style.display = "none";
-    })();
+        wrapper.appendChild(chartAndComponentContainer);
+
+        // Append the entire structure
+        viz3MainEl.appendChild(wrapper);
+        
+        // Select the elements for global access
+        tempSlider = document.getElementById("temp-slider");
+        tempLabel = document.getElementById("temp-current");
+
+        // Create the SVG host inside the placeholder
+        weather_svgHost = d3.select("#chart-placeholder")
+            .append("svg")
+            .attr("id", "weather-svg")
+            .attr("width", "100%")
+            .style("display", "block");
+            
+    })(); 
+    
+    // Check elements *after* injection
+    if (!weather_svgHost || !tempSlider || !tempLabel || !selectEl) {
+        console.error("UI elements failed to initialize after injection or selection.");
+        return;
+    }
+
 
     // --- Load CSV and initialize chart ---
     weather_cleanData(weather_csv)
@@ -139,64 +196,80 @@ function viz3() {
 
             if (signal.aborted) return;
 
-            weather_container.select(".awaitingText").remove();
-            weather_container.select("#weather-svg").remove();
-
-            // Slider element for input
-            const tempSlider = document.getElementById("temp-slider");
-
-            const weather_svgHost = weather_container
-                .append("svg")
-                .attr("id", "weather-svg")
-                .attr("width", "100%")
-                .style("display", "block");
-
-            // --- Core Chart Update Function ---
-            function updateWeatherChart(temp) {
+            // --- Core Chart Update Function (Handles both HOT and COLD filtering) ---
+            function updateWeatherChart(temp, mode) {
                 if (signal.aborted) return;
                 
-                const { width, height, margin } = getResponsiveDimensions(weather_container);
+                const modeTextEl = document.getElementById("mode-text");
+                
+                // 1. FILTER DATASET based on current mode and temp setting
+                let subset;
+                let modeDisplay;
+
+                if (mode === 'hot') {
+                    // Hot Mode: Filter for races where airTemp is GREATER than or equal to the slider value (MINIMUM threshold)
+                    subset = weather_dataset_global.filter(d => d.airTemp >= temp);
+                    modeDisplay = `Air Temp ${temp.toFixed(1)}°C`;
+                    modeTextEl.textContent = "Minimum Air Temperature";
+                } else {
+                    // Cold Mode: Filter for races where airTemp is LESS than or equal to the slider value (MAXIMUM threshold)
+                    subset = weather_dataset_global.filter(d => d.airTemp <= temp);
+                    modeDisplay = `Air Temp ${temp.toFixed(1)}°C`;
+                    modeTextEl.textContent = "Maximum Air Temperature";
+                }
+
+                // 2. CALCULATE CONTEXTUAL AVERAGES and UPDATE COMPONENT
+                const avgWind = d3.mean(subset, d => d.windSpeed) || 0;
+                const avgRain = d3.mean(subset, d => d.rainfall) || 0;
+                
+                const averagesComponent = document.getElementById("averages-component");
+                
+                const racesCount = subset.length;
+
+                let contentHTML = '';
+                if (subset.length > 0) {
+                    contentHTML = `
+                        <h3 style="color: #111; font-weight: bold; margin-bottom: 5px; font-size: 1.2em;">Results:</h3>
+                        <p style="color: #111; font-size: 0.9em; margin-bottom: 5px; line-height: 1.2;">Displayed Races: 
+                             <strong style="color: var(--red, #D40000);">${racesCount}</strong>
+                        </p>
+                        <h4 style="margin-top: 15px; margin-bottom: 5px; color: #111; font-size: 1.1em;">Avg. Conditions:</h4>
+                        <p style="color: #111; font-size: 0.9em; margin-bottom: 5px; line-height: 1.2;">Wind Speed: 
+                            <strong style="color: var(--red, #D40000);">${avgWind.toFixed(1)} km/h</strong>
+                        </p>
+                        <p style="color: #111; font-size: 0.9em; margin-bottom: 0; line-height: 1.2;">Rainfall: 
+                            <strong style="color: var(--red, #D40000);">${avgRain.toFixed(1)} mm</strong>
+                        </p>
+                    `;
+                } else {
+                    // Fallback using the current mode text to be accurate
+                    contentHTML = `
+                        <h3 style="color: #111; font-weight: bold; margin-bottom: 5px; font-size: 1.2em;">No Data Found</h3>
+                        <p style="color: #111; font-size: 0.9em;">No races found with ${modeDisplay.replace(/(\$\$|\\le|\\ge)/g, '').trim()}. Please adjust the threshold.</p>
+                    `;
+                }
+                averagesComponent.innerHTML = contentHTML;
+
+                // 3. CHART RENDERING
+                const { width, height, margin } = getResponsiveDimensions(d3.select("#chart-placeholder"));
                 const transitionDuration = 700;
                 
                 weather_svgHost.attr("viewBox", `0 0 ${width} ${height}`);
 
-                // 1. Filter Dataset based ONLY on Air Temperature
-                const subset = weather_dataset_global.filter(d => 
-                    d.airTemp >= temp
-                );
-                
-                // --- CALCULATE CONTEXTUAL AVERAGES ---
-                const avgWind = d3.mean(subset, d => d.windSpeed) || 0;
-                const avgRain = d3.mean(subset, d => d.rainfall) || 0;
-                
-                // Update the two-line summary text
-                const averagesDiv = document.getElementById("averages-text");
-                if (subset.length > 0) {
-                    averagesDiv.innerHTML = 
-                        `The average wind speed being ${avgWind.toFixed(1)} km/h.`+
-                        `<h6>The </h6>`
-                } else {
-                    // Fallback if the threshold is too high and dataset is empty
-                    averagesDiv.innerHTML = `No races found with a temperature $\ge$ ${temp.toFixed(1)}°C. Please lower the threshold.`;
-                }
-
-                
-                // --- SCALES (DYNAMIC DOMAINS WITH FALLBACK) ---
                 const xDataAccessor = d => d.airTemp;
                 
-                // Use the filtered subset domain, but FALLBACK to the full dataset if subset is empty
+                // Use the filtered subset for the domain limits if available, otherwise use all data
                 const activeData = subset.length > 0 ? subset : weather_dataset_global;
 
                 const xDomain = d3.extent(activeData, xDataAccessor);
                 const yDomain = d3.extent(activeData, d => d.performance);
                 
-                // Basic checks for safety (should be fine with fallback)
+                // Re-check for empty domain after fallback logic
                 if (xDomain[0] === undefined || yDomain[0] === undefined) {
-                    console.warn("Domain is empty, skipping chart update.");
+                    weather_svgHost.selectAll(".chart-group circle").remove();
                     return; 
                 }
 
-                // Add padding to the domain
                 const xRange = xDomain[1] - xDomain[0];
                 const yRange = yDomain[1] - yDomain[0];
                 
@@ -210,10 +283,10 @@ function viz3() {
                     .range([height - margin.bottom, margin.top]);
                 
                 
-                // --- VISUALIZATION SETUP ---
+                // --- VISUALIZATION SETUP (Axes, Title, etc.) ---
                 const xLabel = `Air Temperature (°C)`;
                 const yLabel = `Performance Metric`;
-                const color = "#1e90ff"; 
+                const color = "var(--red, #D40000)"; 
                 
                 const axisFontSize = Math.max(10, width / 60);
                 const labelFontSize = Math.max(12, width / 50);
@@ -281,20 +354,15 @@ function viz3() {
                     .style("font-weight", "bold")
                     .text(`Air Temperature vs. Performance (${subset.length} Races Displayed)`);
 
-                // --- D3 General Update Pattern for Points (Smooth Transition) ---
+                // D3 General Update Pattern for Points
                 const chartGroup = weather_svgHost.select(".chart-group");
                 const pointRadius = Math.max(3, Math.min(6, width / 150));
                 
                 const circles = chartGroup.selectAll("circle")
                     .data(subset, d => d.race); 
 
-                // EXIT selection: Points leaving the data (fades out)
-                circles.exit()
-                    .transition(t)
-                    .attr("r", 0)
-                    .remove(); 
+                circles.exit().transition(t).attr("r", 0).remove(); 
 
-                // ENTER selection: New points appearing (from the bottom)
                 const enterCircles = circles.enter()
                     .append("circle")
                     .attr("cx", d => xScale(xDataAccessor(d))) 
@@ -303,7 +371,6 @@ function viz3() {
                     .attr("fill", color)
                     .attr("opacity", 0.7);
 
-                // MERGE and TRANSITION (Applies to both existing and new circles)
                 enterCircles.merge(circles)
                     .transition(t)
                     .attr("cx", d => xScale(xDataAccessor(d)))
@@ -321,25 +388,35 @@ function viz3() {
             // --- END updateWeatherChart function ---
 
 
-            // --- Event Listener Logic for Temp Slider ---
-            const tempLabel = document.getElementById("temp-current");
-
+            // --- Event Listener Logic ---
+            
             const debouncedChartUpdate = debounce(() => {
                 if (!signal.aborted) {
-                    updateWeatherChart(currentTempThreshold);
+                    updateWeatherChart(currentTempSetting, currentWeatherMode);
                 }
             }, 50);
 
-            // Temperature Slider Input
+            // 1. Temperature Slider Input
             tempSlider.addEventListener("input", () => {
-                currentTempThreshold = +tempSlider.value;
-                tempLabel.textContent = `${currentTempThreshold.toFixed(1)}°C`;
+                currentTempSetting = +tempSlider.value;
+                tempLabel.textContent = `${currentTempSetting.toFixed(1)}°C`;
+                debouncedChartUpdate();
+            }, { signal });
+
+            // 2. Weather Mode Select Input (Hot/Cold)
+            selectEl.addEventListener("change", () => {
+                currentWeatherMode = selectEl.value;
+                // Reset the slider to a sensible default midpoint when switching modes
+                currentTempSetting = 25; 
+                tempSlider.value = currentTempSetting;
+                tempLabel.textContent = `${currentTempSetting.toFixed(1)}°C`;
                 debouncedChartUpdate();
             }, { signal });
 
             // --- Initial load ---
-            currentTempThreshold = +tempSlider.value;
-            updateWeatherChart(currentTempThreshold);
+            currentTempSetting = +tempSlider.value;
+            // **FIX: Call the update function AFTER the data is loaded**
+            updateWeatherChart(currentTempSetting, currentWeatherMode);
         })
     .catch(error => {
         console.error("Error loading or processing data:", error);
