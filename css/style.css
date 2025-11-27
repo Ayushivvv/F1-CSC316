@@ -506,14 +506,15 @@ body {
 #driverGraphArea {
     width: 100%;
     height: 300px;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
 }
+
 
 #driverSummary {
-    font-family: 'Titillium Web';
-    margin-top: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--red);
 }
-
 
 /* --- Visualization 2 Layout --- */
 .viz2-container {

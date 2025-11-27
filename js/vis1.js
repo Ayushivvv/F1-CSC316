@@ -141,6 +141,108 @@ document.addEventListener("DOMContentLoaded", function () {
         }));
     }
 
+    /*OLD CODE FOR SINGLE DRIVER*/
+    // function loadDriverGraph(type, driverId) {
+    //     if (!driverGraphArea) return;
+    //     const stat = driverStats.get(driverId);
+    //     if (!stat) return;
+    //     const config = GRAPH_CONFIG[type];
+    //     const graph = d3.select("#driverGraphArea");
+    //     graph.html("");
+    //
+    //     if (!config) {
+    //         graph
+    //             .append("p")
+    //             .attr("class", "graph-placeholder")
+    //             .text("No chart configuration found.");
+    //         return;
+    //     }
+    //
+    //     const data = buildSeries(stat, config.key);
+    //     if (!data.length) {
+    //         graph
+    //             .append("p")
+    //             .attr("class", "graph-placeholder")
+    //             .text("No season data available for this driver.");
+    //         return;
+    //     }
+    //
+    //     const margin = { top: 25, right: 20, bottom: 45, left: 60 };
+    //     const width = 520 - margin.left - margin.right;
+    //     const height = 320 - margin.top - margin.bottom;
+    //
+    //     const svg = graph
+    //         .append("svg")
+    //         .attr("width", width + margin.left + margin.right)
+    //         .attr("height", height + margin.top + margin.bottom)
+    //         .append("g")
+    //         .attr("transform", `translate(${margin.left},${margin.top})`);
+    //
+    //     const xScale = d3
+    //         .scaleBand()
+    //         .domain(data.map((d) => d.year))
+    //         .range([0, width])
+    //         .padding(0.25);
+    //
+    //     const yMax = d3.max(data, (d) => d.value) || 1;
+    //     const yScale = d3.scaleLinear().domain([0, yMax * 1.1]).range([height, 0]);
+    //
+    //     svg.append("g")
+    //         .attr("transform", `translate(0,${height})`)
+    //         .call(d3.axisBottom(xScale).tickFormat((d) => d.toString()))
+    //         .selectAll("text")
+    //         .style("font-family", "Antonio, sans-serif")
+    //         .style("font-size", "12px");
+    //
+    //     svg.append("g")
+    //         .call(d3.axisLeft(yScale))
+    //         .selectAll("text")
+    //         .style("font-family", "Antonio, sans-serif")
+    //         .style("font-size", "12px");
+    //
+    //     svg.append("text")
+    //         .attr("x", width / 2)
+    //         .attr("y", -5)
+    //         .attr("text-anchor", "middle")
+    //         .style("font-family", "Antonio, sans-serif")
+    //         .style("font-size", "14px")
+    //         .style("font-weight", "bold")
+    //         .text(config.label);
+    //
+    //     svg.append("text")
+    //         .attr("transform", "rotate(-90)")
+    //         .attr("x", -height / 2)
+    //         .attr("y", -margin.left + 20)
+    //         .attr("text-anchor", "middle")
+    //         .style("font-family", "Antonio, sans-serif")
+    //         .style("font-size", "12px")
+    //         .text(config.label);
+    //
+    //     svg.selectAll(".bar")
+    //         .data(data)
+    //         .enter()
+    //         .append("rect")
+    //         .attr("class", "bar")
+    //         .attr("x", (d) => xScale(d.year))
+    //         .attr("y", (d) => yScale(d.value))
+    //         .attr("width", xScale.bandwidth())
+    //         .attr("height", (d) => height - yScale(d.value))
+    //         .attr("fill", config.color);
+    //
+    //     svg.selectAll(".bar-label")
+    //         .data(data)
+    //         .enter()
+    //         .append("text")
+    //         .attr("class", "bar-label")
+    //         .attr("x", (d) => xScale(d.year) + xScale.bandwidth() / 2)
+    //         .attr("y", (d) => yScale(d.value) - 6)
+    //         .attr("text-anchor", "middle")
+    //         .style("font-family", "Antonio, sans-serif")
+    //         .style("font-size", "11px")
+    //         .style("font-weight", "bold")
+    //         .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(1)));
+    // }
+
     function loadDriverGraph(type, driverId) {
         if (!driverGraphArea) return;
         const stat = driverStats.get(driverId);
@@ -150,96 +252,169 @@ document.addEventListener("DOMContentLoaded", function () {
         graph.html("");
 
         if (!config) {
-            graph
-                .append("p")
-                .attr("class", "graph-placeholder")
-                .text("No chart configuration found.");
+            graph.append("p").attr("class", "graph-placeholder").text("No chart configuration found.");
             return;
         }
 
-        const data = buildSeries(stat, config.key);
-        if (!data.length) {
-            graph
-                .append("p")
-                .attr("class", "graph-placeholder")
-                .text("No season data available for this driver.");
+        // Get ONLY years where the selected driver has data
+        const driverYears = Array.from(stat.yearly.keys()).sort((a, b) => a - b);
+        if (driverYears.length === 0) {
+            graph.append("p").attr("class", "graph-placeholder").text("No season data available for this driver.");
             return;
         }
 
-        const margin = { top: 25, right: 20, bottom: 45, left: 60 };
-        const width = 520 - margin.left - margin.right;
-        const height = 320 - margin.top - margin.bottom;
+        // Build chart data - only for years this driver competed
+        const chartData = driverYears.map(year => {
+            const drivers = [];
+            driverStats.forEach((dStat) => {
+                const yearly = dStat.yearly.get(year);
+                if (yearly) { // Only include drivers with data for this year
+                    drivers.push({
+                        driverId: dStat.driverId,
+                        code: dStat.code,
+                        value: yearly[config.key] || 0,
+                        isClicked: dStat.driverId === driverId
+                    });
+                }
+            });
+            return {
+                year,
+                drivers: drivers.sort((a, b) => b.value - a.value) // Sort descending
+            };
+        });
 
-        const svg = graph
-            .append("svg")
+        const margin = { top: 30, right: 20, bottom: 120, left: 60 };
+        const width = 800 - margin.left - margin.right;
+        const height = 350 - margin.top - margin.bottom;
+
+        const container = graph.append("div").style("position", "relative");
+
+        // Slider with year label
+        const sliderWrapper = container.append("div").style("margin-bottom", "1.5rem");
+        sliderWrapper.append("label")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("color", "var(--red)")
+            .style("font-weight", "700")
+            .style("margin-right", "0.5rem")
+            .text("Year: ");
+
+        const yearDisplay = sliderWrapper.append("span")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("color", "var(--red)")
+            .style("font-weight", "700")
+            .style("font-size", "16px")
+            .text(driverYears[0]);
+
+        const slider = sliderWrapper.append("input")
+            .attr("type", "range")
+            .attr("min", 0)
+            .attr("max", driverYears.length - 1)
+            .attr("value", 0)
+            .style("width", "200px")
+            .style("margin-left", "1rem");
+
+        const svg = container.append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const xScale = d3
-            .scaleBand()
-            .domain(data.map((d) => d.year))
-            .range([0, width])
-            .padding(0.25);
+        const yMax = d3.max(chartData, d => d3.max(d.drivers, dr => dr.value)) || 1;
+        const yScale = d3.scaleLinear().domain([0, yMax * 1.15]).range([height, 0]);
+        const xScale = d3.scaleBand().range([0, width]).padding(0.15);
 
-        const yMax = d3.max(data, (d) => d.value) || 1;
-        const yScale = d3.scaleLinear().domain([0, yMax * 1.1]).range([height, 0]);
-
-        svg.append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(xScale).tickFormat((d) => d.toString()))
-            .selectAll("text")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "12px");
-
-        svg.append("g")
-            .call(d3.axisLeft(yScale))
-            .selectAll("text")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "12px");
+        const xAxis = svg.append("g").attr("transform", `translate(0,${height})`);
+        const yAxis = svg.append("g");
 
         svg.append("text")
             .attr("x", width / 2)
-            .attr("y", -5)
+            .attr("y", -15)
             .attr("text-anchor", "middle")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "14px")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("font-size", "16px")
             .style("font-weight", "bold")
             .text(config.label);
 
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -height / 2)
-            .attr("y", -margin.left + 20)
-            .attr("text-anchor", "middle")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "12px")
-            .text(config.label);
+        function updateChart(yearIndex) {
+            const yearData = chartData[yearIndex];
+            yearDisplay.text(yearData.year);
 
-        svg.selectAll(".bar")
-            .data(data)
-            .enter()
-            .append("rect")
-            .attr("class", "bar")
-            .attr("x", (d) => xScale(d.year))
-            .attr("y", (d) => yScale(d.value))
-            .attr("width", xScale.bandwidth())
-            .attr("height", (d) => height - yScale(d.value))
-            .attr("fill", config.color);
+            xScale.domain(yearData.drivers.map(d => d.code));
 
-        svg.selectAll(".bar-label")
-            .data(data)
-            .enter()
-            .append("text")
-            .attr("class", "bar-label")
-            .attr("x", (d) => xScale(d.year) + xScale.bandwidth() / 2)
-            .attr("y", (d) => yScale(d.value) - 6)
-            .attr("text-anchor", "middle")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "11px")
-            .style("font-weight", "bold")
-            .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(1)));
+            const bars = svg.selectAll(".bar").data(yearData.drivers, d => d.driverId);
+
+            bars.enter()
+                .append("rect")
+                .attr("class", "bar")
+                .merge(bars)
+                .transition()
+                .duration(400)
+                .attr("x", d => xScale(d.code))
+                .attr("y", d => yScale(d.value))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - yScale(d.value))
+                .attr("fill", d => d.isClicked ? "var(--red)" : "#ddd");
+
+            bars.exit().remove();
+
+            bars.exit().remove();
+
+// Hover tooltips for bars
+            svg.selectAll(".bar").on("mouseover", (event, d) => {
+                const driverInfo = driverStats.get(d.driverId);
+                const headshotUrl = driverHeadshots.get(driverInfo?.code);
+                const imgHtml = headshotUrl
+                    ? `<img src="${headshotUrl}" alt="${d.code}" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 6px;"/>`
+                    : "";
+
+                d3.select("body").selectAll(".bar-tooltip").remove();
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "bar-tooltip")
+                    .style("position", "absolute")
+                    .style("padding", "8px 10px")
+                    .style("background", "#fff")
+                    .style("border", "2px solid var(--red)")
+                    .style("box-shadow", "0 2px 8px rgba(0,0,0,0.2)")
+                    .style("border-radius", "6px")
+                    .style("font-family", "Antonio, sans-serif")
+                    .style("font-size", "0.8rem")
+                    .style("line-height", "1.3")
+                    .style("pointer-events", "none")
+                    .style("z-index", "1000")
+                    .style("white-space", "nowrap")
+                    .html(`${imgHtml}<div style="font-weight: bold;">${driverInfo?.name || "Unknown"}</div><div>${d.value} ${config.key}</div>`);
+
+                tooltip.style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 20) + "px");
+            })
+                .on("mousemove", (event) => {
+                    d3.select("body").select(".bar-tooltip")
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                })
+                .on("mouseout", () => {
+                    d3.select("body").selectAll(".bar-tooltip").remove();
+                });
+
+            // X-axis with all labels visible
+            xAxis.transition().duration(400).call(d3.axisBottom(xScale))
+                .selectAll("text")
+                .style("font-family", "'Orbitron', sans-serif")
+                .style("font-size", "11px")
+                .style("text-anchor", "end")
+                .attr("transform", "rotate(-45)");
+
+            // Y-axis
+            yAxis.transition().duration(400).call(d3.axisLeft(yScale))
+                .selectAll("text")
+                .style("font-family", "'Orbitron', sans-serif")
+                .style("font-size", "11px");
+        }
+
+        updateChart(0);
+
+        slider.on("input", function() {
+            updateChart(parseInt(this.value));
+        });
     }
 
     document.querySelectorAll(".driver-tabs .tab").forEach((tab) => {
@@ -315,11 +490,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         modalTeam.textContent = teamParts.join(" • ") || "Details unavailable";
 
+    //     driverSummary.innerHTML = `
+    //     <strong>Race Starts:</strong> ${info.totalRaces || 0}<br>
+    //     <strong>Wins:</strong> ${info.wins || 0}<br>
+    //     <strong>Podiums:</strong> ${info.podiums || 0}<br>
+    //     <strong>Career Points:</strong> ${formatPoints(info.points)}
+    // `;
         driverSummary.innerHTML = `
-        <strong>Race Starts:</strong> ${info.totalRaces || 0}<br>
-        <strong>Wins:</strong> ${info.wins || 0}<br>
-        <strong>Podiums:</strong> ${info.podiums || 0}<br>
-        <strong>Career Points:</strong> ${formatPoints(info.points)}
+        <h3 style="font-family: 'Orbitron', sans-serif; color: var(--red); font-size: 14px; margin-bottom: 1rem;">Career Summary Stats</h3>
+        <div><strong>Race Starts:</strong> ${info.totalRaces || 0}</div>
+        <div><strong>Wins:</strong> ${info.wins || 0}</div>
+        <div><strong>Podiums:</strong> ${info.podiums || 0}</div>
+        <div><strong>Career Points:</strong> ${formatPoints(info.points)}</div>
     `;
 
         const tabs = document.querySelectorAll(".driver-tabs .tab");
