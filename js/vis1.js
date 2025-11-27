@@ -452,6 +452,13 @@ document.addEventListener("DOMContentLoaded", function () {
             if (sliderEl) sliderEl.value = 0;
 
             raceVis.isPaused = false;
+
+            // Reset lap counter display
+            if (raceVis.lapCounterEl) {
+                const totalText = raceVis.totalLaps > 0 ? raceVis.totalLaps : "–";
+                raceVis.lapCounterEl.textContent = `Lap 0 / ${totalText}`;
+            }
+
         }
     });
 
