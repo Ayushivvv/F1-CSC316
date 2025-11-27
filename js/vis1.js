@@ -1036,8 +1036,7 @@ class novelTrackVis {
                     const seconds = Math.floor(vis.currentRaceTime / 1000);
                     const minutes = Math.floor(seconds / 60);
                     const secs = seconds % 60;
-                    sliderTimeEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
-                }
+                    sliderTimeEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')} min`;}
         });
     }
 }
