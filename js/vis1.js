@@ -440,6 +440,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const info = driverStats.get(window.currentDriverId);
         if (!info) return;
 
+        // Reset all circle highlights from previous selection
+        d3.selectAll(".race-dot circle")
+            .transition()
+            .duration(100)
+            .attr("r", 12)
+            .attr("filter", "none");
+        d3.selectAll(".race-dot")
+            .attr("stroke", "none");
+
         driverModal.style.display = "block";
 
         const modalName = document.getElementById("driverModalName");
@@ -881,6 +890,13 @@ class novelTrackVis {
 
         circles
             .on("mouseover", (event, d) => {
+                // Highlight the hovered circle
+                d3.select(event.currentTarget).select("circle")
+                    .transition()
+                    .duration(100)
+                    .attr("r", 14)
+                    .attr("filter", "drop-shadow(0 0 8px var(--red))");
+
                 const lapNumber = (d.currentLapIndex || 0) + 1;
 
                 const driverInfo = vis.driverStats.get(d.driverId);
@@ -899,54 +915,72 @@ class novelTrackVis {
                 <div style="font-size: 0.85rem;">P${d.currentPosition || "–"}</div>
             `);
 
-                    if (driverNameEl) {
-                        driverNameEl.textContent = d.driver || "Unknown";
-                    }
-                    if (speedEl) {
-                        const bestLapSeconds = d.bestLapMs
-                            ? (d.bestLapMs / 1000).toFixed(3)
-                            : "–";
-                        speedEl.textContent = bestLapSeconds + " s (best lap)";
-                    }
-                })
-                .on("mousemove", (event) => {
-                    tooltip
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 20) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("display", "none");
+                if (driverNameEl) {
+                    driverNameEl.textContent = d.driver || "Unknown";
+                }
+                if (speedEl) {
+                    const bestLapSeconds = d.bestLapMs
+                        ? (d.bestLapMs / 1000).toFixed(3)
+                        : "–";
+                    speedEl.textContent = bestLapSeconds + " s (best lap)";
+                }
+            })
+            .on("mousemove", (event) => {
+                tooltip
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 20) + "px");
+            })
 
-                    if (!vis.selectedDriver && driverNameEl && speedEl) {
-                        driverNameEl.textContent = "–";
-                        speedEl.textContent = "–";
-                    }
-                })
-                .on("click", (event, d) => {
-                    vis.selectedDriver = d.driverId;
-                
-                    d3.selectAll(".race-dot").attr("stroke", "none");
+            .on("mouseout", (event, d) => {
+                // Reset the circle
+                d3.select(event.currentTarget).select("circle")
+                    .transition()
+                    .duration(100)
+                    .attr("r", 12)
+                    .attr("filter", "none");
+
+                // Re-apply selection highlight if this is the selected driver
+                if (vis.selectedDriver === d.driverId) {
                     d3.select(event.currentTarget)
                         .attr("stroke", "#d40000")
                         .attr("stroke-width", 3);
-                
-                    window.currentDriverId = d.driverId;
-                    window.currentDriverName = d.driver;
-                
-                    if (driverNameEl) {
-                        driverNameEl.textContent = d.driver || "Unknown";
-                    }
-                    if (speedEl) {
-                        const avgLapSeconds = d.avgLapMs
-                            ? (d.avgLapMs / 1000).toFixed(3)
-                            : "–";
-                        speedEl.textContent = avgLapSeconds + " s (avg lap)";
-                    }
+                }
 
-                    if (window.showDriverModal) {
-                        window.showDriverModal();
-                    }
-                });
+
+                tooltip.style("display", "none");
+
+                if (!vis.selectedDriver && driverNameEl && speedEl) {
+                    driverNameEl.textContent = "–";
+                    speedEl.textContent = "–";
+                }
+            })
+
+
+            .on("click", (event, d) => {
+                vis.selectedDriver = d.driverId;
+
+                d3.selectAll(".race-dot").attr("stroke", "none");
+                d3.select(event.currentTarget)
+                    .attr("stroke", "#d40000")
+                    .attr("stroke-width", 3);
+
+                window.currentDriverId = d.driverId;
+                window.currentDriverName = d.driver;
+
+                if (driverNameEl) {
+                    driverNameEl.textContent = d.driver || "Unknown";
+                }
+                if (speedEl) {
+                    const avgLapSeconds = d.avgLapMs
+                        ? (d.avgLapMs / 1000).toFixed(3)
+                        : "–";
+                    speedEl.textContent = avgLapSeconds + " s (avg lap)";
+                }
+
+                if (window.showDriverModal) {
+                    window.showDriverModal();
+                }
+            });
 
             vis.lastElapsed = 0;
 
