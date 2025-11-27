@@ -141,108 +141,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }));
     }
 
-    /*OLD CODE FOR SINGLE DRIVER*/
-    // function loadDriverGraph(type, driverId) {
-    //     if (!driverGraphArea) return;
-    //     const stat = driverStats.get(driverId);
-    //     if (!stat) return;
-    //     const config = GRAPH_CONFIG[type];
-    //     const graph = d3.select("#driverGraphArea");
-    //     graph.html("");
-    //
-    //     if (!config) {
-    //         graph
-    //             .append("p")
-    //             .attr("class", "graph-placeholder")
-    //             .text("No chart configuration found.");
-    //         return;
-    //     }
-    //
-    //     const data = buildSeries(stat, config.key);
-    //     if (!data.length) {
-    //         graph
-    //             .append("p")
-    //             .attr("class", "graph-placeholder")
-    //             .text("No season data available for this driver.");
-    //         return;
-    //     }
-    //
-    //     const margin = { top: 25, right: 20, bottom: 45, left: 60 };
-    //     const width = 520 - margin.left - margin.right;
-    //     const height = 320 - margin.top - margin.bottom;
-    //
-    //     const svg = graph
-    //         .append("svg")
-    //         .attr("width", width + margin.left + margin.right)
-    //         .attr("height", height + margin.top + margin.bottom)
-    //         .append("g")
-    //         .attr("transform", `translate(${margin.left},${margin.top})`);
-    //
-    //     const xScale = d3
-    //         .scaleBand()
-    //         .domain(data.map((d) => d.year))
-    //         .range([0, width])
-    //         .padding(0.25);
-    //
-    //     const yMax = d3.max(data, (d) => d.value) || 1;
-    //     const yScale = d3.scaleLinear().domain([0, yMax * 1.1]).range([height, 0]);
-    //
-    //     svg.append("g")
-    //         .attr("transform", `translate(0,${height})`)
-    //         .call(d3.axisBottom(xScale).tickFormat((d) => d.toString()))
-    //         .selectAll("text")
-    //         .style("font-family", "Antonio, sans-serif")
-    //         .style("font-size", "12px");
-    //
-    //     svg.append("g")
-    //         .call(d3.axisLeft(yScale))
-    //         .selectAll("text")
-    //         .style("font-family", "Antonio, sans-serif")
-    //         .style("font-size", "12px");
-    //
-    //     svg.append("text")
-    //         .attr("x", width / 2)
-    //         .attr("y", -5)
-    //         .attr("text-anchor", "middle")
-    //         .style("font-family", "Antonio, sans-serif")
-    //         .style("font-size", "14px")
-    //         .style("font-weight", "bold")
-    //         .text(config.label);
-    //
-    //     svg.append("text")
-    //         .attr("transform", "rotate(-90)")
-    //         .attr("x", -height / 2)
-    //         .attr("y", -margin.left + 20)
-    //         .attr("text-anchor", "middle")
-    //         .style("font-family", "Antonio, sans-serif")
-    //         .style("font-size", "12px")
-    //         .text(config.label);
-    //
-    //     svg.selectAll(".bar")
-    //         .data(data)
-    //         .enter()
-    //         .append("rect")
-    //         .attr("class", "bar")
-    //         .attr("x", (d) => xScale(d.year))
-    //         .attr("y", (d) => yScale(d.value))
-    //         .attr("width", xScale.bandwidth())
-    //         .attr("height", (d) => height - yScale(d.value))
-    //         .attr("fill", config.color);
-    //
-    //     svg.selectAll(".bar-label")
-    //         .data(data)
-    //         .enter()
-    //         .append("text")
-    //         .attr("class", "bar-label")
-    //         .attr("x", (d) => xScale(d.year) + xScale.bandwidth() / 2)
-    //         .attr("y", (d) => yScale(d.value) - 6)
-    //         .attr("text-anchor", "middle")
-    //         .style("font-family", "Antonio, sans-serif")
-    //         .style("font-size", "11px")
-    //         .style("font-weight", "bold")
-    //         .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(1)));
-    // }
-
     function loadDriverGraph(type, driverId) {
         if (!driverGraphArea) return;
         const stat = driverStats.get(driverId);
@@ -338,6 +236,19 @@ document.addEventListener("DOMContentLoaded", function () {
         function updateChart(yearIndex) {
             const yearData = chartData[yearIndex];
             yearDisplay.text(yearData.year);
+
+            // Add this here
+            svg.selectAll(".subtitle").remove(); // Remove old subtitle
+            svg.append("text")
+                .attr("class", "subtitle")
+                .attr("x", width / 2)
+                .attr("y", 5)
+                .attr("text-anchor", "middle")
+                .style("font-family", "'Orbitron', sans-serif")
+                .style("font-size", "12px")
+                .style("font-weight", "normal")
+                .style("fill", "#666")
+                .text(`${stat.name} vs All Drivers in ${yearData.year}`);
 
             xScale.domain(yearData.drivers.map(d => d.code));
 
@@ -456,19 +367,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const modalTeam = document.getElementById("driverModalTeam");
         const driverSummary = document.getElementById("driverSummary");
 
-        // modalName.textContent = info.name || window.currentDriverName || "Driver";
-        // // modalImg.src = "images/default_driver.png";
-        // modalName.textContent = info.name || window.currentDriverName || "Driver";
-        //
-        // // Get the headshot URL from the drivers_photos map
-        // if (headshots) {
-        //     headshots.forEach((row) => {
-        //         if (row.Abbreviation && row.HeadshotUrl) {
-        //             driverHeadshots.set(row.Abbreviation, row.HeadshotUrl);
-        //         }
-        //     });
-        // }
-
         modalName.textContent = info.name || window.currentDriverName || "Driver";
 
         // Set headshot image
@@ -499,12 +397,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         modalTeam.textContent = teamParts.join(" • ") || "Details unavailable";
 
-    //     driverSummary.innerHTML = `
-    //     <strong>Race Starts:</strong> ${info.totalRaces || 0}<br>
-    //     <strong>Wins:</strong> ${info.wins || 0}<br>
-    //     <strong>Podiums:</strong> ${info.podiums || 0}<br>
-    //     <strong>Career Points:</strong> ${formatPoints(info.points)}
-    // `;
         driverSummary.innerHTML = `
         <h3 style="font-family: 'Orbitron', sans-serif; color: var(--red); font-size: 14px; margin-bottom: 1rem;">Career Summary Stats</h3>
         <div><strong>Race Starts:</strong> ${info.totalRaces || 0}</div>

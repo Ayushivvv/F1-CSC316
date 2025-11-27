@@ -487,6 +487,7 @@ body {
     justify-content: center;
     gap: 1rem;
     margin: 1.5rem 0;
+    position: relative;
 }
 
 .driver-tabs .tab {
@@ -496,11 +497,21 @@ body {
     border-radius: 8px;
     cursor: pointer;
     font-family: 'Orbitron', sans-serif;
+    transition: box-shadow 0.2s ease;
+    pointer-events: auto;
+}
+
+.driver-tabs .tab:hover {
+    box-shadow: 0 0 12px rgba(212, 0, 0, 0.4);
 }
 
 .driver-tabs .tab.active {
     background: var(--red);
     color: white;
+}
+
+.driver-tabs .tab[title] {
+    pointer-events: auto !important;
 }
 
 #driverGraphArea {
