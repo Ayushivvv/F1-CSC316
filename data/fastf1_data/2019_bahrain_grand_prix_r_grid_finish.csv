@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+HAM,Lewis Hamilton,Mercedes,00d2be,3.0,1.0,Finished,0 days 01:34:21.295000,25.0,,2019,Bahrain Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00d2be,4.0,2.0,Finished,0 days 00:00:02.980000,18.0,,2019,Bahrain Grand Prix,R
+LEC,Charles Leclerc,Ferrari,dc0000,1.0,3.0,Finished,0 days 00:00:06.131000,16.0,,2019,Bahrain Grand Prix,R
+VER,Max Verstappen,Red Bull Racing,1e41ff,5.0,4.0,Finished,0 days 00:00:06.408000,12.0,,2019,Bahrain Grand Prix,R
+VET,Sebastian Vettel,Ferrari,dc0000,2.0,5.0,Finished,0 days 00:00:36.068000,10.0,,2019,Bahrain Grand Prix,R
+NOR,Lando Norris,McLaren,ff8700,9.0,6.0,Finished,0 days 00:00:45.754000,8.0,,2019,Bahrain Grand Prix,R
+RAI,Kimi Räikkönen,Alfa Romeo Racing,9b0000,8.0,7.0,Finished,0 days 00:00:47.470000,6.0,,2019,Bahrain Grand Prix,R
+GAS,Pierre Gasly,Red Bull Racing,1e41ff,13.0,8.0,Finished,0 days 00:00:58.094000,4.0,,2019,Bahrain Grand Prix,R
+ALB,Alexander Albon,Toro Rosso,469bff,12.0,9.0,Finished,0 days 00:01:02.697000,2.0,,2019,Bahrain Grand Prix,R
+PER,Sergio Perez,Racing Point,f596c8,14.0,10.0,Finished,0 days 00:01:03.696000,1.0,,2019,Bahrain Grand Prix,R
+GIO,Antonio Giovinazzi,Alfa Romeo Racing,9b0000,16.0,11.0,Finished,0 days 00:01:04.599000,0.0,,2019,Bahrain Grand Prix,R
+KVY,Daniil Kvyat,Toro Rosso,469bff,15.0,12.0,+1 Lap,,0.0,,2019,Bahrain Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,bd9e57,6.0,13.0,+1 Lap,,0.0,,2019,Bahrain Grand Prix,R
+STR,Lance Stroll,Racing Point,f596c8,18.0,14.0,+1 Lap,,0.0,,2019,Bahrain Grand Prix,R
+RUS,George Russell,Williams,ffffff,19.0,15.0,+1 Lap,,0.0,,2019,Bahrain Grand Prix,R
+KUB,Robert Kubica,Williams,ffffff,20.0,16.0,+2 Laps,,0.0,,2019,Bahrain Grand Prix,R
+HUL,Nico Hulkenberg,Renault,fff500,17.0,17.0,Engine,,0.0,,2019,Bahrain Grand Prix,R
+RIC,Daniel Ricciardo,Renault,fff500,10.0,18.0,Out of fuel,,0.0,,2019,Bahrain Grand Prix,R
+SAI,Carlos Sainz,McLaren,ff8700,7.0,19.0,Collision damage,,0.0,,2019,Bahrain Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,bd9e57,11.0,20.0,Retired,,0.0,,2019,Bahrain Grand Prix,R

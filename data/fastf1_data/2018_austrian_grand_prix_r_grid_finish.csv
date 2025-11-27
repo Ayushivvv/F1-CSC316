@@ -1,0 +1,21 @@
+Abbreviation,FullName,TeamName,TeamColor,GridPosition,Position,Status,Time,Points,HeadshotUrl,Year,Circuit,Session
+VER,Max Verstappen,Red Bull Racing,1E41FF,4.0,1.0,Finished,0 days 01:21:56.024000,25.0,,2018,Austrian Grand Prix,R
+RAI,Kimi Räikkönen,Ferrari,DC0000,3.0,2.0,Finished,0 days 00:00:01.504000,18.0,,2018,Austrian Grand Prix,R
+VET,Sebastian Vettel,Ferrari,DC0000,6.0,3.0,Finished,0 days 00:00:03.181000,15.0,,2018,Austrian Grand Prix,R
+GRO,Romain Grosjean,Haas F1 Team,828282,5.0,4.0,+1 Lap,,12.0,,2018,Austrian Grand Prix,R
+MAG,Kevin Magnussen,Haas F1 Team,828282,8.0,5.0,+1 Lap,,10.0,,2018,Austrian Grand Prix,R
+OCO,Esteban Ocon,Force India,F596C8,11.0,6.0,+1 Lap,,8.0,,2018,Austrian Grand Prix,R
+PER,Sergio Perez,Force India,F596C8,16.0,7.0,+1 Lap,,6.0,,2018,Austrian Grand Prix,R
+ALO,Fernando Alonso,McLaren,FF8700,13.0,8.0,+1 Lap,,4.0,,2018,Austrian Grand Prix,R
+LEC,Charles Leclerc,Sauber,9B0000,18.0,9.0,+1 Lap,,2.0,,2018,Austrian Grand Prix,R
+ERI,Marcus Ericsson,Sauber,9B0000,20.0,10.0,+1 Lap,,1.0,,2018,Austrian Grand Prix,R
+GAS,Pierre Gasly,Toro Rosso,469BFF,12.0,11.0,+1 Lap,,0.0,,2018,Austrian Grand Prix,R
+SAI,Carlos Sainz,Renault,FFF500,9.0,12.0,+1 Lap,,0.0,,2018,Austrian Grand Prix,R
+SIR,Sergey Sirotkin,Williams,FFFFFF,17.0,13.0,+2 Laps,,0.0,,2018,Austrian Grand Prix,R
+STR,Lance Stroll,Williams,FFFFFF,14.0,14.0,+2 Laps,,0.0,,2018,Austrian Grand Prix,R
+VAN,Stoffel Vandoorne,McLaren,FF8700,15.0,15.0,Collision damage,,0.0,,2018,Austrian Grand Prix,R
+HAM,Lewis Hamilton,Mercedes,00D2BE,2.0,16.0,Fuel pressure,,0.0,,2018,Austrian Grand Prix,R
+HAR,Brendon Hartley,Toro Rosso,469BFF,19.0,17.0,Hydraulics,,0.0,,2018,Austrian Grand Prix,R
+RIC,Daniel Ricciardo,Red Bull Racing,1E41FF,7.0,18.0,Exhaust,,0.0,,2018,Austrian Grand Prix,R
+BOT,Valtteri Bottas,Mercedes,00D2BE,1.0,19.0,Hydraulics,,0.0,,2018,Austrian Grand Prix,R
+HUL,Nico Hulkenberg,Renault,FFF500,10.0,20.0,Engine,,0.0,,2018,Austrian Grand Prix,R
