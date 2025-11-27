@@ -45,7 +45,7 @@ function viz4() {
         .style("margin-top", "0");
 
     textBlock.append("p")
-        .text("Pick a season and circuit to see how drivers moved from their starting grid slot on the right to their final result on the right.")
+        .text("Pick a season and circuit to see how drivers moved from their starting positions to their final positions. Hover over different drivers to learn more about their race performance.")
         .style("font-family", "Titillium Web, sans-serif")
         .style("font-size", "0.9rem")
         .style("margin-top", "0");

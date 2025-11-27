@@ -943,3 +943,120 @@ body {
 .audio-label {
     white-space: nowrap;
 }
+
+/* ===== Visualization Section ===== */
+.viz-section {
+    max-width: 1100px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+    text-align: left;
+}
+
+.viz-section > h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    color: var(--red);
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+    text-align: center; /* keep the main title centered */
+}
+
+.viz-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* Visualization card container */
+.viz-card {
+    background: var(--card);
+    border: 3px solid var(--red);
+    border-radius: 14px;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--red);
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+/* keep existing "no hover flash" behavior for main viz cards */
+.viz-card#viz1:hover,
+.viz-card#viz2:hover,
+.viz-card#viz3:hover,
+.viz-card#viz-weather-container:hover {
+    background: var(--card);
+    color: var(--black);
+    transform: none;
+    cursor: default;
+}
+
+/* ===== Narrative labels & text around visualizations ===== */
+
+.viz-step {
+    width: 100%;
+    text-align: left;
+}
+
+.viz-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin: 0 0 0.2rem;
+}
+
+.viz-question {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 1.50rem;
+    font-weight: 700;
+    color: var(--gray);
+    margin: 0 0 0.35rem;
+}
+
+/* Hint sits just under the question, full-width, left aligned */
+.viz-hint {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 1.25rem;
+    color: var(--black);
+    margin: 0 0 0.75rem;
+}
+
+/* Takeaway box: white with red stripe on the left */
+.viz-takeaway {
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-left: 4px solid var(--red);
+    padding: 0.6rem 0.9rem;
+    font-size: 1.25rem;
+    font-family: 'Titillium Web', sans-serif;
+    color: var(--black);
+    margin: 0.4rem 0 1.75rem;
+}
+
+.viz-takeaway strong {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-right: 0.25rem;
+}
+
+/* Final message card tweaks */
+.final-message h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.75rem;
+    color: var(--red);
+    margin-top: 0;
+}
+
+.final-message p {
+    margin-bottom: 0;
+    font-size: 1.25rem;
+}
+
