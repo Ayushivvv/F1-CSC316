@@ -1,7 +1,7 @@
 :root {
     --cream: #f9f5f0;
     --red: #d40000;
-    --black: #111;
+    --black: #857d7d;
     --gray: #000000;
     --card: #ffffff;
 }
@@ -305,10 +305,12 @@ body {
 /* ---- stop visualization cards from turning red ---- */
 .viz-card#viz1:hover,
 .viz-card#viz2:hover,
-.viz-card#viz3:hover {
+.viz-card#viz3:hover,
+.viz-card#viz-weather-container:hover {
     background: var(--card);
     color: var(--black);
     transform: none;
+    cursor: default;
 }
 
 
@@ -703,9 +705,118 @@ body {
     transition: opacity 0.1s ease;
 }
 
+/* --- Visualization 4 Layout (yes called vis3 though)--- */
+.viz3-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+#viz3-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    background: var(--card);
+    border: 2px solid var(--black);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+#viz3-trackContainer {
+    flex: 2;
+    background: var(--black);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    position: relative;
+}
+
+/* Team legend */
+#teamLegend {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+    justify-content: center;
+}
+
+.team-legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-family: 'Titillium Web', sans-serif;
+    color: var(--black);
+}
+
+.team-legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 0.3rem;
+    border: 1px solid var(--black);
+}
+
+/* Tooltip for viz3 (extends your existing .tooltip) */
+.tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+    font-family: 'Titillium Web', sans-serif;
+    border: 1px solid #ddd;
+    opacity: 0;
+    z-index: 999;
+}
+
+.tooltip h4 {
+    margin: 0 0 0.2rem 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--red);
+}
+
+.tooltip img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.5rem;
+    border: 2px solid var(--red);
+}
+
+.tooltip .tooltip-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+.tooltip .tooltip-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+}
+
+.tooltip .label {
+    font-weight: 600;
+}
+
+.change-label {
+    text-shadow: 0 0 4px rgba(0,0,0,0.7);
+}
 /* ===== Viz3 ===== */
-
-
 
 /* --- Container for the visualization --- */
 #viz3-main {
@@ -746,4 +857,121 @@ body {
     flex: none;
     text-align: center;
     white-space: nowrap;
+}
+
+/* ===== Floating Audio Player ===== */
+.audio-player {
+    position: fixed;
+    top: 50%;
+    right: 1.2rem; /* FINAL: perfect for GitHub Pages to avoid overlap */
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+.audio-player button {
+    display: flex;
+    align-items: center;
+    gap: 0.40rem;
+
+    background: var(--card);
+    border: 2px solid var(--red);
+    border-radius: 999px;
+
+    /* slightly smaller but same feel */
+    padding: 0.32rem 0.65rem;
+
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem;  /* slightly smaller */
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+
+    color: var(--red);
+    cursor: pointer;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    transition:
+            background 0.25s ease,
+            color 0.25s ease,
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+}
+
+.audio-player button:hover {
+    background: var(--red);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.audio-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 17px;   /* slightly smaller */
+    height: 17px;
+    border-radius: 999px;
+    border: 2px solid currentColor;
+
+    font-size: 0.65rem;
+    line-height: 1;
+}
+
+.audio-label {
+    white-space: nowrap;
+}
+
+
+
+
+/* viz 3 */
+
+
+/* Styling for the temperature slider track */
+#temp-slider {
+    /* Set the minimum and maximum values for the visual gradient */
+    --min: 5; 
+    --max: 45; 
+    
+    /* Calculate color stops dynamically for the gradient */
+    --temp-20: calc((20 - var(--min)) / (var(--max) - var(--min)) * 100%);
+    --temp-35: calc((35 - var(--min)) / (var(--max) - var(--min)) * 100%);
+
+    /* Reset default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    border-radius: 5px;
+    
+    /* Apply the temperature color gradient */
+    background: linear-gradient(
+        to right,
+        #4f86f7 0%, /* Blue for Cold (~5°C) */
+        #a4c1f9 var(--temp-20), /* Light Blue near 20°C */
+        #ffd700 var(--temp-35), /* Yellow/Gold for Optimal/Warm near 35°C */
+        #ff5733 100% /* Red/Orange for Hot (~45°C) */
+    );
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+/* Styling for the slider thumb (the circle you drag) */
+#temp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #333;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+#temp-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #333;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
 }
