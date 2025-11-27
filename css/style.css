@@ -1072,3 +1072,55 @@ body {
     font-size: 1.25rem;
 }
 
+
+/* viz 3 */
+
+
+/* Styling for the temperature slider track */
+#temp-slider {
+    /* Set the minimum and maximum values for the visual gradient */
+    --min: 5; 
+    --max: 45; 
+    
+    /* Calculate color stops dynamically for the gradient */
+    --temp-20: calc((20 - var(--min)) / (var(--max) - var(--min)) * 100%);
+    --temp-35: calc((35 - var(--min)) / (var(--max) - var(--min)) * 100%);
+
+    /* Reset default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    border-radius: 5px;
+    
+    /* Apply the temperature color gradient */
+    background: linear-gradient(
+        to right,
+        #4f86f7 0%, /* Blue for Cold (~5°C) */
+        #a4c1f9 var(--temp-20), /* Light Blue near 20°C */
+        #ffd700 var(--temp-35), /* Yellow/Gold for Optimal/Warm near 35°C */
+        #ff5733 100% /* Red/Orange for Hot (~45°C) */
+    );
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+/* Styling for the slider thumb (the circle you drag) */
+#temp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #333;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+#temp-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #333;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+}
