@@ -122,7 +122,7 @@ function viz3() {
         tempControl.style.maxWidth = '400px';
         tempControl.innerHTML = `
             <h4 style="color: #111; font-family: sans-serif; font-weight: bold;"><span id="mode-text">Minimum Air Temperature</span>: <span id="temp-current">${currentTempSetting.toFixed(1)}°C</span></h4>
-            <input id="temp-slider" type="range" min="5" max="39.5" step="0.5" value="${currentTempSetting.toString()}" style="width: 100%;">
+            <input id="temp-slider" type="range" min="9.5" max="38" step="0.5" value="${currentTempSetting.toString()}" style="width: 100%;">
         `;
         controlsContainer.appendChild(tempControl);
         
@@ -241,6 +241,7 @@ function viz3() {
                             <strong style="color: var(--red, #D40000);">${avgRain.toFixed(1)} mm</strong>
                         </p>
                     `;
+
                 } else {
                     // Fallback using the current mode text to be accurate
                     contentHTML = `
