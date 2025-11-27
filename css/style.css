@@ -572,12 +572,20 @@ body {
 
 /* Car container */
 #carContainer {
-    flex-grow: 1; /* Allows it to take up available space */
+    flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 400px; /* Ensure it has some base height */
-    overflow: hidden; /* Important to prevent scrollbars */
+    min-height: 400px;
+    overflow: hidden;
+    position: relative; /* Add this so tooltips position correctly relative to it */
+}
+
+/* Add this to ensure the canvas fits */
+#carContainer canvas {
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
 }
 
 /* --- SVG STYLES --- */
