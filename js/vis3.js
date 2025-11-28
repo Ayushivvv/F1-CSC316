@@ -1,7 +1,6 @@
-// === viz3.js - FINAL STABLE VERSION (Initialization Fix) ===
+// viz3.js
 
 let viz3HasRun = false;
-
 console.log("viz3.js loaded");
 
 function debounce(func, timeout = 50) {
@@ -73,17 +72,15 @@ function viz3() {
     viz3AbortController = new AbortController();
     const signal = viz3AbortController.signal;
 
-    // **FIX: Ensure correct path**
-    const weather_csv = "data/f1_weather_2018_2023.csv"; // Using the original path which had a folder structure
+    const weather_csv = "data/f1_weather_2018_2023.csv"; 
     const viz3MainEl = document.getElementById("viz3-main");
 
-    // **FIX: Initialize select element and mode robustly**
+    
     const selectEl = document.getElementById("weather-select");
     if (selectEl) {
         currentWeatherMode = selectEl.value;
     }
 
-    // === FORCE FLEXBOX ON #viz3-main (Ensure vertical flow for slider/chart blocks) ===
     if (viz3MainEl) {
         viz3MainEl.style.display = 'flex';
         viz3MainEl.style.flexDirection = 'column';
@@ -96,14 +93,13 @@ function viz3() {
     let weather_svgHost;
 
     // --- Safe UI injection: Creates the Flex layout and replaces 'Loading Weather Data...' ---
-    // --- Safe UI injection: Creates the Flex layout and replaces 'Loading Weather Data...' ---
     (function safeUIInjection() {
         if (!viz3MainEl) return;
 
-        // 1. Clear all existing content inside viz3-main
+        
         viz3MainEl.innerHTML = '';
 
-        // 2. Create the top wrapper (holds everything)
+        
         const wrapper = document.createElement("div");
         wrapper.className = "weather-slider-wrapper";
         wrapper.style.width = "100%";
@@ -111,7 +107,6 @@ function viz3() {
         wrapper.style.paddingBottom = "20px";
         wrapper.style.margin = '0 auto';
 
-        // 3. Slider Control Container
         const controlsContainer = document.createElement("div");
         controlsContainer.style.display = 'flex';
         controlsContainer.style.flexDirection = 'column';
@@ -129,27 +124,28 @@ function viz3() {
     `;
         controlsContainer.appendChild(tempControl);
 
-        // --- 4. Legend Container (NEW POSITION: Right below the slider, at the top) ---
+        // --- Legend Container ---
         const legendContainer = document.createElement("div");
         legendContainer.id = "weather-legend-container";
         legendContainer.style.width = "100%";
         legendContainer.style.maxWidth = "850px";
         legendContainer.style.marginTop = "20px";
-        legendContainer.style.marginBottom = "20px"; // Added space before chart
+        legendContainer.style.marginBottom = "20px";
         legendContainer.style.textAlign = "center";
 
 
-        // --- 5. Container for Component and Chart (Side-by-side row) ---
+        // --- Container for Component and Chart ---
         const chartAndComponentContainer = document.createElement("div");
         chartAndComponentContainer.id = 'chart-component-container';
 
-        // *** EXTREME FLEXBOX OVERRIDE ***
+        
         chartAndComponentContainer.style.cssText = `
         display: flex !important;
-        justify-content: center !important;
+        justify-content: center !important; /* RESTORED: Keep the block centered */
         align-items: flex-start !important; 
         width: 100% !important;
-        gap: 25px !important; /* Increased gap */
+        max-width: 1000px; /* MATCHES wrapper max-width */
+        gap: 40px !important; /* INCREASED GAP */
         flex-wrap: wrap; 
     `;
 
@@ -166,7 +162,31 @@ function viz3() {
         averagesComponent.style.fontFamily = 'sans-serif';
         chartAndComponentContainer.appendChild(averagesComponent);
 
-        // --- 7. Chart Placeholder (RIGHT) ---
+
+
+        const highlightComponent = document.createElement("div");
+        highlightComponent.id = "highlight-component";
+        highlightComponent.style.flexShrink = 0;
+        highlightComponent.style.width = '220px'; // Same width as averages component
+        highlightComponent.style.marginTop = '20px'; // Space below averages
+
+        // --- Container for the LEFT STACK ---
+        const leftStack = document.createElement("div");
+        leftStack.style.display = 'flex';
+        leftStack.style.flexDirection = 'column';
+        leftStack.style.alignItems = 'stretch';
+        leftStack.style.flexShrink = 0;
+        leftStack.style.width = '240px';
+        leftStack.style.marginLeft = '-20px';
+
+        leftStack.appendChild(averagesComponent);
+        leftStack.appendChild(highlightComponent);
+
+        chartAndComponentContainer.appendChild(leftStack);
+
+
+
+        // --- Chart Placeholder (RIGHT) ---
         const chartPlaceholder = document.createElement("div");
         chartPlaceholder.id = "chart-placeholder";
         chartPlaceholder.style.flexGrow = 1;
@@ -174,11 +194,9 @@ function viz3() {
         chartAndComponentContainer.appendChild(chartPlaceholder);
 
 
-        
-
         // --- ASSEMBLE ---
         wrapper.appendChild(controlsContainer);
-        wrapper.appendChild(legendContainer); // Legend is now high up
+        wrapper.appendChild(legendContainer);
         wrapper.appendChild(chartAndComponentContainer);
 
         viz3MainEl.appendChild(wrapper);
@@ -204,7 +222,7 @@ function viz3() {
     })();
 
 
-    // Check elements *after* injection
+    // Check elements
     if (!weather_svgHost || !tempSlider || !tempLabel || !selectEl) {
         console.error("UI elements failed to initialize after injection or selection.");
         return;
@@ -212,7 +230,6 @@ function viz3() {
 
 
     // tooltip for hovering:
-
     tooltip = d3.select("body").append("div")
         .attr("class", "custom-tooltip")
         .style("opacity", 0) // Start invisible
@@ -241,29 +258,36 @@ function viz3() {
 
                 const modeTextEl = document.getElementById("mode-text");
 
-                // 1. FILTER DATASET based on current mode and temp setting
                 let subset;
                 let modeDisplay;
 
                 if (mode === 'hot') {
-                    // Hot Mode: Filter for races where airTemp is GREATER than or equal to the slider value (MINIMUM threshold)
+                    // Hot Mode
                     subset = weather_dataset_global.filter(d => d.airTemp >= temp);
                     modeDisplay = `Air Temp ${temp.toFixed(1)}°C`;
                     modeTextEl.textContent = "Minimum Air Temperature";
                 } else {
-                    // Cold Mode: Filter for races where airTemp is LESS than or equal to the slider value (MAXIMUM threshold)
+                    // Cold Mode
                     subset = weather_dataset_global.filter(d => d.airTemp <= temp);
                     modeDisplay = `Air Temp ${temp.toFixed(1)}°C`;
                     modeTextEl.textContent = "Maximum Air Temperature";
                 }
 
-                // 2. CALCULATE CONTEXTUAL AVERAGES and UPDATE COMPONENT
+                //CALCULATE CONTEXTUAL AVERAGES and UPDATE COMPONENT
                 const avgWind = d3.mean(subset, d => d.windSpeed) || 0;
                 const avgRain = d3.mean(subset, d => d.rainfall) || 0;
 
                 const averagesComponent = document.getElementById("averages-component");
 
                 const racesCount = subset.length;
+
+                // max performance to get the max race data
+
+                let maxPerformanceRace = null;
+                if (racesCount > 0) {
+                    maxPerformanceRace = d3.max(subset, d => d.performance);
+                    maxPerformanceRace = subset.find(d => d.performance === maxPerformanceRace);
+                }
 
                 let contentHTML = '';
                 if (subset.length > 0) {
@@ -298,7 +322,54 @@ function viz3() {
                 }
                 averagesComponent.innerHTML = contentHTML;
 
-                // 3. CHART RENDERING
+
+                // the new component for highest performance
+
+                const highlightComponent = document.getElementById("highlight-component");
+                
+                let highlightHTML = '';
+
+                if (maxPerformanceRace) {
+                    // Use a strong red border to draw attention
+                    highlightComponent.style.cssText = `
+                        flex-shrink: 0; 
+                        width: 220px; 
+                        margin-top: 20px;
+                        padding: 15px; 
+                        border: 3px solid var(--red, #D40000); 
+                        border-radius: 8px; 
+                        box-shadow: 0 4px 8px rgba(212, 0, 0, 0.2); 
+                        background-color: #ffeaea; 
+                        font-family: sans-serif;
+                    `;
+                    
+                    highlightHTML = `
+                        <h4 style="color: var(--red, #D40000); font-weight: 800; margin-bottom: 10px; font-size: 1.1em; text-align: center;">🥇 Best Performance Race 🥇</h4>
+                        <p style="color: #111; font-size: 0.9em; margin-bottom: 5px;">
+                            <strong>Race:</strong> <span style="float: right;">${maxPerformanceRace.race}</span>
+                        </p>
+                        <p style="color: #111; font-size: 0.9em; margin-bottom: 10px;">
+                            <strong>Year:</strong> <span style="float: right;">${maxPerformanceRace.year}</span>
+                        </p>
+                        <p style="color: #111; font-size: 1.1em; font-weight: bold; padding: 5px 0; border-top: 1px dashed #ccc;">
+                            Performance: <span style="float: right; color: var(--red, #D40000);">${maxPerformanceRace.performance.toFixed(2)}</span>
+                        </p>
+                    `;
+                } else {
+                    // Reset styling if no races are displayed
+                    highlightComponent.style.cssText = `
+                        flex-shrink: 0; 
+                        width: 220px; 
+                        margin-top: 20px; 
+                        padding: 0; 
+                        border: none;
+                        box-shadow: none;
+                    `;
+                }
+                highlightComponent.innerHTML = highlightHTML;
+
+
+                //CHART RENDERING
                 const { width, height, margin } = getResponsiveDimensions(d3.select("#chart-placeholder"));
                 const transitionDuration = 700;
 
@@ -310,19 +381,16 @@ function viz3() {
                 const activeData = subset.length > 0 ? subset : weather_dataset_global;
 
 
-                // --- COLOR SCALE SETUP (NEW) ---
+                // --- COLOR SCALE SETUP ---
                 const yearDomain = d3.extent(weather_dataset_global, d => d.year);
 
-                // Define the custom color interpolator function
                 const customInterpolator = d3.interpolateRgb("#d6d6d6ff", "#303030ff");
 
-                // Use d3.scaleSequential to map the year domain (e.g., 2015-2023)
-                // to the custom color interpolator function.
                 const colorScale = d3.scaleSequential()
                     .domain(yearDomain)
                     .interpolator(customInterpolator);
 
-                // --- UPDATE LEGEND (NEW) ---
+                // --- UPDATE LEGEND ---
                 updateYearLegend(colorScale, yearDomain);
 
 
@@ -351,7 +419,6 @@ function viz3() {
                 // --- VISUALIZATION SETUP (Axes, Title, etc.) ---
                 const xLabel = `Air Temperature (°C)`;
                 const yLabel = `Performance Metric`;
-                //const color = "var(--red, #D40000)"; 
 
                 const axisFontSize = Math.max(10, width / 60);
                 const labelFontSize = Math.max(12, width / 50);
@@ -423,45 +490,87 @@ function viz3() {
                 const chartGroup = weather_svgHost.select(".chart-group");
                 const pointRadius = Math.max(5, Math.min(8, width / 150));
 
-                const circles = chartGroup.selectAll("circle")
-                    .data(subset, d => d.race);
+                
+                const standardData = subset.filter(d => d !== maxPerformanceRace);
+
+                const circles = chartGroup.selectAll(".data-circle") 
+                    .data(standardData, d => d.race); 
 
                 circles.exit().transition(t).attr("r", 0).remove();
 
                 const enterCircles = circles.enter()
                     .append("circle")
+                    .attr("class", "data-circle")
                     .attr("cx", d => xScale(xDataAccessor(d)))
                     .attr("cy", height - margin.bottom)
                     .attr("r", 0)
-                    .attr("opacity", 0.85) // INCREASED OPACITY to make color more visible
+                    .attr("opacity", 0.85)
                     .attr("fill", d => colorScale(d.year));
 
                 enterCircles.merge(circles)
                     .transition(t)
                     .attr("fill", d => colorScale(d.year))
-                    .attr("opacity", 0.85) // ENSURED: Keep opacity consistent
+                    .attr("opacity", 0.85)
                     .attr("cx", d => xScale(xDataAccessor(d)))
                     .attr("cy", d => yScale(d.performance))
                     .attr("r", pointRadius);
 
-                // ---------------------------------------------------------------------------------
-                // START: Custom Tooltip Event Handlers (REPLACE <title> logic here)
+
+                // --- Highlight the Max Performance Dot ---
+                const highlightData = maxPerformanceRace ? [maxPerformanceRace] : [];
+                
+                const highlightDot = chartGroup.selectAll(".highlight-dot")
+                    .data(highlightData);
+
+                highlightDot.exit().transition(t).attr("r", 0).remove();
+
+                highlightDot.enter()
+                    .append("circle")
+                    .attr("class", "highlight-dot")
+                    .attr("cx", d => xScale(xDataAccessor(d)))
+                    .attr("cy", height - margin.bottom)
+                    .attr("r", 0)
+                    .style("stroke-width", 3)
+                    .style("stroke", "white") 
+                    .style("fill", "var(--red, #D40000)")
+                    .merge(highlightDot)
+                    .transition(t).attr("cx", d => xScale(xDataAccessor(d)))
+                    .attr("cy", d => yScale(d.performance))
+                    .attr("r", pointRadius * 1.5)
+                    .style("stroke-width", 3) 
+                    .style("stroke", "white") 
+                    .style("fill", "var(--red, #D40000)")
+                    .style("opacity", 1);
+
+                
                 // ---------------------------------------------------------------------------------
 
-                // 1. Remove the old <title> elements if they exist (for cleanup)
                 chartGroup.selectAll("circle").select("title").remove();
 
-                // 2. Add interaction handlers to the circles
                 chartGroup.selectAll("circle")
                     .on("mouseover", function (event, d) {
-                        // Show tooltip and highlight dot
+                        // Show tooltip
                         tooltip.transition().duration(200).style("opacity", 0.9);
-                        d3.select(this).attr("r", pointRadius * 1.5).style("stroke", "#333").style("stroke-width", 2);
+                        
+                        const isMax = d === maxPerformanceRace;
+                        
+                        // Highlight:
+                        d3.select(this)
+                            .attr("r", pointRadius * 1.8) 
+                            .style("stroke-width", isMax ? 5 : 2) 
+                            .style("stroke", isMax ? "black" : "var(--red, #D40000)") // Ring color: Black for highlight, Red for others
+                            .style("fill", isMax ? "var(--red, #D40000)" : d3.select(this).style("fill"));
                     })
                     .on("mousemove", function (event, d) {
                         // Update tooltip content and position
+                        const isMax = d === maxPerformanceRace;
+                        // Use a ternary operator to correctly check if isMax is defined before using it
+                        const bestPerformerTag = (isMax && maxPerformanceRace) ? '<span style="color:var(--red, #D40000); font-weight: bold;">BEST PERFORMER</span><br>' : '';
+                        
                         const content = `
+                            ${bestPerformerTag}
                             <strong>Race:</strong> ${d.race}<br>
+                            <strong>Year:</strong> ${d.year}<br>
                             ---<br>
                             <strong>Air Temp:</strong> ${d.airTemp.toFixed(1)}°C<br>
                             <strong>Track Temp:</strong> ${d.trackTemp.toFixed(1)}°C<br>
@@ -476,15 +585,28 @@ function viz3() {
                             .style("top", (event.pageY - 28) + "px");
                     })
                     .on("mouseout", function (event, d) {
-                        // Hide tooltip and reset dot style
+                        // Hide tooltip
                         tooltip.transition().duration(500).style("opacity", 0);
-                        d3.select(this).attr("r", pointRadius).style("stroke", "none");
+                        
+                        const dot = d3.select(this);
+                        const isMax = d === maxPerformanceRace;
+
+                        if (isMax) {
+                            // Reset highlight dot to its permanent red-filled, white-stroked style.
+                            dot.attr("r", pointRadius * 1.5)
+                               .style("stroke", "white")
+                               .style("stroke-width", 3)
+                               .style("fill", "var(--red, #D40000)");
+                        } else {
+                            
+                            dot.attr("r", pointRadius)
+                               .style("stroke", "none")
+                               .style("stroke-width", 0)
+                               .style("fill", d => colorScale(d.year)); 
+                        }
                     });
 
                 // ---------------------------------------------------------------------------------
-                // END: Custom Tooltip Event Handlers
-                // ---------------------------------------------------------------------------------
-
 
                 // // Update Tooltips
                 // chartGroup.selectAll("circle").select("title").remove(); 
@@ -493,8 +615,6 @@ function viz3() {
                 //         `Round: ${d.race}\nTemp: ${d.airTemp.toFixed(1)}°C\nRain: ${d.rainfall.toFixed(1)} mm\nWind: ${d.windSpeed.toFixed(1)} km/h\nPerformance: ${d.performance.toFixed(2)}`
                 //     );
             }
-            // --- END updateWeatherChart function ---
-
 
             // --- Event Listener Logic ---
 
@@ -504,14 +624,14 @@ function viz3() {
                 }
             }, 50);
 
-            // 1. Temperature Slider Input
+            // Temperature Slider Input
             tempSlider.addEventListener("input", () => {
                 currentTempSetting = +tempSlider.value;
                 tempLabel.textContent = `${currentTempSetting.toFixed(1)}°C`;
                 debouncedChartUpdate();
             }, { signal });
 
-            // 2. Weather Mode Select Input (Hot/Cold)
+            // Weather Mode Select Input (Hot/Cold)
             selectEl.addEventListener("change", () => {
                 currentWeatherMode = selectEl.value;
                 // Reset the slider to a sensible default midpoint when switching modes
@@ -523,7 +643,6 @@ function viz3() {
 
             // --- Initial load ---
             currentTempSetting = +tempSlider.value;
-            // **FIX: Call the update function AFTER the data is loaded**
             updateWeatherChart(currentTempSetting, currentWeatherMode);
         })
         .catch(error => {
@@ -584,31 +703,27 @@ function updateYearLegend(colorScale, yearDomain) {
     if (!weather_legendHost) return;
 
     const svgWidth = weather_legendHost.node().getBoundingClientRect().width;
-    const itemHeight = 15; // Height of each legend item (box + text)
+    const itemHeight = 15;
     const padding = 5;
     const boxSize = 10;
     
-    // 1. Determine unique years present in the overall dataset
-    // We create an array of all unique years in the global dataset
     const uniqueYears = Array.from(new Set(weather_dataset_global.map(d => d.year)))
                         .sort(d3.ascending);
     
-    // Calculate the required SVG height (multiple rows might be needed)
-    // We'll aim for 4 items per row, or adjust based on screen width.
     const itemsPerRow = Math.min(4, Math.max(1, Math.floor(svgWidth / 150))); 
     const numRows = Math.ceil(uniqueYears.length / itemsPerRow);
     const requiredHeight = (numRows * itemHeight) + (numRows * padding) + 20;
 
     weather_legendHost.attr("height", requiredHeight); 
 
-    // 2. Setup Legend Group
+    // Setup Legend Group
     const g = weather_legendHost.selectAll(".legend-group").data([null]);
     const gMerge = g.enter().append("g").attr("class", "legend-group").merge(g);
     
     // Clear existing contents to avoid duplicates
     gMerge.selectAll("*").remove(); 
 
-    // 3. Legend Title (Centered)
+    // Legend Title (Centered)
     gMerge.append("text")
         .attr("class", "legend-title")
         .attr("x", svgWidth / 2)
@@ -618,7 +733,7 @@ function updateYearLegend(colorScale, yearDomain) {
         .style("font-weight", "bold")
         .text("Race Year");
 
-    // 4. Draw Legend Items
+    // Draw Legend Items
     const legendItems = gMerge.selectAll(".legend-item")
         .data(uniqueYears)
         .enter()
@@ -637,20 +752,20 @@ function updateYearLegend(colorScale, yearDomain) {
             return `translate(${xOffset}, ${yOffset})`;
         });
 
-    // 4a. Colored Rectangle
+    // Colored Rectangle
     legendItems.append("rect")
-        .attr("x", -boxSize) // Shift left to center text/box pair
-        .attr("y", -boxSize / 2) // Shift up to center box vertically
+        .attr("x", -boxSize) 
+        .attr("y", -boxSize / 2)
         .attr("width", boxSize)
         .attr("height", boxSize)
-        .style("fill", d => colorScale(d)); // Use colorScale for the year
+        .style("fill", d => colorScale(d)); 
 
-    // 4b. Year Label
+    // Year Label
     legendItems.append("text")
-        .attr("x", boxSize) // Position label to the right of the box
+        .attr("x", boxSize) 
         .attr("y", 0) 
         .style("font-size", "10px")
-        .style("dominant-baseline", "middle") // Vertically center text
+        .style("dominant-baseline", "middle") 
         .style("text-anchor", "start")
         .text(d => d);
 }
