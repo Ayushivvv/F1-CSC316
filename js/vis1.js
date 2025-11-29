@@ -211,6 +211,13 @@ document.addEventListener("DOMContentLoaded", function () {
             .style("width", "200px")
             .style("margin-left", "1rem");
 
+
+        sliderWrapper.append("label")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("color", "var(--red)")
+            .style("font-weight", "700")
+            .text(`${driverYears[driverYears.length - 1]}`);
+
         const svg = container.append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
