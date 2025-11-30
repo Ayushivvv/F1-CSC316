@@ -990,7 +990,7 @@ class novelTrackVis {
         //     });
         // }
 
-        /*OPTION 2: YOU PAUSE AND YOU END UP IN A NEW POSITION YOU HAVE TO CLICK PLAY AGAIN*/
+        /*OPTION 2: YOU PAUSE AND YOU END UP IN A NEW POSITION*/
         const sliderEl = document.getElementById("raceProgress");
         if (sliderEl) {
             sliderEl.addEventListener("input", (e) => {
@@ -1022,6 +1022,12 @@ class novelTrackVis {
                         d.completedLaps++;
                     }
                 });
+
+                // Update lap counter after scrubbing
+                const maxCompletedLaps = Math.max(...dots.map(d => d.completedLaps || 0));
+                if (vis.lapCounterEl) {
+                    vis.lapCounterEl.textContent = `Lap ${maxCompletedLaps} / ${vis.totalLaps}`;
+                }
             });
 
             sliderEl.addEventListener("mouseup", () => {
@@ -1129,6 +1135,12 @@ class novelTrackVis {
                 if (vis.currentRaceTime >= vis.totalRaceTime) {
                     vis.currentRaceTime = vis.totalRaceTime;
                     vis.isPaused = true;
+
+                    // Update lap counter to show final lap count
+                    const maxCompletedLaps = Math.max(...dots.map(d => d.completedLaps || 0));
+                    if (vis.lapCounterEl) {
+                        vis.lapCounterEl.textContent = `Lap ${maxCompletedLaps} / ${vis.totalLaps}`;
+                    }
 
                     // Show race end modal
                     const raceEndModal = document.getElementById("raceEndModal");
