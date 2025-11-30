@@ -543,6 +543,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const circuit = circuitSelect.value.toLowerCase();
         if (!circuit) return;
 
+        const legendWrapper = document.getElementById("vis1LegendWrapper");
+        const legendContainer = document.getElementById("vis1TeamLegend");
+        if (legendWrapper) legendWrapper.style.display = "none";
+        if (legendContainer) legendContainer.innerHTML = "";
+
         d3.select(".awaitingText").style("display", "none");
 
         if (raceVis) {
@@ -567,7 +572,15 @@ document.addEventListener("DOMContentLoaded", function () {
     circuitSelect.appendChild(placeholder);
 
 
-        const wantedCircuits = ["Bahrain", "Monaco", "Silverstone"];
+        const wantedCircuits = [
+            "Bahrain",
+            "Monaco",
+            "Silverstone",
+            "Monza",
+            "Baku",
+            "Yas_Marina",
+            "Americas"
+        ];
 
         wantedCircuits.forEach((trackName) => {
             const circuit = circuits.find(
@@ -592,7 +605,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const opt = document.createElement("option");
             opt.value = trackName.toLowerCase();
-            opt.textContent = `${trackName} (${latestYear})`;
+            const displayName = trackName.replace(/_/g, " ");
+            opt.textContent = `${displayName} (${latestYear})`;
             circuitSelect.appendChild(opt);
         });
 
@@ -618,6 +632,8 @@ class novelTrackVis {
         this.currentTime = 0;
         this.lastElapsed = 0;
         this.speedFactor = 10.0;
+        this.legendWrapper = document.getElementById("vis1LegendWrapper");
+        this.legendContainer = document.getElementById("vis1TeamLegend");
         this.currentLap = 1;
         this.totalLaps = 0;
         this.completedLaps = 0;
@@ -636,6 +652,44 @@ class novelTrackVis {
 
     stopAnimation() {
         this.isPaused = true;
+    }
+
+    updateTeamLegend(dots) {
+        const vis = this;
+        if (!vis.legendWrapper || !vis.legendContainer) return;
+
+        if (!dots || dots.length === 0) {
+            vis.legendContainer.innerHTML = "";
+            vis.legendWrapper.style.display = "none";
+            return;
+        }
+
+        const teamEntries = Array.from(
+            d3.group(dots, d => d.team),
+            ([team, members]) => ({
+                team,
+                color: members[0]?.color || "#999999"
+            })
+        ).sort((a, b) => d3.ascending(a.team, b.team));
+
+        vis.legendContainer.innerHTML = "";
+        teamEntries.forEach(({ team, color }) => {
+            const item = document.createElement("div");
+            item.className = "vis1-team-legend-item";
+
+            const swatch = document.createElement("span");
+            swatch.className = "vis1-team-legend-swatch";
+            swatch.style.backgroundColor = color;
+
+            const label = document.createElement("span");
+            label.textContent = team;
+
+            item.appendChild(swatch);
+            item.appendChild(label);
+            vis.legendContainer.appendChild(item);
+        });
+
+        vis.legendWrapper.style.display = "block";
     }
 
     async loadRaceData() {
@@ -810,9 +864,21 @@ class novelTrackVis {
             vis.dots = dots;
 
             if (!dots || dots.length === 0) {
+                vis.updateTeamLegend([]);
                 console.warn("No dots (drivers) created for this track.");
                 return;
             }
+
+        vis.updateTeamLegend(dots);
+
+        const trackKey = vis.trackName.toLowerCase();
+        const extraLargeDotTracks = new Set(["baku"]);
+        const largeDotTracks = new Set(["yas_marina", "americas"]);
+        const useExtraLargeDots = extraLargeDotTracks.has(trackKey);
+        const useLargeDots = largeDotTracks.has(trackKey);
+        const dotRadius = useExtraLargeDots ? 22 : useLargeDots ? 18 : 12;
+        const dotStrokeWidth = useExtraLargeDots ? 2 : useLargeDots ? 1.5 : 1;
+        const dotFontSize = useExtraLargeDots ? "11px" : useLargeDots ? "10px" : "8px";
 
         const circles = vis.svg.selectAll(".race-dot")
             .data(dots)
@@ -821,10 +887,10 @@ class novelTrackVis {
             .attr("class", "race-dot");
 
         circles.append("circle")
-            .attr("r", 12)
+            .attr("r", dotRadius)
             .attr("fill", d => d.color)
             .attr("stroke", "black")
-            .attr("stroke-width", 1);
+            .attr("stroke-width", dotStrokeWidth);
 
         circles.append("text")
             .attr("text-anchor", "middle")
@@ -833,7 +899,7 @@ class novelTrackVis {
             .attr("stroke", "#000")
             .attr("stroke-width", 0.2)
             .style("font-family", "Orbitron, sans-serif")
-            .style("font-size", "8px")
+            .style("font-size", dotFontSize)
             .style("font-weight", "bold")
             .style("pointer-events", "none")
             .text(d => {

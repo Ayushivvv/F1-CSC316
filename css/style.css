@@ -457,11 +457,67 @@ body {
     flex: 2;
     background: var(--black);
     border-radius: 12px;
-    padding: 15px;
+    padding: 20px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    min-height: 400px;
+    gap: 0.75rem;
+    min-height: 480px;
+}
+
+.vis1-legend-wrapper {
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(10, 10, 10, 0.75);
+    padding: 0.6rem 0.8rem;
+    align-self: flex-start;
+}
+
+.vis1-legend-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.vis1-legend-header::before,
+.vis1-legend-header::after {
+    display: none;
+}
+
+.legend-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f5f5f5;
+}
+
+.vis1-team-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.35rem 0.6rem;
+}
+
+.vis1-team-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 0.75rem;
+    color: #e2e2e2;
+}
+
+.vis1-team-legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 /*Driver Information Pop up*/
