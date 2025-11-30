@@ -709,6 +709,10 @@ class novelTrackVis {
         lapsByDriver.forEach((driverLaps, driverId) => {
             driverLaps.sort((a, b) => d3.ascending(a.lap, b.lap));
 
+            // FILTER: Remove pit stop/outlier laps (more than 1.3x the median), Monaco is too slow
+            const median = driverLaps[Math.floor(driverLaps.length / 2)].milliseconds;
+            driverLaps = driverLaps.filter(lap => lap.milliseconds < median * 1.3);
+
             const driverInfo = driverById.get(driverId);
             const driverName = driverInfo
                 ? `${driverInfo.forename} ${driverInfo.surname}`
