@@ -1092,26 +1092,76 @@ class novelTrackVis {
                 circles
                     .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
-            // Update leaderboard
-            const leaderboardList = document.getElementById("leaderboardList");
-            if (leaderboardList) {
-                dots.forEach(d => {
-                    d.distance = (d.currentLapIndex * vis.pathLength) +
-                                 (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
-                });
+            // // Update leaderboard
+            // const leaderboardList = document.getElementById("leaderboardList");
+            // if (leaderboardList) {
+            //     dots.forEach(d => {
+            //         d.distance = (d.currentLapIndex * vis.pathLength) +
+            //                      (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
+            //     });
+            //
+            //     const ranking = dots
+            //         .slice()
+            //         .sort((a, b) => b.distance - a.distance)
+            //         .slice(0, 5);
+            //
+            //     leaderboardList.innerHTML = "";
+            //     ranking.forEach((d, idx) => {
+            //         const li = document.createElement("li");
+            //         li.textContent = d.driver;
+            //         leaderboardList.appendChild(li);
+            //     });
+            // }
+                // Update leaderboard
+                const leaderboardList = document.getElementById("leaderboardList");
+                if (leaderboardList) {
+                    dots.forEach(d => {
+                        d.distance = (d.currentLapIndex * vis.pathLength) +
+                            (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
+                    });
 
-                const ranking = dots
-                    .slice()
-                    .sort((a, b) => b.distance - a.distance)
-                    .slice(0, 5);
+                    const ranking = dots
+                        .slice()
+                        .sort((a, b) => b.distance - a.distance)
+                        .slice(0, 5);
 
-                leaderboardList.innerHTML = "";
-                ranking.forEach((d, idx) => {
-                    const li = document.createElement("li");
-                    li.textContent = d.driver;
-                    leaderboardList.appendChild(li);
-                });
-            }
+                    leaderboardList.innerHTML = "";
+                    ranking.forEach((d, idx) => {
+                        const li = document.createElement("li");
+                        li.style.display = "flex";
+                        li.style.alignItems = "center";
+                        li.style.gap = "8px";
+                        li.style.marginBottom = "6px";
+
+                        const circle = document.createElement("div");
+                        circle.style.width = "24px";
+                        circle.style.height = "24px";
+                        circle.style.borderRadius = "50%";
+                        circle.style.backgroundColor = d.color;
+                        circle.style.border = "1px solid black";
+                        circle.style.display = "flex";
+                        circle.style.alignItems = "center";
+                        circle.style.justifyContent = "center";
+                        circle.style.flexShrink = "0";
+
+                        const code = document.createElement("span");
+                        code.style.fontFamily = "'Orbitron', sans-serif";
+                        code.style.fontSize = "9px";
+                        code.style.fontWeight = "bold";
+                        code.style.color = "#fff";
+                        code.style.textShadow = "0 0 2px #000";
+                        code.textContent = vis.driverStats.get(d.driverId)?.code || "??";
+
+                        circle.appendChild(code);
+                        li.appendChild(circle);
+
+                        const name = document.createElement("span");
+                        name.textContent = d.driver;
+                        li.appendChild(name);
+
+                        leaderboardList.appendChild(li);
+                    });
+                }
 
                 // Update slider
                 const sliderEl = document.getElementById("raceProgress");
