@@ -187,36 +187,97 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const container = graph.append("div").style("position", "relative");
 
-        // Slider with year label
+
+        // Custom SVG slider with track and car
         const sliderWrapper = container.append("div").style("margin-bottom", "1.5rem");
+
+
         sliderWrapper.append("label")
             .style("font-family", "'Orbitron', sans-serif")
             .style("color", "var(--red)")
             .style("font-weight", "700")
             .style("margin-right", "0.5rem")
-            .text("Year: ");
+            .text(`${driverYears[0]}`);
+
+        const sliderSvg = sliderWrapper.append("svg")
+            .attr("width", 250)
+            .attr("height", 60)
+            .style("margin", "0 1rem")
+            .style("vertical-align", "middle")
+            .style("cursor", "pointer");
 
         const yearDisplay = sliderWrapper.append("span")
             .style("font-family", "'Orbitron', sans-serif")
             .style("color", "var(--red)")
             .style("font-weight", "700")
-            .style("font-size", "16px")
-            .text(driverYears[0]);
+            .style("margin-left", "0.5rem")
+            .text(`${driverYears[0]}/${driverYears[driverYears.length - 1]}`);
 
-        const slider = sliderWrapper.append("input")
-            .attr("type", "range")
-            .attr("min", 0)
-            .attr("max", driverYears.length - 1)
-            .attr("value", 0)
-            .style("width", "200px")
-            .style("margin-left", "1rem");
 
+// Add hint text inline
+        sliderWrapper.append("span")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("font-size", "10px")
+            .style("color", "#999")
+            .style("margin-left", "1rem")
+            .style("font-style", "italic")
+            .text("(Slide the car to explore years!)");
+
+
+// Load track background and car
+        let carIcon = null;
+        Promise.all([
+            d3.xml("images/track.svg"),
+            d3.xml("images/slider_car.svg")
+        ]).then(([trackData, carData]) => {
+            // Add track background
+            const trackNode = trackData.documentElement;
+            const trackGroup = sliderSvg.append("g")
+                .attr("class", "slider-track")
+                .attr("transform", "translate(20, 5) scale(0.3)");
+            Array.from(trackNode.children).forEach(child => {
+                trackGroup.node().appendChild(child.cloneNode(true));
+            });
+
+            // Add car icon
+            const carNode = carData.documentElement;
+            carIcon = sliderSvg.append("g")
+                .attr("class", "slider-car")
+                .attr("transform", "translate(20, 20) scale(0.05)");
+            Array.from(carNode.children).forEach(child => {
+                carIcon.node().appendChild(child.cloneNode(true));
+            });
+            // Initialize car position at center AFTER SVG loads
+            updateCarPosition(0);
+        });
 
         sliderWrapper.append("label")
             .style("font-family", "'Orbitron', sans-serif")
             .style("color", "var(--red)")
             .style("font-weight", "700")
-            .text(`${driverYears[driverYears.length - 1]}`);
+
+        function updateCarPosition(progress) {
+            if (carIcon) {
+                const x = 20 + (progress * 210);
+                carIcon.attr("transform", `translate(${x}, 20) scale(0.05)`);
+
+                // Map slider car position to track clip coords
+                // Car goes from x=20 to x=230 (210px range)
+                // That represents 0 to 800px of track
+                const clipWidth = ((x - 20) / 210) * 800;
+                sliderSvg.select("#progressClip rect").attr("width", clipWidth);
+            }
+        }
+
+        // Handle slider interaction
+        sliderSvg.on("click", function(event) {
+            const rect = sliderSvg.node().getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const progress = Math.max(0, Math.min(1, (clickX - 20) / 210));
+            const yearIndex = Math.round(progress * (driverYears.length - 1));
+            updateChart(yearIndex);
+            updateCarPosition(progress);  // This now also updates the clip
+        });
 
         const svg = container.append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -242,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function updateChart(yearIndex) {
             const yearData = chartData[yearIndex];
-            yearDisplay.text(yearData.year);
+            yearDisplay.text(`${yearData.year}/${driverYears[driverYears.length - 1]}`);
 
             // Add this here
             svg.selectAll(".subtitle").remove(); // Remove old subtitle
@@ -292,6 +353,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     .style("padding", "8px 10px")
                     .style("background", "#fff")
                     .style("border", "2px solid var(--red)")
+                    .style("padding", "12px 16px")
+                    .style("border-radius", "8px")
                     .style("box-shadow", "0 2px 8px rgba(0,0,0,0.2)")
                     .style("border-radius", "6px")
                     .style("font-family", "Antonio, sans-serif")
@@ -330,9 +393,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updateChart(0);
 
-        slider.on("input", function() {
-            updateChart(parseInt(this.value));
-        });
     }
 
     document.querySelectorAll(".driver-tabs .tab").forEach((tab) => {
@@ -1043,7 +1103,13 @@ class novelTrackVis {
                     const seconds = Math.floor(vis.currentRaceTime / 1000);
                     const minutes = Math.floor(seconds / 60);
                     const secs = seconds % 60;
-                    sliderTimeEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')} min`;}
+                    sliderTimeEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')} min`;
+
+// Update progress clip for the track line - ONLY shows gray where car has passed
+                    const progressPercent = (vis.currentRaceTime / vis.totalRaceTime) * 100;
+                    const clipWidth = progress * 700;
+                    vis.svg.select("#progressClip rect").attr("width", clipWidth);
+                }
         });
     }
 }
