@@ -640,6 +640,7 @@ class novelTrackVis {
         this.lapCounterEl = document.getElementById("lapCounter");
         this.totalRaceTime = 0;
         this.currentRaceTime = 0;
+        this.flagGroup = null;
         if (this.lapCounterEl) {
             this.lapCounterEl.textContent = "Lap 0 / –";
         }
@@ -652,6 +653,42 @@ class novelTrackVis {
 
     stopAnimation() {
         this.isPaused = true;
+    }
+
+    getTrackAngle(distance = 0) {
+        const vis = this;
+        if (!vis.trackPath || vis.trackPath.empty()) return 0;
+        const delta = Math.max(1, vis.pathLength * 0.002);
+        const len1 = Math.max(0, distance - delta);
+        const len2 = Math.min(vis.pathLength, distance + delta);
+        const point1 = vis.trackPath.node().getPointAtLength(len1);
+        const point2 = vis.trackPath.node().getPointAtLength(len2);
+        return (Math.atan2(point2.y - point1.y, point2.x - point1.x) * 180) / Math.PI;
+    }
+
+    placeStartFlag() {
+        const vis = this;
+        if (!vis.trackPath || vis.trackPath.empty()) return;
+
+        const startPoint = vis.trackPath.node().getPointAtLength(0);
+        const startAngle = vis.getTrackAngle(0);
+
+        if (!vis.flagGroup) {
+            vis.flagGroup = vis.svg.append("g").attr("class", "vis1-start-flag");
+            vis.flagGroup
+                .append("image")
+                .attr("href", "tracks/checkered_flag.svg")
+                .attr("xlink:href", "tracks/checkered_flag.svg")
+                .attr("width", 32)
+                .attr("height", 32)
+                .attr("x", -16)
+                .attr("y", -16);
+        }
+
+        vis.flagGroup.attr(
+            "transform",
+            `translate(${startPoint.x},${startPoint.y}) rotate(${startAngle})`
+        );
     }
 
     updateTeamLegend(dots) {
@@ -859,6 +896,7 @@ class novelTrackVis {
             }
 
             vis.pathLength = vis.trackPath.node().getTotalLength();
+            vis.placeStartFlag();
 
             const dots = await vis.loadRaceData();
             vis.dots = dots;
