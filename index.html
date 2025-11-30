@@ -175,11 +175,19 @@
                 <div id="circuitContainer">
                     <p class="awaitingText">Awaiting Circuit…</p>
                     <svg id="circuitSVG" width="600" height="400"></svg>
-                    <div id="vis1LegendWrapper" class="vis1-legend-wrapper" style="display: none;">
-                        <div class="vis1-legend-header">
-                            <span class="legend-label">Team Colours</span>
+                    <div class="vis1-meta-row">
+                        <div id="vis1LegendWrapper" class="vis1-legend-wrapper" style="display: none;">
+                            <div class="vis1-legend-header">
+                                <span class="legend-label">Team Colours</span>
+                            </div>
+                            <div id="vis1TeamLegend" class="vis1-team-legend"></div>
                         </div>
-                        <div id="vis1TeamLegend" class="vis1-team-legend"></div>
+                        <div id="vis1AerialWrapper" class="vis1-aerial-card" style="display: none;">
+                            <div class="vis1-aerial-header">
+                                <span class="legend-label">Circuit Aerial</span>
+                            </div>
+                            <img id="vis1AerialImage" alt="Circuit aerial view" />
+                        </div>
                     </div>
                 </div>
             </div>

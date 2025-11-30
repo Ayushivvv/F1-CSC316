@@ -21,6 +21,15 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const driverTabs = document.querySelector(".driver-tabs");
     const driverGraphArea = document.getElementById("driverGraphArea");
+    const trackAerials = {
+        bahrain: "aerials/bahrain_aerial.png",
+        monaco: "aerials/monaco_aerial.png",
+        silverstone: "aerials/silverstone_aerial.png",
+        monza: "aerials/monza_aerial.png",
+        baku: "aerials/baku_aerial.png",
+        yas_marina: "aerials/yas-circuit-aerial.png",
+        americas: "aerials/americas_aerial.png",
+    };
 
     const GRAPH_CONFIG = {
         points: { key: "points", label: "Season Points", color: "var(--red)" },
@@ -545,13 +554,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const legendWrapper = document.getElementById("vis1LegendWrapper");
         const legendContainer = document.getElementById("vis1TeamLegend");
+        const aerialWrapper = document.getElementById("vis1AerialWrapper");
+        const aerialImage = document.getElementById("vis1AerialImage");
         if (legendWrapper) legendWrapper.style.display = "none";
         if (legendContainer) legendContainer.innerHTML = "";
+        if (aerialWrapper) aerialWrapper.style.display = "none";
+        if (aerialImage) {
+            aerialImage.src = "";
+            aerialImage.alt = "Circuit aerial view";
+        }
 
         d3.select(".awaitingText").style("display", "none");
 
         if (raceVis) {
             d3.select("#circuitContainer").selectAll("svg").remove();
+        }
+
+        const aerialPath = trackAerials[circuit];
+        if (aerialPath && aerialImage && aerialWrapper) {
+            aerialImage.src = aerialPath;
+            const label = circuit.replace(/_/g, " ");
+            aerialImage.alt = `${label} aerial view`;
+            aerialWrapper.style.display = "flex";
         }
 
         // raceVis = new novelTrackVis("#circuitContainer", circuit, {}, []);

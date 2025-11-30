@@ -466,9 +466,17 @@ body {
     min-height: 480px;
 }
 
-.vis1-legend-wrapper {
+.vis1-meta-row {
     width: 100%;
-    max-width: 360px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.vis1-legend-wrapper {
+    flex: 1;
+    min-width: 240px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     background: #ffffff;
@@ -518,6 +526,33 @@ body {
     height: 12px;
     border-radius: 2px;
     border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.vis1-aerial-card {
+    flex: 1;
+    min-width: 220px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 0.6rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.vis1-aerial-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding-bottom: 0.25rem;
+}
+
+.vis1-aerial-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
 /*Driver Information Pop up*/
