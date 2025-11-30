@@ -266,7 +266,7 @@
     </section>
 </section>
 
-<!-- Driver modal (unchanged) -->
+<!-- Driver modal -->
 <div id="driverModal" class="viz-modal">
     <div class="modal-content driver-modal">
         <span class="close-btn" id="driverModalClose">&times;</span>
@@ -294,6 +294,19 @@
         <div id="driverGraphArea"></div>
         <div id="driverSummary"></div>
     </div>
+</div>
+
+<!-- RACE END MODAL -->
+<div id="raceEndModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 2000; text-align: center; border: 3px solid var(--red);">
+    <button id="raceEndClose" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; color: var(--red);">×</button>
+
+    <h2 style="font-family: 'Orbitron', sans-serif; color: var(--red); font-size: 28px; margin-bottom: 20px;">RACE FINISHED</h2>
+    <div style="font-family: 'Orbitron', sans-serif; color: var(--red); font-size: 20px; margin-bottom: 30px;">
+        🏆 Winner: <span id="raceWinnerName"></span>
+    </div>
+    <button id="raceReplayBtn" style="padding: 12px 24px; font-family: 'Orbitron', sans-serif; background: var(--red); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold;">
+        REPLAY
+    </button>
 </div>
 
 <!-- Viz2 modal -->

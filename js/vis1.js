@@ -529,6 +529,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // RACE END MODAL HANDLERS
+    document.getElementById("raceReplayBtn").addEventListener("click", () => {
+        document.getElementById("raceEndModal").style.display = "none";
+        replayBtn.click();
+    });
+
+    document.getElementById("raceEndClose").addEventListener("click", () => {
+        document.getElementById("raceEndModal").style.display = "none";
+    });
+
     function loadTrack() {
         const circuit = circuitSelect.value.toLowerCase();
         if (!circuit) return;
@@ -1114,6 +1124,23 @@ class novelTrackVis {
                     const clipWidth = progress * 700;
                     vis.svg.select("#progressClip rect").attr("width", clipWidth);
                 }
+
+                // ADD THIS AT THE END - Stop when race is complete
+                if (vis.currentRaceTime >= vis.totalRaceTime) {
+                    vis.currentRaceTime = vis.totalRaceTime;
+                    vis.isPaused = true;
+
+                    // Show race end modal
+                    const raceEndModal = document.getElementById("raceEndModal");
+                    const raceWinnerName = document.getElementById("raceWinnerName");
+                    const winner = dots.reduce((a, b) => b.distance - a.distance > 0 ? b : a);
+                    raceWinnerName.textContent = winner.driver;
+                    raceEndModal.style.display = "block";
+
+                    return true; // Stop the timer
+                }
+
+
         });
     }
 }
