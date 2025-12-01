@@ -1092,33 +1092,7 @@ class novelTrackVis {
 
             vis.lastElapsed = 0;
 
-
-            /*OPTION 1: YOU SLIDE THROUGH THE ENTIRE THING. IT IS FAST BUT TAKES TO LONG*/
-
-        // const sliderEl = document.getElementById("raceProgress");
-        // if (sliderEl) {
-        //     let isSliding = false;
-        //
-        //     sliderEl.addEventListener("mousedown", () => {
-        //         isSliding = true;
-        //         vis.isPaused = false;
-        //     });
-        //
-        //     sliderEl.addEventListener("input", (e) => {
-        //         if (isSliding) {
-        //             // Speed up while dragging
-        //             vis.speedFactor = 100.0;
-        //         }
-        //     });
-        //
-        //     sliderEl.addEventListener("mouseup", () => {
-        //         isSliding = false;
-        //         // Return to normal speed
-        //         vis.speedFactor = 10.0;
-        //     });
-        // }
-
-        /*OPTION 2: YOU PAUSE AND YOU END UP IN A NEW POSITION*/
+        /*Race slider*/
         const sliderEl = document.getElementById("raceProgress");
         if (sliderEl) {
             sliderEl.addEventListener("input", (e) => {
@@ -1220,26 +1194,6 @@ class novelTrackVis {
                 circles
                     .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
-            // // Update leaderboard
-            // const leaderboardList = document.getElementById("leaderboardList");
-            // if (leaderboardList) {
-            //     dots.forEach(d => {
-            //         d.distance = (d.currentLapIndex * vis.pathLength) +
-            //                      (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
-            //     });
-            //
-            //     const ranking = dots
-            //         .slice()
-            //         .sort((a, b) => b.distance - a.distance)
-            //         .slice(0, 5);
-            //
-            //     leaderboardList.innerHTML = "";
-            //     ranking.forEach((d, idx) => {
-            //         const li = document.createElement("li");
-            //         li.textContent = d.driver;
-            //         leaderboardList.appendChild(li);
-            //     });
-            // }
                 // Update leaderboard
                 const leaderboardList = document.getElementById("leaderboardList");
                 if (leaderboardList) {
@@ -1309,7 +1263,7 @@ class novelTrackVis {
                     vis.svg.select("#progressClip rect").attr("width", clipWidth);
                 }
 
-                // ADD THIS AT THE END - Stop when race is complete
+                // Stop when race is complete
                 if (vis.currentRaceTime >= vis.totalRaceTime) {
                     vis.currentRaceTime = vis.totalRaceTime;
                     vis.isPaused = true;

@@ -56,13 +56,13 @@ Specifically, we analyze how differences between teams and drivers, as well as r
 | [Google Fonts](https://fonts.google.com/) | - | Orbitron, Playfair Display, and Titillium Web fonts |
 
 ### Data Files
-| Folder | Source | Description |
-|--------|--------|-------------|
-| `data/f1_kaggle/` | Kaggle | Historical F1 race, driver, and constructor data |
-| `data/fastf1_data/` | FastF1 API | Lap timing, telemetry, and session data |
-| `data/openf1_data/` | OpenF1 API | Weather, radio, and real-time race data |
-| `data/f1_weather_2018_2023. csv` | OpenF1 | Weather conditions for races 2018-2023 |
-| `data/driver_headshots_combined. csv` | Custom | Driver images and metadata |
+| Folder | Source                   | Description |
+|--------|--------------------------|-------------|
+| `data/f1_kaggle/` | Kaggle                   | Historical F1 race, driver, and constructor data |
+| `data/fastf1_data/` | FastF1 API               | Lap timing, telemetry, and session data |
+| `data/openf1_data/` | OpenF1 API               | Weather, radio, and real-time race data |
+| `data/f1_weather_2018_2023. csv` | OpenF1                   | Weather conditions for races 2018-2023 |
+| `data/driver_headshots_combined. csv` | Custom (from FastF1 API) | Driver images and metadata |
 
 ### Assets
 | Folder | Description |
