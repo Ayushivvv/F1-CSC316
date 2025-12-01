@@ -115,7 +115,7 @@ Specifically, we analyze how differences between teams and drivers, as well as r
 ## 🖥 Other Sources
 
 - **[Formula 1 Official Website](https://www.formula1.com/)** – Race-level summaries
-- **[Big Data F1](https://www.bigdataf1. com/)** – Supplementary F1 statistics
+- **[Big Data F1](https://www.bigdataf1.com/)** – Supplementary F1 statistics
 
 ---
 
