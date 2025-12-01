@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" id="svg2" viewBox="0 0 509.88 719.37" version="1.1">
+  <g id="layer1" transform="translate(-52.53 -15.031)">
+    <g id="g3726" stroke-linejoin="round" stroke-linecap="round" transform="translate(-18.691 137.63)">
+      <rect id="rect2818" style="color:#000000" transform="rotate(38.669)" ry="5.3837" height="10.767" width="601.71" stroke="#ffc7c7" y="120.05" x="193.25" stroke-width=".2"/>
+      <g id="g3703" stroke-width=".92925" transform="matrix(.62523 -.78044 .90381 .72406 -162.39 377.48)">
+        <rect id="rect3613" style="color:#000000" ry="0" height="249.79" width="441.64" stroke="#5f5f5f" y="78.852" x="271.63" fill="#fff"/>
+        <path id="path3663" style="color:#000000" stroke="#000" d="m272.59 101.43v-21.936h49.678v43.872h-49.678v-21.936z"/>
+        <path id="path3665" style="color:#000000" stroke="#000" d="m323.55 150.79v-25.484h54.838v50.968h-54.838v-25.484z"/>
+        <path id="path3667" style="color:#000000" stroke="#000" d="m272.59 203.69v-25.484h49.678v50.968h-49.678v-25.484z"/>
+        <path id="path3669" style="color:#000000" stroke="#000" d="m380.33 203.69v-25.484h54.838v50.968h-54.838v-25.484z"/>
+        <path id="path3671" style="color:#000000" stroke="#000" d="m380.33 101.43v-21.936h54.838v43.872h-54.838v-21.936z"/>
+        <path id="path3673" style="color:#000000" stroke="#000" d="m436.46 150.79v-25.484h55.484v50.968h-55.484v-25.484z"/>
+        <path id="path3675" style="color:#000000" stroke="#000" d="m493.23 101.43v-21.936h54.838v43.872h-54.838v-21.936z"/>
+        <path id="path3677" style="color:#000000" stroke="#000" d="m493.23 203.69v-25.484h54.838v50.968h-54.838v-25.484z"/>
+        <path id="path3679" style="color:#000000" stroke="#000" d="m550.01 150.79v-25.484h54.838v50.968h-54.838v-25.484z"/>
+        <path id="path3681" style="color:#000000" stroke="#000" d="m606.14 101.43v-21.936h54.838v43.872h-54.838v-21.936z"/>
+        <path id="path3683" style="color:#000000" stroke="#000" d="m662.91 150.79v-25.484h49.678v50.968h-49.678v-25.484z"/>
+        <path id="path3685" style="color:#000000" stroke="#000" d="m606.14 203.69v-25.484h54.838v50.968h-54.838v-25.484z"/>
+        <path id="path3687" style="color:#000000" stroke="#000" d="m662.91 256.6v-25.484h49.678v50.968h-49.678v-25.484z"/>
+        <path id="path3689" style="color:#000000" stroke="#000" d="m550.01 256.6v-25.484h54.838v50.968h-54.838v-25.484z"/>
+        <path id="path3691" style="color:#000000" stroke="#000" d="m436.46 256.6v-25.484h55.484v50.968h-55.484v-25.484z"/>
+        <path id="path3693" style="color:#000000" stroke="#000" d="m323.55 256.6v-25.484h54.838v50.968h-54.838v-25.484z"/>
+        <path id="path3695" style="color:#000000" stroke="#000" d="m272.59 305.95v-21.936h49.678v43.872h-49.678v-21.936z"/>
+        <path id="path3697" style="color:#000000" stroke="#000" d="m380.33 305.95v-21.936h54.838v43.872h-54.838v-21.936z"/>
+        <path id="path3699" style="color:#000000" stroke="#000" d="m493.23 305.95v-21.936h54.838v43.872h-54.838v-21.936z"/>
+        <path id="path3701" style="color:#000000" stroke="#000" d="m606.14 305.95v-21.936h54.838v43.872h-54.838v-21.936z"/>
+      </g>
+    </g>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Checkered flag</dc:title>
+        <dc:date>2010-05-25T02:32:35</dc:date>
+        <dc:description>The checkered flag (flat version) symbolizing the end of a car race. Drawn in Inkscape.</dc:description>
+        <dc:source>http://openclipart.org/detail/62629/checkered-flag-by-j_alves</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>J_Alves</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>automotive</rdf:li>
+            <rdf:li>car</rdf:li>
+            <rdf:li>checkered</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>finish</rdf:li>
+            <rdf:li>flag</rdf:li>
+            <rdf:li>race</rdf:li>
+            <rdf:li>racing</rdf:li>
+            <rdf:li>sports2010</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

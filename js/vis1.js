@@ -21,6 +21,15 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const driverTabs = document.querySelector(".driver-tabs");
     const driverGraphArea = document.getElementById("driverGraphArea");
+    const trackAerials = {
+        bahrain: "aerials/bahrain_aerial.png",
+        monaco: "aerials/monaco_aerial.png",
+        silverstone: "aerials/silverstone_aerial.png",
+        monza: "aerials/monza_aerial.png",
+        baku: "aerials/baku_aerial.png",
+        yas_marina: "aerials/yas-circuit-aerial.png",
+        americas: "aerials/americas_aerial.png",
+    };
 
     const GRAPH_CONFIG = {
         points: { key: "points", label: "Season Points", color: "var(--red)" },
@@ -150,96 +159,249 @@ document.addEventListener("DOMContentLoaded", function () {
         graph.html("");
 
         if (!config) {
-            graph
-                .append("p")
-                .attr("class", "graph-placeholder")
-                .text("No chart configuration found.");
+            graph.append("p").attr("class", "graph-placeholder").text("No chart configuration found.");
             return;
         }
 
-        const data = buildSeries(stat, config.key);
-        if (!data.length) {
-            graph
-                .append("p")
-                .attr("class", "graph-placeholder")
-                .text("No season data available for this driver.");
+        // Get ONLY years where the selected driver has data
+        const driverYears = Array.from(stat.yearly.keys()).sort((a, b) => a - b);
+        if (driverYears.length === 0) {
+            graph.append("p").attr("class", "graph-placeholder").text("No season data available for this driver.");
             return;
         }
 
-        const margin = { top: 25, right: 20, bottom: 45, left: 60 };
-        const width = 520 - margin.left - margin.right;
-        const height = 320 - margin.top - margin.bottom;
+        // Build chart data - only for years this driver competed
+        const chartData = driverYears.map(year => {
+            const drivers = [];
+            driverStats.forEach((dStat) => {
+                const yearly = dStat.yearly.get(year);
+                if (yearly) { // Only include drivers with data for this year
+                    drivers.push({
+                        driverId: dStat.driverId,
+                        code: dStat.code,
+                        value: yearly[config.key] || 0,
+                        isClicked: dStat.driverId === driverId
+                    });
+                }
+            });
+            return {
+                year,
+                drivers: drivers.sort((a, b) => b.value - a.value) // Sort descending
+            };
+        });
 
-        const svg = graph
-            .append("svg")
+        const margin = { top: 30, right: 20, bottom: 120, left: 60 };
+        const width = 800 - margin.left - margin.right;
+        const height = 350 - margin.top - margin.bottom;
+
+        const container = graph.append("div").style("position", "relative");
+
+
+        // Custom SVG slider with track and car
+        const sliderWrapper = container.append("div").style("margin-bottom", "1.5rem");
+
+
+        sliderWrapper.append("label")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("color", "var(--red)")
+            .style("font-weight", "700")
+            .style("margin-right", "0.5rem")
+            .text(`${driverYears[0]}`);
+
+        const sliderSvg = sliderWrapper.append("svg")
+            .attr("width", 250)
+            .attr("height", 60)
+            .style("margin", "0 1rem")
+            .style("vertical-align", "middle")
+            .style("cursor", "pointer");
+
+        const yearDisplay = sliderWrapper.append("span")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("color", "var(--red)")
+            .style("font-weight", "700")
+            .style("margin-left", "0.5rem")
+            .text(`${driverYears[0]}/${driverYears[driverYears.length - 1]}`);
+
+
+// Add hint text inline
+        sliderWrapper.append("span")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("font-size", "10px")
+            .style("color", "#999")
+            .style("margin-left", "1rem")
+            .style("font-style", "italic")
+            .text("(Slide the car to explore years!)");
+
+
+// Load track background and car
+        let carIcon = null;
+        Promise.all([
+            d3.xml("images/track.svg"),
+            d3.xml("images/slider_car.svg")
+        ]).then(([trackData, carData]) => {
+            // Add track background
+            const trackNode = trackData.documentElement;
+            const trackGroup = sliderSvg.append("g")
+                .attr("class", "slider-track")
+                .attr("transform", "translate(20, 5) scale(0.3)");
+            Array.from(trackNode.children).forEach(child => {
+                trackGroup.node().appendChild(child.cloneNode(true));
+            });
+
+            // Add car icon
+            const carNode = carData.documentElement;
+            carIcon = sliderSvg.append("g")
+                .attr("class", "slider-car")
+                .attr("transform", "translate(20, 20) scale(0.05)");
+            Array.from(carNode.children).forEach(child => {
+                carIcon.node().appendChild(child.cloneNode(true));
+            });
+            // Initialize car position at center AFTER SVG loads
+            updateCarPosition(0);
+        });
+
+        sliderWrapper.append("label")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("color", "var(--red)")
+            .style("font-weight", "700")
+
+        function updateCarPosition(progress) {
+            if (carIcon) {
+                const x = 20 + (progress * 210);
+                carIcon.attr("transform", `translate(${x}, 20) scale(0.05)`);
+
+                // Map slider car position to track clip coords
+                // Car goes from x=20 to x=230 (210px range)
+                // That represents 0 to 800px of track
+                const clipWidth = ((x - 20) / 210) * 800;
+                sliderSvg.select("#progressClip rect").attr("width", clipWidth);
+            }
+        }
+
+        // Handle slider interaction
+        sliderSvg.on("click", function(event) {
+            const rect = sliderSvg.node().getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const progress = Math.max(0, Math.min(1, (clickX - 20) / 210));
+            const yearIndex = Math.round(progress * (driverYears.length - 1));
+            updateChart(yearIndex);
+            updateCarPosition(progress);  // This now also updates the clip
+        });
+
+        const svg = container.append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const xScale = d3
-            .scaleBand()
-            .domain(data.map((d) => d.year))
-            .range([0, width])
-            .padding(0.25);
+        const yMax = d3.max(chartData, d => d3.max(d.drivers, dr => dr.value)) || 1;
+        const yScale = d3.scaleLinear().domain([0, yMax * 1.15]).range([height, 0]);
+        const xScale = d3.scaleBand().range([0, width]).padding(0.15);
 
-        const yMax = d3.max(data, (d) => d.value) || 1;
-        const yScale = d3.scaleLinear().domain([0, yMax * 1.1]).range([height, 0]);
-
-        svg.append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(xScale).tickFormat((d) => d.toString()))
-            .selectAll("text")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "12px");
-
-        svg.append("g")
-            .call(d3.axisLeft(yScale))
-            .selectAll("text")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "12px");
+        const xAxis = svg.append("g").attr("transform", `translate(0,${height})`);
+        const yAxis = svg.append("g");
 
         svg.append("text")
             .attr("x", width / 2)
-            .attr("y", -5)
+            .attr("y", -15)
             .attr("text-anchor", "middle")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "14px")
+            .style("font-family", "'Orbitron', sans-serif")
+            .style("font-size", "16px")
             .style("font-weight", "bold")
             .text(config.label);
 
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -height / 2)
-            .attr("y", -margin.left + 20)
-            .attr("text-anchor", "middle")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "12px")
-            .text(config.label);
+        function updateChart(yearIndex) {
+            const yearData = chartData[yearIndex];
+            yearDisplay.text(`${yearData.year}/${driverYears[driverYears.length - 1]}`);
 
-        svg.selectAll(".bar")
-            .data(data)
-            .enter()
-            .append("rect")
-            .attr("class", "bar")
-            .attr("x", (d) => xScale(d.year))
-            .attr("y", (d) => yScale(d.value))
-            .attr("width", xScale.bandwidth())
-            .attr("height", (d) => height - yScale(d.value))
-            .attr("fill", config.color);
+            // Add this here
+            svg.selectAll(".subtitle").remove(); // Remove old subtitle
+            svg.append("text")
+                .attr("class", "subtitle")
+                .attr("x", width / 2)
+                .attr("y", 5)
+                .attr("text-anchor", "middle")
+                .style("font-family", "'Orbitron', sans-serif")
+                .style("font-size", "12px")
+                .style("font-weight", "normal")
+                .style("fill", "#666")
+                .text(`${stat.name} vs All Drivers in ${yearData.year}`);
 
-        svg.selectAll(".bar-label")
-            .data(data)
-            .enter()
-            .append("text")
-            .attr("class", "bar-label")
-            .attr("x", (d) => xScale(d.year) + xScale.bandwidth() / 2)
-            .attr("y", (d) => yScale(d.value) - 6)
-            .attr("text-anchor", "middle")
-            .style("font-family", "Antonio, sans-serif")
-            .style("font-size", "11px")
-            .style("font-weight", "bold")
-            .text((d) => (Number.isInteger(d.value) ? d.value : d.value.toFixed(1)));
+            xScale.domain(yearData.drivers.map(d => d.code));
+
+            const bars = svg.selectAll(".bar").data(yearData.drivers, d => d.driverId);
+
+            bars.enter()
+                .append("rect")
+                .attr("class", "bar")
+                .merge(bars)
+                .transition()
+                .duration(400)
+                .attr("x", d => xScale(d.code))
+                .attr("y", d => yScale(d.value))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => height - yScale(d.value))
+                .attr("fill", d => d.isClicked ? "var(--red)" : "#ddd");
+
+            bars.exit().remove();
+
+            bars.exit().remove();
+
+// Hover tooltips for bars
+            svg.selectAll(".bar").on("mouseover", (event, d) => {
+                const driverInfo = driverStats.get(d.driverId);
+                const headshotUrl = driverHeadshots.get(driverInfo?.code);
+                const imgHtml = headshotUrl
+                    ? `<img src="${headshotUrl}" alt="${d.code}" style="width: 50px; height: 50px; border-radius: 50%; margin-bottom: 6px;"/>`
+                    : "";
+
+                d3.select("body").selectAll(".bar-tooltip").remove();
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "bar-tooltip")
+                    .style("position", "absolute")
+                    .style("padding", "8px 10px")
+                    .style("background", "#fff")
+                    .style("border", "2px solid var(--red)")
+                    .style("padding", "12px 16px")
+                    .style("border-radius", "8px")
+                    .style("box-shadow", "0 2px 8px rgba(0,0,0,0.2)")
+                    .style("border-radius", "6px")
+                    .style("font-family", "Antonio, sans-serif")
+                    .style("font-size", "0.8rem")
+                    .style("line-height", "1.3")
+                    .style("pointer-events", "none")
+                    .style("z-index", "1000")
+                    .style("white-space", "nowrap")
+                    .html(`${imgHtml}<div style="font-weight: bold;">${driverInfo?.name || "Unknown"}</div><div>${d.value} ${config.key}</div>`);
+
+                tooltip.style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 20) + "px");
+            })
+                .on("mousemove", (event) => {
+                    d3.select("body").select(".bar-tooltip")
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                })
+                .on("mouseout", () => {
+                    d3.select("body").selectAll(".bar-tooltip").remove();
+                });
+
+            // X-axis with all labels visible
+            xAxis.transition().duration(400).call(d3.axisBottom(xScale))
+                .selectAll("text")
+                .style("font-family", "'Orbitron', sans-serif")
+                .style("font-size", "11px")
+                .style("text-anchor", "end")
+                .attr("transform", "rotate(-45)");
+
+            // Y-axis
+            yAxis.transition().duration(400).call(d3.axisLeft(yScale))
+                .selectAll("text")
+                .style("font-family", "'Orbitron', sans-serif")
+                .style("font-size", "11px");
+        }
+
+        updateChart(0);
+
     }
 
     document.querySelectorAll(".driver-tabs .tab").forEach((tab) => {
@@ -265,25 +427,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const info = driverStats.get(window.currentDriverId);
         if (!info) return;
 
+        // Reset all circle highlights from previous selection
+        d3.selectAll(".race-dot circle")
+            .transition()
+            .duration(100)
+            .attr("r", 12)
+            .attr("filter", "none");
+        d3.selectAll(".race-dot")
+            .attr("stroke", "none");
+
         driverModal.style.display = "block";
 
         const modalName = document.getElementById("driverModalName");
         const modalImg = document.getElementById("driverModalImg");
         const modalTeam = document.getElementById("driverModalTeam");
         const driverSummary = document.getElementById("driverSummary");
-
-        // modalName.textContent = info.name || window.currentDriverName || "Driver";
-        // // modalImg.src = "images/default_driver.png";
-        // modalName.textContent = info.name || window.currentDriverName || "Driver";
-        //
-        // // Get the headshot URL from the drivers_photos map
-        // if (headshots) {
-        //     headshots.forEach((row) => {
-        //         if (row.Abbreviation && row.HeadshotUrl) {
-        //             driverHeadshots.set(row.Abbreviation, row.HeadshotUrl);
-        //         }
-        //     });
-        // }
 
         modalName.textContent = info.name || window.currentDriverName || "Driver";
 
@@ -316,10 +474,11 @@ document.addEventListener("DOMContentLoaded", function () {
         modalTeam.textContent = teamParts.join(" • ") || "Details unavailable";
 
         driverSummary.innerHTML = `
-        <strong>Race Starts:</strong> ${info.totalRaces || 0}<br>
-        <strong>Wins:</strong> ${info.wins || 0}<br>
-        <strong>Podiums:</strong> ${info.podiums || 0}<br>
-        <strong>Career Points:</strong> ${formatPoints(info.points)}
+        <h3 style="font-family: 'Orbitron', sans-serif; color: var(--red); font-size: 14px; margin-bottom: 1rem;">Career Summary Stats</h3>
+        <div><strong>Race Starts:</strong> ${info.totalRaces || 0}</div>
+        <div><strong>Wins:</strong> ${info.wins || 0}</div>
+        <div><strong>Podiums:</strong> ${info.podiums || 0}</div>
+        <div><strong>Career Points:</strong> ${formatPoints(info.points)}</div>
     `;
 
         const tabs = document.querySelectorAll(".driver-tabs .tab");
@@ -369,17 +528,54 @@ document.addEventListener("DOMContentLoaded", function () {
             if (sliderEl) sliderEl.value = 0;
 
             raceVis.isPaused = false;
+
+            // Reset lap counter display
+            if (raceVis.lapCounterEl) {
+                const totalText = raceVis.totalLaps > 0 ? raceVis.totalLaps : "–";
+                raceVis.lapCounterEl.textContent = `Lap 0 / ${totalText}`;
+            }
+
         }
+    });
+
+    // RACE END MODAL HANDLERS
+    document.getElementById("raceReplayBtn").addEventListener("click", () => {
+        document.getElementById("raceEndModal").style.display = "none";
+        replayBtn.click();
+    });
+
+    document.getElementById("raceEndClose").addEventListener("click", () => {
+        document.getElementById("raceEndModal").style.display = "none";
     });
 
     function loadTrack() {
         const circuit = circuitSelect.value.toLowerCase();
         if (!circuit) return;
 
+        const legendWrapper = document.getElementById("vis1LegendWrapper");
+        const legendContainer = document.getElementById("vis1TeamLegend");
+        const aerialWrapper = document.getElementById("vis1AerialWrapper");
+        const aerialImage = document.getElementById("vis1AerialImage");
+        if (legendWrapper) legendWrapper.style.display = "none";
+        if (legendContainer) legendContainer.innerHTML = "";
+        if (aerialWrapper) aerialWrapper.style.display = "none";
+        if (aerialImage) {
+            aerialImage.src = "";
+            aerialImage.alt = "Circuit aerial view";
+        }
+
         d3.select(".awaitingText").style("display", "none");
 
         if (raceVis) {
             d3.select("#circuitContainer").selectAll("svg").remove();
+        }
+
+        const aerialPath = trackAerials[circuit];
+        if (aerialPath && aerialImage && aerialWrapper) {
+            aerialImage.src = aerialPath;
+            const label = circuit.replace(/_/g, " ");
+            aerialImage.alt = `${label} aerial view`;
+            aerialWrapper.style.display = "flex";
         }
 
         // raceVis = new novelTrackVis("#circuitContainer", circuit, {}, []);
@@ -400,7 +596,15 @@ document.addEventListener("DOMContentLoaded", function () {
     circuitSelect.appendChild(placeholder);
 
 
-        const wantedCircuits = ["Bahrain", "Monaco", "Silverstone"];
+        const wantedCircuits = [
+            "Bahrain",
+            "Monaco",
+            "Silverstone",
+            "Monza",
+            "Baku",
+            "Yas_Marina",
+            "Americas"
+        ];
 
         wantedCircuits.forEach((trackName) => {
             const circuit = circuits.find(
@@ -425,7 +629,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const opt = document.createElement("option");
             opt.value = trackName.toLowerCase();
-            opt.textContent = `${trackName} (${latestYear})`;
+            const displayName = trackName.replace(/_/g, " ");
+            opt.textContent = `${displayName} (${latestYear})`;
             circuitSelect.appendChild(opt);
         });
 
@@ -451,12 +656,15 @@ class novelTrackVis {
         this.currentTime = 0;
         this.lastElapsed = 0;
         this.speedFactor = 10.0;
+        this.legendWrapper = document.getElementById("vis1LegendWrapper");
+        this.legendContainer = document.getElementById("vis1TeamLegend");
         this.currentLap = 1;
         this.totalLaps = 0;
         this.completedLaps = 0;
         this.lapCounterEl = document.getElementById("lapCounter");
         this.totalRaceTime = 0;
         this.currentRaceTime = 0;
+        this.flagGroup = null;
         if (this.lapCounterEl) {
             this.lapCounterEl.textContent = "Lap 0 / –";
         }
@@ -469,6 +677,80 @@ class novelTrackVis {
 
     stopAnimation() {
         this.isPaused = true;
+    }
+
+    getTrackAngle(distance = 0) {
+        const vis = this;
+        if (!vis.trackPath || vis.trackPath.empty()) return 0;
+        const delta = Math.max(1, vis.pathLength * 0.002);
+        const len1 = Math.max(0, distance - delta);
+        const len2 = Math.min(vis.pathLength, distance + delta);
+        const point1 = vis.trackPath.node().getPointAtLength(len1);
+        const point2 = vis.trackPath.node().getPointAtLength(len2);
+        return (Math.atan2(point2.y - point1.y, point2.x - point1.x) * 180) / Math.PI;
+    }
+
+    placeStartFlag() {
+        const vis = this;
+        if (!vis.trackPath || vis.trackPath.empty()) return;
+
+        const startPoint = vis.trackPath.node().getPointAtLength(0);
+        const startAngle = vis.getTrackAngle(0);
+
+        if (!vis.flagGroup) {
+            vis.flagGroup = vis.svg.append("g").attr("class", "vis1-start-flag");
+            vis.flagGroup
+                .append("image")
+                .attr("href", "tracks/checkered_flag.svg")
+                .attr("xlink:href", "tracks/checkered_flag.svg")
+                .attr("width", 32)
+                .attr("height", 32)
+                .attr("x", -16)
+                .attr("y", -16);
+        }
+
+        vis.flagGroup.attr(
+            "transform",
+            `translate(${startPoint.x},${startPoint.y}) rotate(${startAngle})`
+        );
+    }
+
+    updateTeamLegend(dots) {
+        const vis = this;
+        if (!vis.legendWrapper || !vis.legendContainer) return;
+
+        if (!dots || dots.length === 0) {
+            vis.legendContainer.innerHTML = "";
+            vis.legendWrapper.style.display = "none";
+            return;
+        }
+
+        const teamEntries = Array.from(
+            d3.group(dots, d => d.team),
+            ([team, members]) => ({
+                team,
+                color: members[0]?.color || "#999999"
+            })
+        ).sort((a, b) => d3.ascending(a.team, b.team));
+
+        vis.legendContainer.innerHTML = "";
+        teamEntries.forEach(({ team, color }) => {
+            const item = document.createElement("div");
+            item.className = "vis1-team-legend-item";
+
+            const swatch = document.createElement("span");
+            swatch.className = "vis1-team-legend-swatch";
+            swatch.style.backgroundColor = color;
+
+            const label = document.createElement("span");
+            label.textContent = team;
+
+            item.appendChild(swatch);
+            item.appendChild(label);
+            vis.legendContainer.appendChild(item);
+        });
+
+        vis.legendWrapper.style.display = "block";
     }
 
     async loadRaceData() {
@@ -552,6 +834,10 @@ class novelTrackVis {
         lapsByDriver.forEach((driverLaps, driverId) => {
             driverLaps.sort((a, b) => d3.ascending(a.lap, b.lap));
 
+            // FILTER: Remove pit stop/outlier laps (more than 1.3x the median), Monaco is too slow
+            const median = driverLaps[Math.floor(driverLaps.length / 2)].milliseconds;
+            driverLaps = driverLaps.filter(lap => lap.milliseconds < median * 1.3);
+
             const driverInfo = driverById.get(driverId);
             const driverName = driverInfo
                 ? `${driverInfo.forename} ${driverInfo.surname}`
@@ -634,14 +920,27 @@ class novelTrackVis {
             }
 
             vis.pathLength = vis.trackPath.node().getTotalLength();
+            vis.placeStartFlag();
 
             const dots = await vis.loadRaceData();
             vis.dots = dots;
 
             if (!dots || dots.length === 0) {
+                vis.updateTeamLegend([]);
                 console.warn("No dots (drivers) created for this track.");
                 return;
             }
+
+        vis.updateTeamLegend(dots);
+
+        const trackKey = vis.trackName.toLowerCase();
+        const extraLargeDotTracks = new Set(["baku"]);
+        const largeDotTracks = new Set(["yas_marina", "americas"]);
+        const useExtraLargeDots = extraLargeDotTracks.has(trackKey);
+        const useLargeDots = largeDotTracks.has(trackKey);
+        const dotRadius = useExtraLargeDots ? 22 : useLargeDots ? 18 : 12;
+        const dotStrokeWidth = useExtraLargeDots ? 2 : useLargeDots ? 1.5 : 1;
+        const dotFontSize = useExtraLargeDots ? "11px" : useLargeDots ? "10px" : "8px";
 
         const circles = vis.svg.selectAll(".race-dot")
             .data(dots)
@@ -650,10 +949,10 @@ class novelTrackVis {
             .attr("class", "race-dot");
 
         circles.append("circle")
-            .attr("r", 12)
+            .attr("r", dotRadius)
             .attr("fill", d => d.color)
             .attr("stroke", "black")
-            .attr("stroke-width", 1);
+            .attr("stroke-width", dotStrokeWidth);
 
         circles.append("text")
             .attr("text-anchor", "middle")
@@ -662,7 +961,7 @@ class novelTrackVis {
             .attr("stroke", "#000")
             .attr("stroke-width", 0.2)
             .style("font-family", "Orbitron, sans-serif")
-            .style("font-size", "8px")
+            .style("font-size", dotFontSize)
             .style("font-weight", "bold")
             .style("pointer-events", "none")
             .text(d => {
@@ -699,6 +998,13 @@ class novelTrackVis {
 
         circles
             .on("mouseover", (event, d) => {
+                // Highlight the hovered circle
+                d3.select(event.currentTarget).select("circle")
+                    .transition()
+                    .duration(100)
+                    .attr("r", 14)
+                    .attr("filter", "drop-shadow(0 0 8px var(--red))");
+
                 const lapNumber = (d.currentLapIndex || 0) + 1;
 
                 const driverInfo = vis.driverStats.get(d.driverId);
@@ -717,54 +1023,72 @@ class novelTrackVis {
                 <div style="font-size: 0.85rem;">P${d.currentPosition || "–"}</div>
             `);
 
-                    if (driverNameEl) {
-                        driverNameEl.textContent = d.driver || "Unknown";
-                    }
-                    if (speedEl) {
-                        const bestLapSeconds = d.bestLapMs
-                            ? (d.bestLapMs / 1000).toFixed(3)
-                            : "–";
-                        speedEl.textContent = bestLapSeconds + " s (best lap)";
-                    }
-                })
-                .on("mousemove", (event) => {
-                    tooltip
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 20) + "px");
-                })
-                .on("mouseout", () => {
-                    tooltip.style("display", "none");
+                if (driverNameEl) {
+                    driverNameEl.textContent = d.driver || "Unknown";
+                }
+                if (speedEl) {
+                    const bestLapSeconds = d.bestLapMs
+                        ? (d.bestLapMs / 1000).toFixed(3)
+                        : "–";
+                    speedEl.textContent = bestLapSeconds + " s (best lap)";
+                }
+            })
+            .on("mousemove", (event) => {
+                tooltip
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 20) + "px");
+            })
 
-                    if (!vis.selectedDriver && driverNameEl && speedEl) {
-                        driverNameEl.textContent = "–";
-                        speedEl.textContent = "–";
-                    }
-                })
-                .on("click", (event, d) => {
-                    vis.selectedDriver = d.driverId;
-                
-                    d3.selectAll(".race-dot").attr("stroke", "none");
+            .on("mouseout", (event, d) => {
+                // Reset the circle
+                d3.select(event.currentTarget).select("circle")
+                    .transition()
+                    .duration(100)
+                    .attr("r", 12)
+                    .attr("filter", "none");
+
+                // Re-apply selection highlight if this is the selected driver
+                if (vis.selectedDriver === d.driverId) {
                     d3.select(event.currentTarget)
                         .attr("stroke", "#d40000")
                         .attr("stroke-width", 3);
-                
-                    window.currentDriverId = d.driverId;
-                    window.currentDriverName = d.driver;
-                
-                    if (driverNameEl) {
-                        driverNameEl.textContent = d.driver || "Unknown";
-                    }
-                    if (speedEl) {
-                        const avgLapSeconds = d.avgLapMs
-                            ? (d.avgLapMs / 1000).toFixed(3)
-                            : "–";
-                        speedEl.textContent = avgLapSeconds + " s (avg lap)";
-                    }
+                }
 
-                    if (window.showDriverModal) {
-                        window.showDriverModal();
-                    }
-                });
+
+                tooltip.style("display", "none");
+
+                if (!vis.selectedDriver && driverNameEl && speedEl) {
+                    driverNameEl.textContent = "–";
+                    speedEl.textContent = "–";
+                }
+            })
+
+
+            .on("click", (event, d) => {
+                vis.selectedDriver = d.driverId;
+
+                d3.selectAll(".race-dot").attr("stroke", "none");
+                d3.select(event.currentTarget)
+                    .attr("stroke", "#d40000")
+                    .attr("stroke-width", 3);
+
+                window.currentDriverId = d.driverId;
+                window.currentDriverName = d.driver;
+
+                if (driverNameEl) {
+                    driverNameEl.textContent = d.driver || "Unknown";
+                }
+                if (speedEl) {
+                    const avgLapSeconds = d.avgLapMs
+                        ? (d.avgLapMs / 1000).toFixed(3)
+                        : "–";
+                    speedEl.textContent = avgLapSeconds + " s (avg lap)";
+                }
+
+                if (window.showDriverModal) {
+                    window.showDriverModal();
+                }
+            });
 
             vis.lastElapsed = 0;
 
@@ -794,7 +1118,7 @@ class novelTrackVis {
         //     });
         // }
 
-        /*OPTION 2: YOU PAUSE AND YOU END UP IN A NEW POSITION YOU HAVE TO CLICK PLAY AGAIN*/
+        /*OPTION 2: YOU PAUSE AND YOU END UP IN A NEW POSITION*/
         const sliderEl = document.getElementById("raceProgress");
         if (sliderEl) {
             sliderEl.addEventListener("input", (e) => {
@@ -826,6 +1150,12 @@ class novelTrackVis {
                         d.completedLaps++;
                     }
                 });
+
+                // Update lap counter after scrubbing
+                const maxCompletedLaps = Math.max(...dots.map(d => d.completedLaps || 0));
+                if (vis.lapCounterEl) {
+                    vis.lapCounterEl.textContent = `Lap ${maxCompletedLaps} / ${vis.totalLaps}`;
+                }
             });
 
             sliderEl.addEventListener("mouseup", () => {
@@ -890,26 +1220,76 @@ class novelTrackVis {
                 circles
                     .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
-            // Update leaderboard
-            const leaderboardList = document.getElementById("leaderboardList");
-            if (leaderboardList) {
-                dots.forEach(d => {
-                    d.distance = (d.currentLapIndex * vis.pathLength) +
-                                 (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
-                });
+            // // Update leaderboard
+            // const leaderboardList = document.getElementById("leaderboardList");
+            // if (leaderboardList) {
+            //     dots.forEach(d => {
+            //         d.distance = (d.currentLapIndex * vis.pathLength) +
+            //                      (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
+            //     });
+            //
+            //     const ranking = dots
+            //         .slice()
+            //         .sort((a, b) => b.distance - a.distance)
+            //         .slice(0, 5);
+            //
+            //     leaderboardList.innerHTML = "";
+            //     ranking.forEach((d, idx) => {
+            //         const li = document.createElement("li");
+            //         li.textContent = d.driver;
+            //         leaderboardList.appendChild(li);
+            //     });
+            // }
+                // Update leaderboard
+                const leaderboardList = document.getElementById("leaderboardList");
+                if (leaderboardList) {
+                    dots.forEach(d => {
+                        d.distance = (d.currentLapIndex * vis.pathLength) +
+                            (d.lapElapsed / d.currentLap.milliseconds) * vis.pathLength;
+                    });
 
-                const ranking = dots
-                    .slice()
-                    .sort((a, b) => b.distance - a.distance)
-                    .slice(0, 5);
+                    const ranking = dots
+                        .slice()
+                        .sort((a, b) => b.distance - a.distance)
+                        .slice(0, 5);
 
-                leaderboardList.innerHTML = "";
-                ranking.forEach((d, idx) => {
-                    const li = document.createElement("li");
-                    li.textContent = d.driver;
-                    leaderboardList.appendChild(li);
-                });
-            }
+                    leaderboardList.innerHTML = "";
+                    ranking.forEach((d, idx) => {
+                        const li = document.createElement("li");
+                        li.style.display = "flex";
+                        li.style.alignItems = "center";
+                        li.style.gap = "8px";
+                        li.style.marginBottom = "6px";
+
+                        const circle = document.createElement("div");
+                        circle.style.width = "24px";
+                        circle.style.height = "24px";
+                        circle.style.borderRadius = "50%";
+                        circle.style.backgroundColor = d.color;
+                        circle.style.border = "1px solid black";
+                        circle.style.display = "flex";
+                        circle.style.alignItems = "center";
+                        circle.style.justifyContent = "center";
+                        circle.style.flexShrink = "0";
+
+                        const code = document.createElement("span");
+                        code.style.fontFamily = "'Orbitron', sans-serif";
+                        code.style.fontSize = "9px";
+                        code.style.fontWeight = "bold";
+                        code.style.color = "#fff";
+                        code.style.textShadow = "0 0 2px #000";
+                        code.textContent = vis.driverStats.get(d.driverId)?.code || "??";
+
+                        circle.appendChild(code);
+                        li.appendChild(circle);
+
+                        const name = document.createElement("span");
+                        name.textContent = d.driver;
+                        li.appendChild(name);
+
+                        leaderboardList.appendChild(li);
+                    });
+                }
 
                 // Update slider
                 const sliderEl = document.getElementById("raceProgress");
@@ -921,8 +1301,36 @@ class novelTrackVis {
                     const seconds = Math.floor(vis.currentRaceTime / 1000);
                     const minutes = Math.floor(seconds / 60);
                     const secs = seconds % 60;
-                    sliderTimeEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                    sliderTimeEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')} min`;
+
+// Update progress clip for the track line - ONLY shows gray where car has passed
+                    const progressPercent = (vis.currentRaceTime / vis.totalRaceTime) * 100;
+                    const clipWidth = progress * 700;
+                    vis.svg.select("#progressClip rect").attr("width", clipWidth);
                 }
+
+                // ADD THIS AT THE END - Stop when race is complete
+                if (vis.currentRaceTime >= vis.totalRaceTime) {
+                    vis.currentRaceTime = vis.totalRaceTime;
+                    vis.isPaused = true;
+
+                    // Update lap counter to show final lap count
+                    const maxCompletedLaps = Math.max(...dots.map(d => d.completedLaps || 0));
+                    if (vis.lapCounterEl) {
+                        vis.lapCounterEl.textContent = `Lap ${maxCompletedLaps} / ${vis.totalLaps}`;
+                    }
+
+                    // Show race end modal
+                    const raceEndModal = document.getElementById("raceEndModal");
+                    const raceWinnerName = document.getElementById("raceWinnerName");
+                    const winner = dots.reduce((a, b) => b.distance - a.distance > 0 ? b : a);
+                    raceWinnerName.textContent = winner.driver;
+                    raceEndModal.style.display = "block";
+
+                    return true; // Stop the timer
+                }
+
+
         });
     }
 }

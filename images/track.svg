@@ -1,0 +1,17 @@
+<svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <clipPath id="progressClip">
+            <rect x="0" y="0" width="0" height="200"/>
+        </clipPath>
+    </defs>
+
+    <!-- Track borders -->
+    <rect x="0" y="50" width="800" height="8" fill="#000000"/>
+    <rect x="0" y="142" width="800" height="8" fill="#000000"/>
+
+    <!-- Center lane divider (dashed line) - RED (initial) -->
+    <line x1="0" y1="100" x2="800" y2="100" stroke="#4d4a4a" stroke-width="4" stroke-dasharray="20,15"/>
+
+    <!-- Center lane divider (dashed line) - GRAY (only past progress) -->
+    <line x1="0" y1="100" x2="800" y2="100" stroke="red" stroke-width="3" stroke-dasharray="20,15" clip-path="url(#progressClip)"/>
+</svg>
