@@ -77,8 +77,8 @@ Specifically, we analyze how differences between teams and drivers, as well as r
 ## 🖥️ Interface Features & Usage Guide
 
 ### Audio Player (Top Right)
-- Click **"Pause Theme"** to mute/unmute the F1 theme music
-- Music auto-plays on page load
+- Click **"Play Music"** to unmute the F1 theme music and create a fun experience while exploring the website
+- Click **"Pause Music"** to pause the music 
 
 ### Visualization 1: The Driver 🏁
 - **Circuit Selection**: Use the dropdown to choose a race circuit
@@ -100,7 +100,7 @@ Specifically, we analyze how differences between teams and drivers, as well as r
 - **Data Points**: Hover over points for detailed race information
 
 ### Visualization 4: The Race 🏆
-- **Grid Animation**: Watch drivers move from starting position to finish
+- **Grid Animation**: Watch drivers move from the starting position to the finish
 - **Hover Stats**: See positions gained/lost and key race statistics for each driver
 
 ---
@@ -123,6 +123,6 @@ Specifically, we analyze how differences between teams and drivers, as well as r
 
 1. Clone the repository
 2.  Open `index.html` in a modern web browser
-3. No build process required – all dependencies are loaded via CDN
+3. No build process required, all dependencies are loaded via CDN
 
 ---
